@@ -16,6 +16,7 @@
 		3661DDCE22AF3012008F7017 /* exampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3661DDCD22AF3012008F7017 /* exampleUITests.swift */; };
 		3661DDDC22AF3599008F7017 /* Allocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3661DDDB22AF3599008F7017 /* Allocator.swift */; };
 		3661DDDE22AF3890008F7017 /* AscendClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3661DDDD22AF3890008F7017 /* AscendClient.swift */; };
+		3661DDE122AF4855008F7017 /* AscendParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3661DDE022AF4855008F7017 /* AscendParticipant.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		3661DDCF22AF3012008F7017 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3661DDDB22AF3599008F7017 /* Allocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Allocator.swift; sourceTree = "<group>"; };
 		3661DDDD22AF3890008F7017 /* AscendClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendClient.swift; sourceTree = "<group>"; };
+		3661DDE022AF4855008F7017 /* AscendParticipant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendParticipant.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				3661DDB922AF3012008F7017 /* Info.plist */,
 				3661DDDB22AF3599008F7017 /* Allocator.swift */,
 				3661DDDD22AF3890008F7017 /* AscendClient.swift */,
+				3661DDE022AF4855008F7017 /* AscendParticipant.swift */,
 			);
 			path = example;
 			sourceTree = "<group>";
@@ -288,6 +291,7 @@
 			files = (
 				3661DDDC22AF3599008F7017 /* Allocator.swift in Sources */,
 				3661DDB022AF3012008F7017 /* ViewController.swift in Sources */,
+				3661DDE122AF4855008F7017 /* AscendParticipant.swift in Sources */,
 				3661DDDE22AF3890008F7017 /* AscendClient.swift in Sources */,
 				3661DDAE22AF3012008F7017 /* AppDelegate.swift in Sources */,
 			);

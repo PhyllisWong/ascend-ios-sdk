@@ -35,17 +35,19 @@ public protocol AscendClient {
    *     allocation returns it will reapply the new changes if the experiment
    *     has changed.
    * </p>
-   * @param key a unique key identifying a specific value in the participants
-   *            allocation
-   * @param defaultValue a default value to return upon error
-   * @param function a handler that is invoked when the allocation is updated
-   * @param <T> type of value to be returned
-   */
+ */
+  // TODO: add a quick help for this thingy
+  associatedtype ActionType // FIXME: Check this is doing what I think it's doing
   
-  // FIXME: ActionType is throwing compiler error
-  associatedtype ActionType // Check this is doing what I think it's doing
+  /**
+  - Parameters:
+    - key: a unique key identifying a specific value in the participants allocation
+    - defaultValue: a default value to return upon error
+    - function:  a handler that is invoked when the allocation is updated
+    - <T>: type of value to be returned
+ */
   static func subscribe<T>(key: String, defaultValue: T, AscendAction: ActionType)
-  
+ 
   /**
    * Emits a generic event to be recorded by Ascend.
    * <p>
