@@ -9,7 +9,6 @@
 import Foundation
 
 public protocol AscendClient {
-  
   /**
    * Retrieves a value from the participant's allocation, returns a default upon error.
    * <p>
@@ -45,7 +44,7 @@ public protocol AscendClient {
   
   // FIXME: ActionType is throwing compiler error
   associatedtype ActionType // Check this is doing what I think it's doing
-   static func subscribe<T>(key: String, defaultValue: T, AscendAction: ActionType)
+  static func subscribe<T>(key: String, defaultValue: T, AscendAction: ActionType)
   
   /**
    * Emits a generic event to be recorded by Ascend.
