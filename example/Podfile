@@ -1,0 +1,10 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '8.1'
+
+target 'example' do
+  use_frameworks!
+
+  # Pods for ascend sdk example app
+  pod 'Alamofire', '4.4.0'
+
+end
