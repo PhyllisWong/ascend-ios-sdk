@@ -6,5 +6,6 @@ target 'example' do
 
   # Pods for ascend sdk example app
   pod 'Alamofire', '4.4.0'
+  pod 'PromiseKit', '~> 6.8'
 
 end
