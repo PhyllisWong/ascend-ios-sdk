@@ -17,17 +17,20 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
-    self.getConfig()
+    self.getJsonData()
   }
 }
 
 
 private extension ViewController {
   
-  private func getConfig() {
-    HttpService.get(completion: { [unowned self ] (response) in
-      guard let response = response else { return }
-      print(response)
+  private func getJsonData() {
+    HttpService.get(completion: { [unowned self] (response) in
+      guard let response = response else {
+        print("OOPS!")
+        return
+      }
+      print("THIS IS THE STUFF YOU ASKED FOR: \(response)")
     })
   }
   

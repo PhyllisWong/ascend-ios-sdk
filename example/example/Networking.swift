@@ -52,7 +52,7 @@ class NetworkManager: Networking {
       // 4 check what the data was that came back
       do {
         let json = try JSONSerialization.jsonObject(with: data!, options: [])
-        print(json)
+        completion(json)
       } catch {
         print("JSON error: \(error.localizedDescription)")
       }
@@ -65,13 +65,12 @@ class NetworkManager: Networking {
 // - MARK: final class makes it so it can't be extended or overridden
 final class HttpService {
   
-  static func get(completion: @escaping ([NSDictionary]?) -> ()) {
+  static func get(completion: @escaping (Any?) -> ()) {
     let stringUrl = "https://participants-stg.evolv.ai/v1/5eadef5e68/configuration"
     guard let url = URL(string: stringUrl) else { return completion(nil) }
-    print("is this thing on?")
     
     NetworkManager.get(fromUrl: url) { (response) in
-      guard let response = response as? [NSDictionary] else {
+      guard let response = response as? Any else {
         return completion(nil)
       }
       completion(response)
