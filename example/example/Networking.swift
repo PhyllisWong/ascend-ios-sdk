@@ -42,16 +42,15 @@ class NetworkManager: Networking {
           return
       }
       
-      
       // 3 check that we got back JSON and not html or xml or some wack shit
       guard let mime = response?.mimeType, mime == "application/json" else {
         print("Wrong MIME type!")
         return
       }
       
-      // 4 check what the data was that came back
+      // 4 serialize the data to json
       do {
-        let json = try JSONSerialization.jsonObject(with: data!, options: [])
+        let json = try JSONSerialization.jsonObject(with: data!, options: []) as! Dictionary<String, [Dictionary<String, Any>]>
         completion(json)
       } catch {
         print("JSON error: \(error.localizedDescription)")
@@ -59,18 +58,21 @@ class NetworkManager: Networking {
     })
     task.resume()
   }
+  
+  
 }
 
 
 // - MARK: final class makes it so it can't be extended or overridden
 final class HttpService {
   
+  // FIXME: change this to NSDictionary and line 76
   static func get(completion: @escaping (Any?) -> ()) {
     let stringUrl = "https://participants-stg.evolv.ai/v1/5eadef5e68/configuration"
     guard let url = URL(string: stringUrl) else { return completion(nil) }
     
     NetworkManager.get(fromUrl: url) { (response) in
-      guard let response = response as? Any else {
+      guard let response = response else {
         return completion(nil)
       }
       completion(response)

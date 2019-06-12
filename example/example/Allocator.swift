@@ -22,7 +22,7 @@ class Allocator {
 //  private let eventEmitter: EventEmitter
 //  private let httpClient: HttpClient
   
-  // TODO: this shit is not highlighting
+  // TODO: this shit is highlighting
   var hello = "hello?"
   
 }

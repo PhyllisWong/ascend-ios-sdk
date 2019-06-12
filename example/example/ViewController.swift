@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
   
-  enum DataError: Error {
+  enum DataError: Error { // move this somewhere more sensible
     case taskError
   }
 
@@ -25,12 +25,15 @@ class ViewController: UIViewController {
 private extension ViewController {
   
   private func getJsonData() {
-    HttpService.get(completion: { [unowned self] (response) in
+    HttpService.get(completion: { [weak self] (response) in
+      // unwraps the optional response
       guard let response = response else {
         print("OOPS!")
         return
       }
+      // response as Dictionary<String, [Dictionary<String, Any>]>
       print("THIS IS THE STUFF YOU ASKED FOR: \(response)")
+      // dump(response) // shows it as swift data types
     })
   }
   

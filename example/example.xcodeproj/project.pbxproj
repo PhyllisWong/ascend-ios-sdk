@@ -19,6 +19,7 @@
 		3661DDE122AF4855008F7017 /* AscendParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3661DDE022AF4855008F7017 /* AscendParticipant.swift */; };
 		3661DDE322AF6160008F7017 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3661DDE222AF6160008F7017 /* Networking.swift */; };
 		3664FC0822B084F7009ED0BE /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC0722B084F7009ED0BE /* HttpClient.swift */; };
+		3664FC0A22B15F98009ED0BE /* AscendAllocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC0922B15F98009ED0BE /* AscendAllocationStore.swift */; };
 		F00345C3683348A0B72996D8 /* Pods_example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1791950A4D5C785F26EAE579 /* Pods_example.framework */; };
 /* End PBXBuildFile section */
 
@@ -60,6 +61,7 @@
 		3661DDE022AF4855008F7017 /* AscendParticipant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendParticipant.swift; sourceTree = "<group>"; };
 		3661DDE222AF6160008F7017 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		3664FC0722B084F7009ED0BE /* HttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpClient.swift; sourceTree = "<group>"; };
+		3664FC0922B15F98009ED0BE /* AscendAllocationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendAllocationStore.swift; sourceTree = "<group>"; };
 		FDEECCE933EDCA50BF9067D5 /* Pods-example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.release.xcconfig"; path = "Target Support Files/Pods-example/Pods-example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,6 +123,7 @@
 				3661DDB622AF3012008F7017 /* LaunchScreen.storyboard */,
 				3661DDB922AF3012008F7017 /* Info.plist */,
 				3661DDDB22AF3599008F7017 /* Allocator.swift */,
+				3664FC0922B15F98009ED0BE /* AscendAllocationStore.swift */,
 				3661DDDD22AF3890008F7017 /* AscendClient.swift */,
 				3661DDE222AF6160008F7017 /* Networking.swift */,
 				3664FC0722B084F7009ED0BE /* HttpClient.swift */,
@@ -370,6 +373,7 @@
 				3664FC0822B084F7009ED0BE /* HttpClient.swift in Sources */,
 				3661DDDE22AF3890008F7017 /* AscendClient.swift in Sources */,
 				3661DDAE22AF3012008F7017 /* AppDelegate.swift in Sources */,
+				3664FC0A22B15F98009ED0BE /* AscendAllocationStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
