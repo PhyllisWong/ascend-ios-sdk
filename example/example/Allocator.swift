@@ -8,21 +8,50 @@
 
 import Foundation
 
-class Allocator {
+public class Allocator {
   
-  enum AllocationsStatus {
+  enum AllocationStatus {
     case FETCHING, RETRIEVED, FAILED
   }
   
-  // TODO: uncomment after making this classes
-//  private let executionQueue: ExecutionQueue
-//  private let store: AscendAllocationStore
-//  private let config: AscendConfig
-//  private let participant: AscendParticipant
-//  private let eventEmitter: EventEmitter
-//  private let httpClient: HttpClient
+  private let executionDispatch: ExecutionDispatch
+  private let store: AscendAllocationStore // TODO: in memory store
+  private let config: AscendConfig
+  private let participant: AscendParticipant
+  private let eventEmitter: EventEmitter
+  private let httpClient: HttpClient
   
-  // TODO: this shit is highlighting
-  var hello = "hello?"
+  private var confirmationSandbagged: Bool = false
+  private var contaminationSandbagged: Bool = false
   
+  private var allocationStatus: AllocationStatus
+  
+  init(executionDispatch: ExecutionDispatch,
+       store: AscendAllocationStore,
+       config: AscendConfig,
+       participant: AscendParticipant,
+       eventEmitter: EventEmitter,
+       httpClient: HttpClient
+    ) {
+    self.executionDispatch = executionDispatch
+    self.store = store
+    self.config = config
+    self.participant = participant
+    self.eventEmitter = eventEmitter
+    self.httpClient = httpClient
+    self.allocationStatus = AllocationStatus.FETCHING
+  }
+  
+  func getAllocationStatus() -> AllocationStatus { return allocationStatus }
+  
+  func sandbagConfirmation() -> () { confirmationSandbagged = true }
+  func sandbagContamination() -> () { contaminationSandbagged = true }
+  
+  func creatAllocationsUrl() -> String {
+    let path: String = ""
+    config.getDomain()
+    participant.getUserId()
+    return path
+    
+  }
 }

@@ -31,7 +31,7 @@ private extension ViewController {
         print("OOPS!")
         return
       }
-      // response as Dictionary<String, [Dictionary<String, Any>]>
+       let really_bad_var_name = response // as! Dictionary<String, [Dictionary<String, Any>]>
       print("THIS IS THE STUFF YOU ASKED FOR: \(response)")
       // dump(response) // shows it as swift data types
     })

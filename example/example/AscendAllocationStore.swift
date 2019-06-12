@@ -8,6 +8,7 @@
 
 import Foundation
 
+// This is the inerface for the client
 public protocol AscendAllocationStore {
   
   /**

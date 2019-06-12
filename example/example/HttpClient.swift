@@ -22,5 +22,4 @@ public protocol HttpClient {
    * @return a response future
    */
   
-  
 }
