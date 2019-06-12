@@ -27,11 +27,11 @@ public class AscendParticipant : BuilderProtocol {
     return builder
   }
   
-  func getUserId() -> String { return userId }
+  public func getUserId() -> String { return userId }
   
-  func getSessionId() -> String { return sessionId }
+  public func getSessionId() -> String { return sessionId }
   
-  func getUserAttributes() -> [String: String] { return userAttributes }
+  public func getUserAttributes() -> [String: String] { return userAttributes }
  
 }
 
