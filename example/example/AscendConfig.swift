@@ -73,6 +73,7 @@ public class ConfigBuilder {
   private let DEFAULT_API_VERSION: String = "v1"
   private let DEFAULT_ALLOCATION_STORE_SIZE: Int = 1000
   
+  
   /**
    * Responsible for creating an instance of AscendClientImpl.
    * <p>
@@ -81,13 +82,18 @@ public class ConfigBuilder {
    * </p>
    * @param environmentId unique id representing a customer's environment
    */
-  init(environmentId: String, httpClient: HttpClient) {
-    self.environmentId = environmentId
-    self.httpClient = httpClient
+  init(environmentId: String, httpClient: HttpClient? = nil) {
     self.allocationStoreSize = DEFAULT_ALLOCATION_STORE_SIZE
     self.httpScheme = DEFAULT_HTTP_SCHEME
     self.domain = DEFAULT_DOMAIN
     self.version = DEFAULT_API_VERSION
+    
+    self.environmentId = environmentId
+    if (httpClient != nil) {
+      self.httpClient = httpClient! // FIXME: perform safe unwrap here
+    } else {
+      self.httpClient = HttpService()
+    }
   }
   
   /**
@@ -162,3 +168,4 @@ public class ConfigBuilder {
     return ascendConfig
   }
 }
+

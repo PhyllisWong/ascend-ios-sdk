@@ -64,12 +64,19 @@ class NetworkManager: Networking {
 }
 
 // - MARK: final class makes it so it can't be extended or overridden
-final class HttpService {
+final class HttpService: HttpClient {
+  
+  public var url: String
+  
+  init() {
+    self.url = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
+  }
+  
   
   // FIXME: change Any to NSDictionary for this method
-  static func get(completion: @escaping (Any?) -> ()) {
+  static func get(url: String, completion: @escaping (Any?) -> ()) {
     // TODO: create a method that creates this give a uid that is not checked
-    let stringUrl = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
+    let stringUrl = url
     guard let url = URL(string: stringUrl) else { return completion(nil) }
     
     NetworkManager.get(fromUrl: url) { (response) in
@@ -78,6 +85,10 @@ final class HttpService {
       }
       completion(response)
     }
+  }
+  
+  static func post(url: String, jsonArray: [[String : Any]]) {
+    print("working on it")
   }
   
 }
