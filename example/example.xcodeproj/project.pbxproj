@@ -29,6 +29,7 @@
 		3664FC1922B18B31009ED0BE /* URLResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1822B18B31009ED0BE /* URLResponse.swift */; };
 		3664FC1B22B19352009ED0BE /* ExecutionDispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */; };
 		3664FC1D22B19392009ED0BE /* AscendConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1C22B19392009ED0BE /* AscendConfig.swift */; };
+		3664FC1F22B1C40D009ED0BE /* DefaultAllocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */; };
 		F00345C3683348A0B72996D8 /* Pods_example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1791950A4D5C785F26EAE579 /* Pods_example.framework */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +81,7 @@
 		3664FC1822B18B31009ED0BE /* URLResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLResponse.swift; sourceTree = "<group>"; };
 		3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionDispatch.swift; sourceTree = "<group>"; };
 		3664FC1C22B19392009ED0BE /* AscendConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendConfig.swift; sourceTree = "<group>"; };
+		3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAllocationStore.swift; sourceTree = "<group>"; };
 		FDEECCE933EDCA50BF9067D5 /* Pods-example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.release.xcconfig"; path = "Target Support Files/Pods-example/Pods-example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,12 +146,13 @@
 				3664FC1C22B19392009ED0BE /* AscendConfig.swift */,
 				3664FC0D22B17F69009ED0BE /* Allocations.swift */,
 				3664FC0922B15F98009ED0BE /* AscendAllocationStore.swift */,
+				3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */,
 				3661DDDD22AF3890008F7017 /* AscendClient.swift */,
 				3661DDE022AF4855008F7017 /* AscendParticipant.swift */,
 				3664FC0F22B187BC009ED0BE /* EventEmitter.swift */,
 				3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */,
-				3664FC1122B18A94009ED0BE /* Networking */,
 				3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */,
+				3664FC1122B18A94009ED0BE /* Networking */,
 			);
 			path = example;
 			sourceTree = "<group>";
@@ -416,6 +419,7 @@
 				3664FC0E22B17F69009ED0BE /* Allocations.swift in Sources */,
 				3661DDAE22AF3012008F7017 /* AppDelegate.swift in Sources */,
 				3664FC1522B18B06009ED0BE /* HTTPURLRequest.swift in Sources */,
+				3664FC1F22B1C40D009ED0BE /* DefaultAllocationStore.swift in Sources */,
 				3664FC0A22B15F98009ED0BE /* AscendAllocationStore.swift in Sources */,
 				3664FC1D22B19392009ED0BE /* AscendConfig.swift in Sources */,
 			);
