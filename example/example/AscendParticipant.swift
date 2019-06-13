@@ -8,12 +8,10 @@
 
 import Foundation
 
-protocol BuilderProtocol { static func builder() -> Builder }
 
-
-public class AscendParticipant : BuilderProtocol {
+public class AscendParticipant {
+  private let sessionId: String // immuntable
   private var userId: String
-  private let sessionId: String
   private var userAttributes: [String : String]
   
   init(userId: String, sessionId: String, userAttributes: [String: String]) {
@@ -32,9 +30,8 @@ public class AscendParticipant : BuilderProtocol {
   public func getSessionId() -> String { return sessionId }
   
   public func getUserAttributes() -> [String: String] { return userAttributes }
- 
-}
 
+}
 
 public class Builder {
   private var userId: String

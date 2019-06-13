@@ -52,6 +52,5 @@ public class Allocator {
     config.getDomain()
     participant.getUserId()
     return path
-    
   }
 }

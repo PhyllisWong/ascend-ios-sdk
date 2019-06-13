@@ -12,4 +12,4 @@ import Foundation
 import Foundation
 protocol ExecutionDispatcher {}
 
-class ExecutionDispatch {}
+public class ExecutionDispatch {}

@@ -22,7 +22,7 @@ public protocol AscendAllocationStore {
    */
   
   // What data type this supposed to return, and will it need to be serialized to json?
-  static func getJsonArray(uid: String) -> [[String: Any]?]
+  func get(uid: String) -> [[String: Any]?]
   
   /**
    * Stores a JsonArray.
@@ -35,5 +35,5 @@ public protocol AscendAllocationStore {
   
   // Do we want to go some kind of confirmation that this was sucessful?
   // Where are we storing this data?
-  static func putJsonArray(uid: String, jsonArray: [[String: Any]]) -> ()
+  func put(uid: String, allocations: [[String: Any]]) -> ()
 }
