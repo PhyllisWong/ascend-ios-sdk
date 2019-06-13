@@ -10,15 +10,6 @@ import Foundation
 import Alamofire
 import PromiseKit
 
-typealias JSON = [String : Any]
-
-// enum used for convenience purposes (optional)
-public enum ServerURL: String {
-  case base = "https://participants-stg.evolv.ai"
-  
-  // additional endpoints
-}
-
 protocol Networking {
   static func get(fromUrl url: URL, completion: @escaping (Any?) -> ())
 }
@@ -64,21 +55,12 @@ class NetworkManager: Networking {
 }
 
 // - MARK: final class makes it so it can't be extended or overridden
-final class HttpService: HttpClient {
-  
-  public var url: String
-  
-  init() {
-    self.url = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
-  }
-  
+public class HttpClient : HttpServiceProvider {
   
   // FIXME: change Any to NSDictionary for this method
-  static func get(url: String, completion: @escaping (Any?) -> ()) {
-    // TODO: create a method that creates this give a uid that is not checked
-    let stringUrl = url
-    guard let url = URL(string: stringUrl) else { return completion(nil) }
-    
+  static func get(url: URL, completion: @escaping (Any?) -> ()) {
+    let urlString = "https://participants.evolv.ai/v1/40ebcd9abf?uid=640E05D3-8837-43B8-A060-2427EE1B684C&sid=2F3B882D-8259-4EF9-930C-62B3E4AFC871"
+    let url = URL(string: urlString)!
     NetworkManager.get(fromUrl: url) { (response) in
       guard let response = response else {
         return completion(nil)
@@ -92,16 +74,16 @@ final class HttpService: HttpClient {
   }
   
 }
-
-public enum Resource {
-  case getConfig
-  
-  public var resource: (method: HTTPMethod, route: String) {
-    let environment_id = "5eadef5e68"
-    switch self {
-    case .getConfig:
-      return (.get, "/v1/\(environment_id)/configuration")
-    }
-  }
-}
+//
+//public enum Resource {
+//  case getConfig
+//
+//  public var resource: (method: HTTPMethod, route: String) {
+//    let environment_id = "5eadef5e68"
+//    switch self {
+//    case .getConfig:
+//      return (.get, "/v1/\(environment_id)/configuration")
+//    }
+//  }
+//}
 

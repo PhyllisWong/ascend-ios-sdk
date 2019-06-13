@@ -19,15 +19,15 @@ class ViewController: UIViewController {
     // Do any additional setup after loading the view.
     self.getJsonData()
     
-    let envId = "envID"
-    let builder = ConfigBuilder(environmentId: envId)
-    print(builder.buildConfig().getDomain())
-    print(builder.buildConfig().getHttpScheme())
-    print(builder.buildConfig().getVersion())
-    print(builder.buildConfig().getEnvironmentId())
-    print(builder.buildConfig().getAscendAllocationStore())
-    print(builder.buildConfig().getHttpClient())
-    print(builder.buildConfig().getExecutionDispatch())
+//    let envId = "envID"
+//    let builder = AscendConfigBuilder(environmentId: envId)
+//    print(builder.buildConfig().getDomain())
+//    print(builder.buildConfig().getHttpScheme())
+//    print(builder.buildConfig().getVersion())
+//    print(builder.buildConfig().getEnvironmentId())
+//    print(builder.buildConfig().getAscendAllocationStore())
+//    print(builder.buildConfig().getHttpClient())
+//    print(builder.buildConfig().getExecutionDispatch())
   }
 }
 
@@ -35,8 +35,19 @@ class ViewController: UIViewController {
 private extension ViewController {
   
   private func getJsonData() {
-    let urlString = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
-    HttpService.get(url: urlString, completion: { [weak self] (response) in
+//    let urlString = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
+    let builder = Builder()
+    
+    let uid = builder.build().getUserId()
+    let sid = builder.build().getSessionId()
+    let ua = builder.build().getUserAttributes()
+    let participant = AscendParticipant(userId: uid, sessionId: sid, userAttributes: ua)
+    let httpClient = HttpClient()
+    let envId = "40ebcd9abf"
+    let config = ConfigBuilder(environmentId: envId).buildConfig()
+    let allocator = Allocator(config: config, participant: participant, httpClient: httpClient)
+    let url = allocator.createAllocationsUrl()
+    HttpClient.get(url: url, completion: { [weak self] (response) in
       // unwraps the optional response
       guard let response = response else {
         print("OOPS!")

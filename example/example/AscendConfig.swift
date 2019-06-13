@@ -14,21 +14,21 @@ public class AscendConfig {
   private let domain: String;
   private let version: String;
   private let environmentId: String;
-  private let ascendAllocationStore: AscendAllocationStore;
+  // private let ascendAllocationStore: AscendAllocationStore;
   private let httpClient: HttpClient;
-  private let executionDispatch: ExecutionDispatch;
+  // private let executionDispatch: ExecutionDispatch;
   
   init(httpScheme: String, domain: String, version: String,
-       environmentId: String, ascendAllocationStore: AscendAllocationStore,
+       environmentId: String, // ascendAllocationStore: AscendAllocationStore,
        httpClient: HttpClient
     ) {
     self.httpScheme = httpScheme
     self.domain = domain
     self.version = version
     self.environmentId = environmentId
-    self.ascendAllocationStore = ascendAllocationStore
+    // self.ascendAllocationStore = ascendAllocationStore
     self.httpClient = httpClient
-    self.executionDispatch = ExecutionDispatch()
+    // self.executionDispatch = ExecutionDispatch()
   }
   
   public func configBuilder(environmentId: String, httpClient: HttpClient) -> ConfigBuilder {
@@ -44,17 +44,17 @@ public class AscendConfig {
   
   public func getEnvironmentId() -> String { return environmentId }
   
-  public func getAscendAllocationStore() -> AscendAllocationStore {
-    return ascendAllocationStore
-  }
+  // public func getAscendAllocationStore() -> AscendAllocationStore {
+    // return ascendAllocationStore
+  // }
   
   public func getHttpClient() -> HttpClient {
     return self.httpClient
   }
   
-  public func getExecutionDispatch() -> ExecutionDispatch {
-    return self.executionDispatch
-  }
+  // public func getExecutionDispatch() -> ExecutionDispatch {
+    // return self.executionDispatch
+  // }
   
 }
 
@@ -92,7 +92,7 @@ public class ConfigBuilder {
     if (httpClient != nil) {
       self.httpClient = httpClient! // FIXME: perform safe unwrap here
     } else {
-      self.httpClient = HttpService()
+      self.httpClient = HttpClient()
     }
   }
   
@@ -164,7 +164,7 @@ public class ConfigBuilder {
 
     let ascendConfig = AscendConfig(httpScheme: httpScheme, domain: domain,
                                     version: version, environmentId: environmentId,
-                                    ascendAllocationStore: allocationStore!, httpClient: httpClient)
+                                    httpClient: httpClient)
     return ascendConfig
   }
 }

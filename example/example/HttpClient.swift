@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol HttpClient {
+protocol HttpServiceProvider: class {
 
   /**
    * Performs a GET request using the provided url.
@@ -21,7 +21,7 @@ public protocol HttpClient {
    * @param url a valid url representing a call to the Participant API.
    * @return a response future
    */
-  static func get(url: String, completion: @escaping (Any?) -> ())
+  static func get(url: URL, completion: @escaping (Any?) -> ())
   
   // TODO: this is a copy pasta from get method, FIXME
   /**
