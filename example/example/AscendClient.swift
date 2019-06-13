@@ -35,17 +35,19 @@ public protocol AscendClient {
    *     allocation returns it will reapply the new changes if the experiment
    *     has changed.
    * </p>
-   * @param key a unique key identifying a specific value in the participants
-   *            allocation
-   * @param defaultValue a default value to return upon error
-   * @param function a handler that is invoked when the allocation is updated
-   * @param <T> type of value to be returned
-   */
+ */
+  // TODO: add a quick help for this thingy
+  associatedtype ActionType // FIXME: Check this is doing what I think it's doing
   
-  // FIXME: ActionType is throwing compiler error
-  associatedtype ActionType // Check this is doing what I think it's doing
-  static func subscribe<T>(key: String, defaultValue: T, AscendAction: ActionType)
-  
+  /**
+  - Parameters:
+    - key: a unique key identifying a specific value in the participants allocation
+    - defaultValue: a default value to return upon error
+    - function:  a handler that is invoked when the allocation is updated
+    - <T>: type of value to be returned
+ */
+  static func subscribe<T>(key: String, defaultValue: T, AscendAction: ActionType) -> Void
+ 
   /**
    * Emits a generic event to be recorded by Ascend.
    * <p>
@@ -56,7 +58,7 @@ public protocol AscendClient {
    * @param score a score to be associated with the event
    */
   
-  static func emitEvent(key: String, Score: Double)
+  static func emitEvent(key: String, Score: Double) -> Void
   
   /**
    * Emits a generic event to be recorded by Ascend.
@@ -65,7 +67,7 @@ public protocol AscendClient {
    * </p>
    * @param key the identifier of the event
    */
-  static func emitEvent(key: String)
+  static func emitEvent(key: String) -> Void
   
   /**
    * Sends a confirmed event to Ascend.
@@ -75,7 +77,7 @@ public protocol AscendClient {
    *     timed out or failed.
    * </p>
    */
-  static func confirm()
+  static func confirm() -> Void
   
   /**
    * Sends a contamination event to Ascend.
@@ -85,5 +87,5 @@ public protocol AscendClient {
    *     that the allocation timed out or failed.
    * </p>
    */
-  static func contaminate()
+  static func contaminate() -> Void
 }

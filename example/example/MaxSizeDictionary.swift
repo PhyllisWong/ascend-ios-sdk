@@ -1,0 +1,48 @@
+//
+//  MaxSizeDictionary.swift
+//  example
+//
+//  Created by phyllis.wong on 6/12/19.
+//  Copyright © 2019 phyllis.wong. All rights reserved.
+//
+
+import Foundation
+
+// FIXME: This solves the problem of not overloading virtual memory on the device
+//extension Dictionary where Key:Hashable, Value:AnyObject {
+public struct MaxSizeDictionary<T: Hashable, U> {
+  private let _limit: UInt
+  private var dictionary = [T: U]()
+  
+  init(limit: UInt) {
+    self._limit = limit
+  }
+  
+  subscript(key: T) -> U? {
+    get {
+      return dictionary[key]
+    }
+    set {
+      let keys = dictionary.keys
+      if keys.count < _limit || keys.contains(key) {
+        dictionary[key] = newValue
+      }
+    }
+  }
+  func getDictionary() {}
+}
+
+
+
+//public class MaxSizeHashMap<K, V> extends LinkedHashMap<K, V> {
+//  private final int maxSize;
+//
+//  public MaxSizeHashMap(int maxSize) {
+//    this.maxSize = maxSize;
+//  }
+//
+//  @Override
+//  protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+//    return size() > maxSize;
+//  }
+//}
