@@ -33,8 +33,13 @@ private extension ViewController {
     let envId = "40ebcd9abf"
     let config = ConfigBuilder(environmentId: envId).buildConfig()
     let alloc = Allocator(config: config, participant: participant, httpClient: httpClient)
-    let url = alloc.createAllocationsUrl()
-    let results = alloc.fetchAllocations(url: url)
-    print("YOUR FETCHED ALLOCATION: \(results)")
+    let results = alloc.fetchAllocations()
+    print("YOUR FETCHED ALLOCATION: \(String(describing: results))")
+//    do {
+//      let data = try alloc.fetchAllocationsAsyncAwait()
+//
+//    } catch {
+//      print("failed to fetch stuff:", error)
+//    }
   }
 }

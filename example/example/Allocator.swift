@@ -65,9 +65,9 @@ public class Allocator {
     return URL(string: "")!
   }
   
-  public func fetchAllocations(url: URL) -> JSON {
-    var fakeJsonArray: JSON = [["height": 0.90, "button": "blue"]]
-    
+  public func fetchAllocations() -> JSON {
+//    var fakeJsonArray: JSON = [["height": 0.90, "button": "blue"]]
+    let url = self.createAllocationsUrl()
     /*
      1. create the URL
      2. create the allocationFuture (settable)
@@ -84,47 +84,44 @@ public class Allocator {
      13. catch and handle error, set allocationFuture with resolveAllocationFailure
      14. return allocationFuture (will either have allocations or an error
      */
-//    let track = Cache.shareInstance
-//
-//    NetworkManager.sharedInstance.get(fromUrl: url, completion: { (response) in
-//      guard let response = response else { // response needs to be safe unwrapped
-//        print("OOPS!")
-//        return
-//      }
-//      // let really_bad_var_name = response // as! Dictionary<String, [Dictionary<String, Any>]>
-//      let json = JSON(response) // as! Dictionary<String, String>
-//      print(json) // TODO: save this is the store
-//      let encoder = NSCoder()
-////      encoder.decodeData().
-////      track.set(object: response, forKey: url)
-//    })
+
     let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 20)
+    var fakeJsonArray = JSON()
+    
+    
     
     Alamofire.request(request).responseJSON { (response) in
       let cachedURLResponse = CachedURLResponse(response: response.response!, data: (response.data! as NSData) as Data, userInfo: nil, storagePolicy: .allowed)
       URLCache.shared.storeCachedResponse(cachedURLResponse, for: response.request!)
-      
       guard response.result.error == nil else {
-        
-        // got an error in getting the data, need to handle it
         print("error fetching data from url")
         print(response.result.error!)
         return
-        
       }
       
       let json = try? JSON(data: cachedURLResponse.data) // SwiftyJSON
-      
-//      print("Your json: \(String(describing: json))") // Test if it works
-      
       // do whatever you want with your data here
      
       fakeJsonArray = json!
+      // return fakeJsonArray
+      print("stuff: \(json!)")
       
     }
+    
+    
     print("Your json: \(String(describing: fakeJsonArray))") // Test if it works
     return fakeJsonArray
   }
+  enum NetworkError: Error {
+    case url
+  }
+//
+//  func fetchAllocationsAsyncAwait() throws -> Data? {
+//    let dummyURL = createAllocationsUrl()
+//    if dummyURL {
+//      throw NetworkError.url
+//    }
+//  }
   
   public func resolveAllocationsFailure() -> JsonArray {
     let fakeJsonArray = [["height": 0.90, "button": "blue"]]
