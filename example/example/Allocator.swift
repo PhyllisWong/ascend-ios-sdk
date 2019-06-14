@@ -74,9 +74,7 @@ public class Allocator {
       }
       // let really_bad_var_name = response // as! Dictionary<String, [Dictionary<String, Any>]>
       let json = JSON(response) // as! Dictionary<String, String>
-      print(json)
-      //      let dict = json.dictionary
-      //      print(dict)
+      print(json) // TODO: save this is the store
     })
     
     return fakeJsonArray
