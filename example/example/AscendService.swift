@@ -13,8 +13,11 @@ protocol Networking {
   static func get(fromUrl url: URL, completion: @escaping (Any?) -> ())
 }
 
-class NetworkManager: Networking {
-  static func get(fromUrl url: URL, completion: @escaping (Any?) -> ()) {
+struct NetworkManager  {
+  
+  static let sharedInstance = NetworkManager()
+  
+  func get(fromUrl url: URL, completion: @escaping (Any?) -> ()) {
     let session = URLSession.shared
     let task = session.dataTask(with: url, completionHandler: { (data, response, error) in
       
@@ -61,7 +64,7 @@ public class HttpClient : HttpServiceProvider {
     let safeUrlString = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
     // let urlString = "https://participants.evolv.ai/v1/40ebcd9abf/allocations?uid=0FABD775-0E0B-4D1D-8E7A-B425B92E9DC7"
     // let url = URL(string: urlString)!
-    NetworkManager.get(fromUrl: url) { (response) in
+    NetworkManager.sharedInstance.get(fromUrl: url) { (response) in
       guard let response = response else {
         return completion(nil)
       }

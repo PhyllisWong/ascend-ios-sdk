@@ -9,20 +9,24 @@ PODS:
     - PromiseKit/CorePromise
   - PromiseKit/UIKit (6.8.5):
     - PromiseKit/CorePromise
+  - Track (2.0.0)
 
 DEPENDENCIES:
   - DynamicJSON (~> 2.0.2)
   - PromiseKit (~> 6.8)
+  - Track
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - DynamicJSON
     - PromiseKit
+    - Track
 
 SPEC CHECKSUMS:
   DynamicJSON: fc0c5a82980ff8aa956156f04d84fcdb2822e875
   PromiseKit: 9616b0afef31eae56ab9ce044c8ec2b8612a15cd
+  Track: 45590b4545034d30f61622e82bef0534b168d9a9
 
-PODFILE CHECKSUM: 546fd1156785ecc69c43403196f8688254eefc2d
+PODFILE CHECKSUM: faa0d75a6b4170bda6612b312b6b8f7d4d86c433
 
 COCOAPODS: 1.7.1
