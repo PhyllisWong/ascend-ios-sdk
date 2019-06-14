@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Alamofire
 import PromiseKit
 
 protocol Networking {
@@ -42,8 +41,8 @@ class NetworkManager: Networking {
       
       // 4 serialize the data to json
       do {
-        let json = try JSONSerialization.jsonObject(with: data!, options: [])
-        completion(json)
+        // let json = try JSONSerialization.jsonObject(with: data!, options: [])
+        completion(data)
       } catch {
         print("JSON error: \(error.localizedDescription)")
       }
@@ -59,8 +58,9 @@ public class HttpClient : HttpServiceProvider {
   
   // FIXME: change Any to NSDictionary for this method
   static func get(url: URL, completion: @escaping (Any?) -> ()) {
-    let urlString = "https://participants.evolv.ai/v1/40ebcd9abf?uid=640E05D3-8837-43B8-A060-2427EE1B684C&sid=2F3B882D-8259-4EF9-930C-62B3E4AFC871"
-    let url = URL(string: urlString)!
+    let safeUrlString = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
+    // let urlString = "https://participants.evolv.ai/v1/40ebcd9abf/allocations?uid=0FABD775-0E0B-4D1D-8E7A-B425B92E9DC7"
+    // let url = URL(string: urlString)!
     NetworkManager.get(fromUrl: url) { (response) in
       guard let response = response else {
         return completion(nil)

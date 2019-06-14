@@ -20,8 +20,8 @@ public class AscendParticipant {
     self.userAttributes = userAttributes
   }
   
-  public static func builder() -> Builder {
-    let builder = Builder()
+  public static func builder() -> ParticipantBuilder {
+    let builder = ParticipantBuilder()
     return builder
   }
   
@@ -33,7 +33,7 @@ public class AscendParticipant {
 
 }
 
-public class Builder {
+public class ParticipantBuilder {
   private var userId: String
   private var sessionId: String
   private var userAttributes: [String : String]
@@ -49,7 +49,7 @@ public class Builder {
    * @param userId a unique key
    * @return this instance of the participant
    */
-  public func setUserId(userId: String) -> Builder {
+  public func setUserId(userId: String) -> ParticipantBuilder {
     self.userId = userId;
     return self
   }
@@ -59,7 +59,7 @@ public class Builder {
    * @param sessionId a unique key
    * @return this instance of the participant
    */
-  public func setSessionId(sessionId: String) -> Builder {
+  public func setSessionId(sessionId: String) -> ParticipantBuilder {
     self.sessionId = sessionId;
     return self
   }
@@ -70,7 +70,7 @@ public class Builder {
    *                      describe the participant
    * @return this instance of the participant
    */
-  public func setUserAttributes(userAttributes: [String : String]) -> Builder {
+  public func setUserAttributes(userAttributes: [String : String]) -> ParticipantBuilder {
     self.userAttributes = userAttributes;
     return self;
   }

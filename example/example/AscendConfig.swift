@@ -69,7 +69,7 @@ public class ConfigBuilder {
   private var httpClient: HttpClient
   
   private let DEFAULT_HTTP_SCHEME: String = "https"
-  private let DEFAULT_DOMAIN: String = "participants.evolv.ai"
+  private let DEFAULT_DOMAIN: String = "participants-phyllis.evolv.ai"
   private let DEFAULT_API_VERSION: String = "v1"
   private let DEFAULT_ALLOCATION_STORE_SIZE: Int = 1000
   
