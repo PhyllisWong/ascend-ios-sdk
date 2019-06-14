@@ -30,6 +30,7 @@
 		3664FC1B22B19352009ED0BE /* ExecutionDispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */; };
 		3664FC1D22B19392009ED0BE /* AscendConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1C22B19392009ED0BE /* AscendConfig.swift */; };
 		3664FC1F22B1C40D009ED0BE /* DefaultAllocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */; };
+		3664FC2522B42EEF009ED0BE /* LruCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC2422B42EEF009ED0BE /* LruCache.swift */; };
 		F00345C3683348A0B72996D8 /* Pods_example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1791950A4D5C785F26EAE579 /* Pods_example.framework */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +83,7 @@
 		3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionDispatch.swift; sourceTree = "<group>"; };
 		3664FC1C22B19392009ED0BE /* AscendConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendConfig.swift; sourceTree = "<group>"; };
 		3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAllocationStore.swift; sourceTree = "<group>"; };
+		3664FC2422B42EEF009ED0BE /* LruCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LruCache.swift; sourceTree = "<group>"; };
 		FDEECCE933EDCA50BF9067D5 /* Pods-example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.release.xcconfig"; path = "Target Support Files/Pods-example/Pods-example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -143,6 +145,7 @@
 				3661DDB422AF3012008F7017 /* Assets.xcassets */,
 				3661DDB922AF3012008F7017 /* Info.plist */,
 				3661DDDB22AF3599008F7017 /* Allocator.swift */,
+				3664FC2422B42EEF009ED0BE /* LruCache.swift */,
 				3664FC1C22B19392009ED0BE /* AscendConfig.swift */,
 				3664FC0D22B17F69009ED0BE /* Allocations.swift */,
 				3664FC0922B15F98009ED0BE /* AscendAllocationStore.swift */,
@@ -362,15 +365,19 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-example/Pods-example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/DynamicJSON/DynamicJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/PINCache/PINCache.framework",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
-				"${BUILT_PRODUCTS_DIR}/Track/Track.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DynamicJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINCache.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Track.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -415,6 +422,7 @@
 				3664FC1B22B19352009ED0BE /* ExecutionDispatch.swift in Sources */,
 				3661DDE122AF4855008F7017 /* AscendParticipant.swift in Sources */,
 				3661DDE322AF6160008F7017 /* AscendService.swift in Sources */,
+				3664FC2522B42EEF009ED0BE /* LruCache.swift in Sources */,
 				3664FC1922B18B31009ED0BE /* URLResponse.swift in Sources */,
 				3664FC0822B084F7009ED0BE /* HttpClient.swift in Sources */,
 				3661DDDE22AF3890008F7017 /* AscendClient.swift in Sources */,
