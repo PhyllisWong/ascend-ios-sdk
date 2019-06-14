@@ -66,15 +66,33 @@ public class Allocator {
   
   public func fetchAllocations(url: URL) -> JsonArray {
     let fakeJsonArray = [["height": 0.90, "button": "blue"]]
+    /*
+     1. create the URL
+     2. create the allocationFuture (settable)
+     3. sets an observable (some way to know when the promise os returned)
+     4. instantiate a JSON parser
+     5. parse the JSON returned by the future
+     6. get previous allocation from the store
+     7. reconcile the allocations (are they the same, different, is the previous allocation valid?
+     8. save allocation to the store (this updates the cache date if alloc the same)
+     9. update the allocation status
+     10. emit some event
+     11. set the allocationFuture with returned allocations
+     12. executeQueue should execute all values from the allocation
+     13. catch and handle error, set allocationFuture with resolveAllocationFailure
+     14. return allocationFuture (will either have allocations or an error
+    */
     
-    HttpClient.get(url: url, completion: { (response) in
+    // TODO: once this is working, change to httpClient.get()
+    NetworkManager.sharedInstance.get(fromUrl: url, completion: { (response) in
       guard let response = response else { // response needs to be safe unwrapped
         print("OOPS!")
         return
       }
       // let really_bad_var_name = response // as! Dictionary<String, [Dictionary<String, Any>]>
       let json = JSON(response) // as! Dictionary<String, String>
-      print(json) // TODO: save this is the store
+      print(json)
+
     })
     
     return fakeJsonArray

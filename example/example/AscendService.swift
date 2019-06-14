@@ -10,11 +10,14 @@ import Foundation
 import PromiseKit
 
 protocol Networking {
-  static func get(fromUrl url: URL, completion: @escaping (Any?) -> ())
+  func get(fromUrl url: URL, completion: @escaping (Any?) -> ())
 }
 
-class NetworkManager: Networking {
-  static func get(fromUrl url: URL, completion: @escaping (Any?) -> ()) {
+struct  NetworkManager: Networking {
+  
+  static let sharedInstance = NetworkManager()
+  
+  func get(fromUrl url: URL, completion: @escaping (Any?) -> ()) {
     let session = URLSession.shared
     let task = session.dataTask(with: url, completionHandler: { (data, response, error) in
       
@@ -38,14 +41,14 @@ class NetworkManager: Networking {
         print("Wrong MIME type!")
         return
       }
-      
-      // 4 serialize the data to json
-      do {
-        // let json = try JSONSerialization.jsonObject(with: data!, options: [])
-        completion(data)
-      } catch {
-        print("JSON error: \(error.localizedDescription)")
-      }
+//      
+//      // 4 serialize the data to json
+//      do {
+//        // let json = try JSONSerialization.jsonObject(with: data!, options: [])
+//        completion(data)
+//      } catch {
+//        print("JSON error: \(error.localizedDescription)")
+//      }
     })
     task.resume()
   }
@@ -54,19 +57,16 @@ class NetworkManager: Networking {
 }
 
 // - MARK: final class makes it so it can't be extended or overridden
-public class HttpClient : HttpServiceProvider {
+public class HttpClient {
   
   // FIXME: change Any to NSDictionary for this method
   static func get(url: URL, completion: @escaping (Any?) -> ()) {
-    let safeUrlString = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
-    // let urlString = "https://participants.evolv.ai/v1/40ebcd9abf/allocations?uid=0FABD775-0E0B-4D1D-8E7A-B425B92E9DC7"
-    // let url = URL(string: urlString)!
-    NetworkManager.get(fromUrl: url) { (response) in
-      guard let response = response else {
-        return completion(nil)
-      }
-      completion(response)
-    }
+//    NetworkManager.get(fromUrl: url) { (response) in
+//      guard let response = response else {
+//        return completion(nil)
+//      }
+//      completion(response)
+//    }
   }
   
   static func post(url: String, jsonArray: [[String : Any]]) {

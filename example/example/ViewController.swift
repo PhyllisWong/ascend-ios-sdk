@@ -35,6 +35,6 @@ private extension ViewController {
     let alloc = Allocator(config: config, participant: participant, httpClient: httpClient)
     let url = alloc.createAllocationsUrl()
     let results = alloc.fetchAllocations(url: url)
-    print("YOUR FETCHED ALLOCATION: \(results)")
+    print("YOUR FETCHED ALLOCATION: \(String(describing: results))")
   }
 }

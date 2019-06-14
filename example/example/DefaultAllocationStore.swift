@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Track
 
 public class DefaultAllocationStore : AscendAllocationStore {
 
