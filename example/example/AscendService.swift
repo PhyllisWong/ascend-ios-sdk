@@ -8,6 +8,7 @@
 
 import Foundation
 import PromiseKit
+import DynamicJSON
 
 protocol Networking {
   static func get(fromUrl url: URL, completion: @escaping (Any) -> Void)
@@ -24,7 +25,6 @@ struct NetworkingService  {
       
       if let err = error {
         logger.log(.error, message: err.localizedDescription)
-        let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
         let fileUrl = Bundle.main.url(forResource: "logs", withExtension: "txt")
         
         // writing
@@ -60,7 +60,6 @@ struct NetworkingService  {
       
       // 4 serialize the data to json
       do {
-        // let json = try JSONSerialization.jsonObject(with: data!, options: [])
         completion(data, response, error as? NetworkingError)
       } catch {
         print("JSON error: \(NetworkingError.invalidRequest)")

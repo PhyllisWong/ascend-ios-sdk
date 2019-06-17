@@ -18,7 +18,7 @@ public class Allocator {
     case FETCHING, RETRIEVED, FAILED
   }
   
-  private let store = URLCache.shared // TODO: change this with abstracted class
+  let store = URLCache.shared // TODO: change this with abstracted class
   private let config: AscendConfig
   private let participant: AscendParticipant
   // private let eventEmitter: EventEmitter
@@ -26,7 +26,7 @@ public class Allocator {
   
   private var confirmationSandbagged: Bool = false
   private var contaminationSandbagged: Bool = false
-  
+  private var logger: Logger
   private var allocationStatus: AllocationStatus
   
   init(//executionDispatch: ExecutionDispatch,
@@ -43,6 +43,7 @@ public class Allocator {
     // self.eventEmitter = eventEmitter
     self.httpClient = httpClient
     self.allocationStatus = AllocationStatus.FETCHING
+    self.logger = Log.logger
   }
   
   func getAllocationStatus() -> AllocationStatus { return allocationStatus }
@@ -68,10 +69,8 @@ public class Allocator {
     let url = self.createAllocationsUrl()
     // let url = URL(string: "kjnsdfjbn")! // BAD!!!! for testing
     var jsonArray = JSON()
-    // let dispatchGroup = DispatchGroup()
-    // var dispatchQueue = DispatchQueue(label: urlString)
     var cachedResponse = CachedURLResponse()
-    let logger = Log.BasicLogger()
+    
 //    if #available(iOS 10.0, *) {
 //      dispatchQueue = DispatchQueue(
 //        label: urlString,
@@ -92,15 +91,16 @@ public class Allocator {
       }
     })
     
-    NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in
+    
+    NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in // Needs to be abstracted out
       
       if let error = err {
-        logger.log(.debug, message: "Error : \(error.localizedDescription)")
+        self.logger.log(.debug, message: "Error : \(error.localizedDescription)")
       }
       
       guard let response = res, let data = _data else {
         // If you don't get a response here, use the data from the cache
-        logger.log(.debug, message: "NetworkingError data")
+        self.logger.log(.debug, message: "NetworkingError data")
         return
       }
       // You got data back...convert it to JSON
@@ -110,27 +110,43 @@ public class Allocator {
       // Save the data to update the date of the cached data
       self.store.storeCachedResponse(cachedURLResponse, for: request)
       
-      semaphore.signal() // tell the semaphore that we are doner
+      semaphore.signal() // tell the semaphore that we are done
      })
      _ = semaphore.wait(timeout: .distantFuture)
     
     // TODO: add reconciliation logic here
-    return jsonArray
-  }
-  
-  
-  public func resolveAllocationsFailure() -> JsonArray {
-    let fakeJsonArray = [["height": 0.90, "button": "blue"]]
-    
-    return fakeJsonArray
-  }
-  
-  static func allocationsNotEmpty(allocations: JsonArray) -> Bool {
-    
-    if let allocations = allocations {
-      if allocations.count > 0 { return true }
+    if (JSON(cachedResponse.data) == jsonArray) {
+      return JSON(cachedResponse.data)
+    } else {
+      return jsonArray
     }
-    return false
+  }
+  
+  
+  public func resolveAllocationsFailure(session: URLSessionDataTask) -> [JSON] {
+    var previousAllocations = [JSON]()
+    
+    let semaphore = DispatchSemaphore(value: 0)
+    self.store.getCachedResponse(for: session, completionHandler: { (cachedData) in
+      if let cached = cachedData {
+        print("Cached Response: \(cached)")
+        previousAllocations = [JSON(cached)]
+      }
+      semaphore.signal() // tell the semaphore that we are done
+    })
+     _ = semaphore.wait(timeout: .distantFuture)
+    
+    if (allocationsNotEmpty(allocations: previousAllocations)) {
+      logger.log(.debug, message: "Falling back to participant's previous allocation.")
+    }
+    return previousAllocations
+  }
+  
+  func allocationsNotEmpty(allocations: [JSON]?) -> Bool {
+    guard let allocationsArray = allocations else {
+      return false
+    }
+    return allocationsArray.count > 0
   }
   
 }
