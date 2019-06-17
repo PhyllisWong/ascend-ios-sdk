@@ -20,11 +20,27 @@ struct NetworkingService  {
   func get(fromUrl url: URL, completion: @escaping (Data?, URLResponse?, NetworkingError?) -> Void) {
     let session = URLSession.shared
     let task = session.dataTask(with: url, completionHandler: { (data, response, error) in
+    let logger = Log.BasicLogger()
       
-      // 1 check for errors
-      if error != nil || data == nil {
-        // self.handleClientError(error) // create a function that can deal with the error
-        print("OH NO! An error occured ...")
+      if let err = error {
+        logger.log(.error, message: err.localizedDescription)
+        let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+        let fileUrl = Bundle.main.url(forResource: "logs", withExtension: "txt")
+        
+        // writing
+        do {
+          let errorMessage = String(stringLiteral: "Error Occured \(err.localizedDescription)")
+          try errorMessage.write(to: fileUrl!, atomically: true, encoding: .utf8)
+        } catch {
+          print("Error writing to log")
+        }
+        // reading
+        do {
+          let text = try String(contentsOf: fileUrl!, encoding: .utf8)
+          print("REQUESTED TEXT: \(text)")
+        } catch {
+          print("error reading")
+        }
         return
       }
       

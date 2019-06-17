@@ -12,7 +12,7 @@ enum NetworkingError: String, Error {
   case invalidRequest = "Invalid request"
   case invalidUrl
   case response
-  case data
+  case data = "No data"
 }
 
 extension NetworkingError: LocalizedError {

@@ -18,8 +18,7 @@ public class Allocator {
     case FETCHING, RETRIEVED, FAILED
   }
   
-  // private let executionDispatch: ExecutionDispatch
-  private let store = URLCache.shared // TODO: in memory store
+  private let store = URLCache.shared // TODO: change this with abstracted class
   private let config: AscendConfig
   private let participant: AscendParticipant
   // private let eventEmitter: EventEmitter
@@ -67,23 +66,9 @@ public class Allocator {
   
   public func fetchAllocations() -> JSON {
     let url = self.createAllocationsUrl()
-    /*
-     2. create the allocationFuture (settable)
-     4. instantiate a JSON parser
-     5. parse the JSON returned by the future
-     6. get previous allocation from the store
-     7. reconcile the allocations (are they the same, different, is the previous allocation valid?
-     8. save allocation to the store (this updates the cache date if alloc the same)
-     9. update the allocation status
-     10. emit some event
-     11. set the allocationFuture with returned allocations
-     12. executeQueue should execute all values from the allocation
-     13. catch and handle error, set allocationFuture with resolveAllocationFailure
-     14. return allocationFuture (will either have allocations or an error
-     */
+    // let url = URL(string: "kjnsdfjbn")! // BAD!!!! for testing
     var jsonArray = JSON()
     // let dispatchGroup = DispatchGroup()
-    let urlString = String(describing: url)
     // var dispatchQueue = DispatchQueue(label: urlString)
     var cachedResponse = CachedURLResponse()
     let logger = Log.BasicLogger()
@@ -97,8 +82,6 @@ public class Allocator {
 //    }
     
     let semaphore = DispatchSemaphore(value: 0)
-   
-    
     let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 20)
     let session = URLSession.shared.dataTask(with: url)
     
@@ -111,29 +94,27 @@ public class Allocator {
     
     NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in
       
-      // TODO: test this log the error
       if let error = err {
-        logger.log(.error, message: error.localizedDescription)
+        logger.log(.debug, message: "Error : \(error.localizedDescription)")
       }
+      
       guard let response = res, let data = _data else {
-        print("error fetching data from url", NetworkingError.data)
+        // If you don't get a response here, use the data from the cache
+        logger.log(.debug, message: "NetworkingError data")
         return
       }
-    
+      // You got data back...convert it to JSON
       jsonArray = JSON(data)
-    
+      // Initialize the data to be cached
       let cachedURLResponse = CachedURLResponse(response: response, data: data, userInfo: nil, storagePolicy: .allowedInMemoryOnly)
-    
-      // stores the initial response with a ~> Void
+      // Save the data to update the date of the cached data
       self.store.storeCachedResponse(cachedURLResponse, for: request)
-      // print("cachedResponse: \(cached)")
-    
       
-      semaphore.signal() // 3. sets an observable (some way to know when the promise is returned)
+      semaphore.signal() // tell the semaphore that we are doner
      })
-    
      _ = semaphore.wait(timeout: .distantFuture)
-    print("Your json: \(String(describing: jsonArray))")
+    
+    // TODO: add reconciliation logic here
     return jsonArray
   }
   
