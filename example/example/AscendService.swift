@@ -10,14 +10,14 @@ import Foundation
 import PromiseKit
 
 protocol Networking {
-  static func get(fromUrl url: URL, completion: @escaping (Any?) -> ())
+  static func get(fromUrl url: URL, completion: @escaping (Any) -> Void)
 }
 
-struct NetworkManager  {
+struct NetworkingService  {
   
-  static let sharedInstance = NetworkManager()
+  static let sharedInstance = NetworkingService()
   
-  func get(fromUrl url: URL, completion: @escaping (Any?) -> ()) {
+  func get(fromUrl url: URL, completion: @escaping (Data?, URLResponse?, NetworkingError?) -> Void) {
     let session = URLSession.shared
     let task = session.dataTask(with: url, completionHandler: { (data, response, error) in
       
@@ -45,32 +45,30 @@ struct NetworkManager  {
       // 4 serialize the data to json
       do {
         // let json = try JSONSerialization.jsonObject(with: data!, options: [])
-        completion(data)
+        completion(data, response, error as? NetworkingError)
       } catch {
-        print("JSON error: \(error.localizedDescription)")
+        print("JSON error: \(NetworkingError.invalidRequest)")
       }
     })
     task.resume()
   }
-  
-  
 }
 
 // - MARK: final class makes it so it can't be extended or overridden
-public class HttpClient : HttpServiceProvider {
+public class HttpClient  {
   
   // FIXME: change Any to NSDictionary for this method
-  static func get(url: URL, completion: @escaping (Any?) -> ()) {
-    let safeUrlString = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
-    // let urlString = "https://participants.evolv.ai/v1/40ebcd9abf/allocations?uid=0FABD775-0E0B-4D1D-8E7A-B425B92E9DC7"
-    // let url = URL(string: urlString)!
-    NetworkManager.sharedInstance.get(fromUrl: url) { (response) in
-      guard let response = response else {
-        return completion(nil)
-      }
-      completion(response)
-    }
-  }
+//  static func get(url: URL, completion: @escaping (Any?) -> ()) {
+//    let safeUrlString = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
+//    // let urlString = "https://participants.evolv.ai/v1/40ebcd9abf/allocations?uid=0FABD775-0E0B-4D1D-8E7A-B425B92E9DC7"
+//    // let url = URL(string: urlString)!
+//    NetworkingService.sharedInstance.get(fromUrl: url) { (response) in
+//      guard let response = response else {
+//        return completion(nil)
+//      }
+//      completion(response)
+//    }
+//  }
   
   static func post(url: String, jsonArray: [[String : Any]]) {
     print("working on it")

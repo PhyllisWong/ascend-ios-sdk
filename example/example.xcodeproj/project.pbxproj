@@ -31,6 +31,9 @@
 		3664FC1D22B19392009ED0BE /* AscendConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1C22B19392009ED0BE /* AscendConfig.swift */; };
 		3664FC1F22B1C40D009ED0BE /* DefaultAllocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */; };
 		3664FC2522B42EEF009ED0BE /* LruCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC2422B42EEF009ED0BE /* LruCache.swift */; };
+		3664FC2722B803CA009ED0BE /* ErrorObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC2622B803CA009ED0BE /* ErrorObserver.swift */; };
+		3664FC2A22B80664009ED0BE /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC2922B80664009ED0BE /* Log.swift */; };
+		3664FC2C22B81219009ED0BE /* AscendCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC2B22B81219009ED0BE /* AscendCommon.swift */; };
 		F00345C3683348A0B72996D8 /* Pods_example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1791950A4D5C785F26EAE579 /* Pods_example.framework */; };
 /* End PBXBuildFile section */
 
@@ -84,6 +87,9 @@
 		3664FC1C22B19392009ED0BE /* AscendConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendConfig.swift; sourceTree = "<group>"; };
 		3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAllocationStore.swift; sourceTree = "<group>"; };
 		3664FC2422B42EEF009ED0BE /* LruCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LruCache.swift; sourceTree = "<group>"; };
+		3664FC2622B803CA009ED0BE /* ErrorObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorObserver.swift; sourceTree = "<group>"; };
+		3664FC2922B80664009ED0BE /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		3664FC2B22B81219009ED0BE /* AscendCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendCommon.swift; sourceTree = "<group>"; };
 		FDEECCE933EDCA50BF9067D5 /* Pods-example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.release.xcconfig"; path = "Target Support Files/Pods-example/Pods-example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,7 +150,9 @@
 				3661DDB622AF3012008F7017 /* LaunchScreen.storyboard */,
 				3661DDB422AF3012008F7017 /* Assets.xcassets */,
 				3661DDB922AF3012008F7017 /* Info.plist */,
+				3664FC2B22B81219009ED0BE /* AscendCommon.swift */,
 				3661DDDB22AF3599008F7017 /* Allocator.swift */,
+				3664FC2622B803CA009ED0BE /* ErrorObserver.swift */,
 				3664FC2422B42EEF009ED0BE /* LruCache.swift */,
 				3664FC1C22B19392009ED0BE /* AscendConfig.swift */,
 				3664FC0D22B17F69009ED0BE /* Allocations.swift */,
@@ -155,6 +163,7 @@
 				3664FC0F22B187BC009ED0BE /* EventEmitter.swift */,
 				3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */,
 				3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */,
+				3664FC2822B80652009ED0BE /* Service Objects */,
 				3664FC1122B18A94009ED0BE /* Networking */,
 			);
 			path = example;
@@ -189,6 +198,14 @@
 				3664FC0722B084F7009ED0BE /* HttpClient.swift */,
 			);
 			name = Networking;
+			sourceTree = "<group>";
+		};
+		3664FC2822B80652009ED0BE /* Service Objects */ = {
+			isa = PBXGroup;
+			children = (
+				3664FC2922B80664009ED0BE /* Log.swift */,
+			);
+			name = "Service Objects";
 			sourceTree = "<group>";
 		};
 		CBD64E96FA606424245D213D /* Pods */ = {
@@ -421,6 +438,7 @@
 				3664FC1022B187BC009ED0BE /* EventEmitter.swift in Sources */,
 				3664FC1B22B19352009ED0BE /* ExecutionDispatch.swift in Sources */,
 				3661DDE122AF4855008F7017 /* AscendParticipant.swift in Sources */,
+				3664FC2A22B80664009ED0BE /* Log.swift in Sources */,
 				3661DDE322AF6160008F7017 /* AscendService.swift in Sources */,
 				3664FC2522B42EEF009ED0BE /* LruCache.swift in Sources */,
 				3664FC1922B18B31009ED0BE /* URLResponse.swift in Sources */,
@@ -430,6 +448,8 @@
 				3661DDAE22AF3012008F7017 /* AppDelegate.swift in Sources */,
 				3664FC1522B18B06009ED0BE /* HTTPURLRequest.swift in Sources */,
 				3664FC1F22B1C40D009ED0BE /* DefaultAllocationStore.swift in Sources */,
+				3664FC2C22B81219009ED0BE /* AscendCommon.swift in Sources */,
+				3664FC2722B803CA009ED0BE /* ErrorObserver.swift in Sources */,
 				3664FC0A22B15F98009ED0BE /* AscendAllocationStore.swift in Sources */,
 				3664FC1D22B19392009ED0BE /* AscendConfig.swift in Sources */,
 			);
@@ -544,6 +564,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = "";
 			};
 			name = Debug;
 		};
@@ -597,6 +618,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = "";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

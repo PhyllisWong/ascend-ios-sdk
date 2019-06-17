@@ -19,7 +19,7 @@ public class Allocator {
   }
   
   // private let executionDispatch: ExecutionDispatch
-  // private let store: AscendAllocationStore // TODO: in memory store
+  private let store = URLCache.shared // TODO: in memory store
   private let config: AscendConfig
   private let participant: AscendParticipant
   // private let eventEmitter: EventEmitter
@@ -66,12 +66,9 @@ public class Allocator {
   }
   
   public func fetchAllocations() -> JSON {
-//    var fakeJsonArray: JSON = [["height": 0.90, "button": "blue"]]
     let url = self.createAllocationsUrl()
     /*
-     1. create the URL
      2. create the allocationFuture (settable)
-     3. sets an observable (some way to know when the promise os returned)
      4. instantiate a JSON parser
      5. parse the JSON returned by the future
      6. get previous allocation from the store
@@ -84,44 +81,62 @@ public class Allocator {
      13. catch and handle error, set allocationFuture with resolveAllocationFailure
      14. return allocationFuture (will either have allocations or an error
      */
-
+    var jsonArray = JSON()
+    // let dispatchGroup = DispatchGroup()
+    let urlString = String(describing: url)
+    // var dispatchQueue = DispatchQueue(label: urlString)
+    var cachedResponse = CachedURLResponse()
+    let logger = Log.BasicLogger()
+//    if #available(iOS 10.0, *) {
+//      dispatchQueue = DispatchQueue(
+//        label: urlString,
+//        qos: .default,
+//        attributes: .concurrent,
+//        autoreleaseFrequency: .workItem,
+//        target: .global())
+//    }
+    
+    let semaphore = DispatchSemaphore(value: 0)
+   
+    
     let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 20)
-    var fakeJsonArray = JSON()
+    let session = URLSession.shared.dataTask(with: url)
     
+    self.store.getCachedResponse(for: session, completionHandler: { (cachedData) in
+      if let cached = cachedData {
+        print("Cached Response: \(cached)")
+        cachedResponse = cached
+      }
+    })
     
-    
-    Alamofire.request(request).responseJSON { (response) in
-      let cachedURLResponse = CachedURLResponse(response: response.response!, data: (response.data! as NSData) as Data, userInfo: nil, storagePolicy: .allowed)
-      URLCache.shared.storeCachedResponse(cachedURLResponse, for: response.request!)
-      guard response.result.error == nil else {
-        print("error fetching data from url")
-        print(response.result.error!)
+    NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in
+      
+      // TODO: test this log the error
+      if let error = err {
+        logger.log(.error, message: error.localizedDescription)
+      }
+      guard let response = res, let data = _data else {
+        print("error fetching data from url", NetworkingError.data)
         return
       }
-      
-      let json = try? JSON(data: cachedURLResponse.data) // SwiftyJSON
-      // do whatever you want with your data here
-     
-      fakeJsonArray = json!
-      // return fakeJsonArray
-      print("stuff: \(json!)")
-      
-    }
     
+      jsonArray = JSON(data)
     
-    print("Your json: \(String(describing: fakeJsonArray))") // Test if it works
-    return fakeJsonArray
+      let cachedURLResponse = CachedURLResponse(response: response, data: data, userInfo: nil, storagePolicy: .allowedInMemoryOnly)
+    
+      // stores the initial response with a ~> Void
+      self.store.storeCachedResponse(cachedURLResponse, for: request)
+      // print("cachedResponse: \(cached)")
+    
+      
+      semaphore.signal() // 3. sets an observable (some way to know when the promise is returned)
+     })
+    
+     _ = semaphore.wait(timeout: .distantFuture)
+    print("Your json: \(String(describing: jsonArray))")
+    return jsonArray
   }
-  enum NetworkError: Error {
-    case url
-  }
-//
-//  func fetchAllocationsAsyncAwait() throws -> Data? {
-//    let dummyURL = createAllocationsUrl()
-//    if dummyURL {
-//      throw NetworkError.url
-//    }
-//  }
+  
   
   public func resolveAllocationsFailure() -> JsonArray {
     let fakeJsonArray = [["height": 0.90, "button": "blue"]]

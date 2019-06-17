@@ -35,11 +35,5 @@ private extension ViewController {
     let alloc = Allocator(config: config, participant: participant, httpClient: httpClient)
     let results = alloc.fetchAllocations()
     print("YOUR FETCHED ALLOCATION: \(String(describing: results))")
-//    do {
-//      let data = try alloc.fetchAllocationsAsyncAwait()
-//
-//    } catch {
-//      print("failed to fetch stuff:", error)
-//    }
   }
 }
