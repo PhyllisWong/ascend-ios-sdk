@@ -1,5 +1,7 @@
 PODS:
-  - Alamofire (4.4.0)
+  - Alamofire (4.8.2)
+  - DynamicJSON (2.0.2)
+  - PINCache (2.3)
   - PromiseKit (6.8.5):
     - PromiseKit/CorePromise (= 6.8.5)
     - PromiseKit/Foundation (= 6.8.5)
@@ -9,20 +11,30 @@ PODS:
     - PromiseKit/CorePromise
   - PromiseKit/UIKit (6.8.5):
     - PromiseKit/CorePromise
+  - SwiftyJSON (4.3.0)
 
 DEPENDENCIES:
-  - Alamofire (= 4.4.0)
+  - Alamofire
+  - DynamicJSON (~> 2.0.2)
+  - PINCache
   - PromiseKit (~> 6.8)
+  - SwiftyJSON (~> 4.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
+    - DynamicJSON
+    - PINCache
     - PromiseKit
+    - SwiftyJSON
 
 SPEC CHECKSUMS:
-  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  DynamicJSON: fc0c5a82980ff8aa956156f04d84fcdb2822e875
+  PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
   PromiseKit: 9616b0afef31eae56ab9ce044c8ec2b8612a15cd
+  SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
-PODFILE CHECKSUM: d01990a3edbc9136718ea904fe6d3cca4742203f
+PODFILE CHECKSUM: 283af9279df947eb3e2031ffa7d129d72b62f4e0
 
 COCOAPODS: 1.7.1

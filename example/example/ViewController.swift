@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DynamicJSON
 
 class ViewController: UIViewController {
   
@@ -18,16 +19,6 @@ class ViewController: UIViewController {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
     self.getJsonData()
-    
-    let envId = "envID"
-    let builder = ConfigBuilder(environmentId: envId)
-    print(builder.buildConfig().getDomain())
-    print(builder.buildConfig().getHttpScheme())
-    print(builder.buildConfig().getVersion())
-    print(builder.buildConfig().getEnvironmentId())
-    print(builder.buildConfig().getAscendAllocationStore())
-    print(builder.buildConfig().getHttpClient())
-    print(builder.buildConfig().getExecutionDispatch())
   }
 }
 
@@ -35,16 +26,14 @@ class ViewController: UIViewController {
 private extension ViewController {
   
   private func getJsonData() {
-    let urlString = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
-    HttpService.get(url: urlString, completion: { [weak self] (response) in
-      // unwraps the optional response
-      guard let response = response else {
-        print("OOPS!")
-        return
-      }
-      // let really_bad_var_name = response // as! Dictionary<String, [Dictionary<String, Any>]>
-      print("YOUR ALLOCATION: \(response)")
-      // dump(response) // shows it as swift data types
-    })
+    let participantBuilder = ParticipantBuilder()
+    
+    let participant = participantBuilder.build()
+    let httpClient = HttpClient()
+    let envId = "40ebcd9abf"
+    let config = ConfigBuilder(environmentId: envId).buildConfig()
+    let alloc = Allocator(config: config, participant: participant, httpClient: httpClient)
+    let results = alloc.fetchAllocations()
+    print("YOUR FETCHED ALLOCATION: \(String(describing: results))")
   }
 }

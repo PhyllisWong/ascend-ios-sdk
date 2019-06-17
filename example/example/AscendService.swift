@@ -7,31 +7,40 @@
 //
 
 import Foundation
-import Alamofire
 import PromiseKit
-
-typealias JSON = [String : Any]
-
-// enum used for convenience purposes (optional)
-public enum ServerURL: String {
-  case base = "https://participants-stg.evolv.ai"
-  
-  // additional endpoints
-}
+import DynamicJSON
 
 protocol Networking {
-  static func get(fromUrl url: URL, completion: @escaping (Any?) -> ())
+  static func get(fromUrl url: URL, completion: @escaping (Any) -> Void)
 }
 
-class NetworkManager: Networking {
-  static func get(fromUrl url: URL, completion: @escaping (Any?) -> ()) {
+struct NetworkingService  {
+  
+  static let sharedInstance = NetworkingService()
+  
+  func get(fromUrl url: URL, completion: @escaping (Data?, URLResponse?, NetworkingError?) -> Void) {
     let session = URLSession.shared
     let task = session.dataTask(with: url, completionHandler: { (data, response, error) in
+    let logger = Log.BasicLogger()
       
-      // 1 check for errors
-      if error != nil || data == nil {
-        // self.handleClientError(error) // create a function that can deal with the error
-        print("OH NO! An error occured ...")
+      if let err = error {
+        logger.log(.error, message: err.localizedDescription)
+        let fileUrl = Bundle.main.url(forResource: "logs", withExtension: "txt")
+        
+        // writing
+        do {
+          let errorMessage = String(stringLiteral: "Error Occured \(err.localizedDescription)")
+          try errorMessage.write(to: fileUrl!, atomically: true, encoding: .utf8)
+        } catch {
+          print("Error writing to log")
+        }
+        // reading
+        do {
+          let text = try String(contentsOf: fileUrl!, encoding: .utf8)
+          print("REQUESTED TEXT: \(text)")
+        } catch {
+          print("error reading")
+        }
         return
       }
       
@@ -51,57 +60,46 @@ class NetworkManager: Networking {
       
       // 4 serialize the data to json
       do {
-        let json = try JSONSerialization.jsonObject(with: data!, options: [])
-        completion(json)
+        completion(data, response, error as? NetworkingError)
       } catch {
-        print("JSON error: \(error.localizedDescription)")
+        print("JSON error: \(NetworkingError.invalidRequest)")
       }
     })
     task.resume()
   }
-  
-  
 }
 
 // - MARK: final class makes it so it can't be extended or overridden
-final class HttpService: HttpClient {
-  
-  public var url: String
-  
-  init() {
-    self.url = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
-  }
-  
+public class HttpClient  {
   
   // FIXME: change Any to NSDictionary for this method
-  static func get(url: String, completion: @escaping (Any?) -> ()) {
-    // TODO: create a method that creates this give a uid that is not checked
-    let stringUrl = url
-    guard let url = URL(string: stringUrl) else { return completion(nil) }
-    
-    NetworkManager.get(fromUrl: url) { (response) in
-      guard let response = response else {
-        return completion(nil)
-      }
-      completion(response)
-    }
-  }
+//  static func get(url: URL, completion: @escaping (Any?) -> ()) {
+//    let safeUrlString = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
+//    // let urlString = "https://participants.evolv.ai/v1/40ebcd9abf/allocations?uid=0FABD775-0E0B-4D1D-8E7A-B425B92E9DC7"
+//    // let url = URL(string: urlString)!
+//    NetworkingService.sharedInstance.get(fromUrl: url) { (response) in
+//      guard let response = response else {
+//        return completion(nil)
+//      }
+//      completion(response)
+//    }
+//  }
   
   static func post(url: String, jsonArray: [[String : Any]]) {
     print("working on it")
   }
   
 }
-
-public enum Resource {
-  case getConfig
-  
-  public var resource: (method: HTTPMethod, route: String) {
-    let environment_id = "5eadef5e68"
-    switch self {
-    case .getConfig:
-      return (.get, "/v1/\(environment_id)/configuration")
-    }
-  }
-}
+//
+//public enum Resource {
+//  case getConfig
+//
+//  public var resource: (method: HTTPMethod, route: String) {
+//    let environment_id = "5eadef5e68"
+//    switch self {
+//    case .getConfig:
+//      return (.get, "/v1/\(environment_id)/configuration")
+//    }
+//  }
+//}
 
