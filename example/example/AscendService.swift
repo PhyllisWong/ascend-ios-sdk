@@ -11,14 +11,14 @@ import PromiseKit
 import DynamicJSON
 
 protocol Networking {
-  static func get(fromUrl url: URL, completion: @escaping (Any) -> Void)
+  func get(fromUrl url: URL, completion: @escaping (Any) -> Void)
 }
 
-struct NetworkingService  {
+struct NetworkingService {
   
   static let sharedInstance = NetworkingService()
   
-  func get(fromUrl url: URL, completion: @escaping (Data?, URLResponse?, NetworkingError?) -> Void) {
+  public func get(fromUrl url: URL, completion: @escaping (Data?, URLResponse?, NetworkingError?) -> Void) {
     let session = URLSession.shared
     let task = session.dataTask(with: url, completionHandler: { (data, response, error) in
     let logger = Log.BasicLogger()
@@ -68,38 +68,34 @@ struct NetworkingService  {
     task.resume()
   }
 }
-
+// let safeUrlString = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
 // - MARK: final class makes it so it can't be extended or overridden
 public class HttpClient  {
   
   // FIXME: change Any to NSDictionary for this method
-//  static func get(url: URL, completion: @escaping (Any?) -> ()) {
-//    let safeUrlString = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
-//    // let urlString = "https://participants.evolv.ai/v1/40ebcd9abf/allocations?uid=0FABD775-0E0B-4D1D-8E7A-B425B92E9DC7"
-//    // let url = URL(string: urlString)!
-//    NetworkingService.sharedInstance.get(fromUrl: url) { (response) in
-//      guard let response = response else {
-//        return completion(nil)
-//      }
-//      completion(response)
-//    }
-//  }
+  public func get(withUrl url: URL, semaphore: DispatchSemaphore) -> [JSON] {
+    
+    var jsonArray = [JSON()]
+    NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in
+
+      if let error = err {
+        Log.logger.log(.debug, message: "Error : \(error.localizedDescription)")
+      }
+      
+      guard let response = res, let data = _data else {
+        Log.logger.log(.debug, message: "NetworkingError data")
+        return
+      }
+      
+      jsonArray = [JSON(data)]
+      semaphore.signal() // tell the semaphore that we are done
+    })
+    return jsonArray
+  }
   
   static func post(url: String, jsonArray: [[String : Any]]) {
     print("working on it")
   }
   
 }
-//
-//public enum Resource {
-//  case getConfig
-//
-//  public var resource: (method: HTTPMethod, route: String) {
-//    let environment_id = "5eadef5e68"
-//    switch self {
-//    case .getConfig:
-//      return (.get, "/v1/\(environment_id)/configuration")
-//    }
-//  }
-//}
 

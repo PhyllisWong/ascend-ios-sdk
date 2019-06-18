@@ -8,8 +8,6 @@
 
 import Foundation
 
-import Foundation
-
 protocol Logger {
   func log(_ level: Log.Level, message: String)
 }
@@ -23,6 +21,8 @@ struct Log {
   }
   
   struct BasicLogger: Logger {
+    static let sharedInstance = BasicLogger()
+    
     func log(_ level: Level, message: String) {
       var prefix = ""
       
@@ -39,7 +39,7 @@ struct Log {
   }
   
   static var level = Level.noLogging
-  static var logger: Logger = BasicLogger()
+  static public var logger: Logger = BasicLogger()
   
   static func debug(_ msg: @autoclosure () -> String) {
     if level.rawValue <= Level.debug.rawValue {
