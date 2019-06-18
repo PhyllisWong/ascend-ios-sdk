@@ -93,7 +93,7 @@ public class HttpClient  {
     return jsonArray
   }
   
-  static func post(url: String, jsonArray: [[String : Any]]) {
+  public func post(url: String, jsonArray: [[String : Any]]) {
     print("working on it")
   }
   

@@ -78,7 +78,6 @@ public class Allocator {
       let cached = try LruCache.sharedInstance.getEntry(store: self.store, session: session)
       if let c = cached {
         cachedResponse = c
-        semaphore.signal()
       }
     } catch {
 //      jsonArray = [self.resolveAllocationsFailure(session: session)]
@@ -103,10 +102,8 @@ public class Allocator {
         do {
           let _ = try LruCache.sharedInstance.putEntry(store: self.store, request: request, response: response, data: data)
         } catch {
-          // Error saving to the cache: log it or do something else???
+          self.logger.log(.debug, message: "Error saving to the cache")
         }
-
-
         semaphore.signal() // tell the semaphore that we are done
       })
       _ = semaphore.wait(timeout: .distantFuture)
