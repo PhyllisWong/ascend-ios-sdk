@@ -22,7 +22,7 @@ public class Allocator {
   private let config: AscendConfig
   private let participant: AscendParticipant
   // private let eventEmitter: EventEmitter
-  private let httpClient: HttpClient
+  private let httpClient: NetworkingService
   
   private var confirmationSandbagged: Bool = false
   private var contaminationSandbagged: Bool = false
@@ -34,7 +34,7 @@ public class Allocator {
        config: AscendConfig,
        participant: AscendParticipant,
        // eventEmitter: EventEmitter,
-       httpClient: HttpClient
+       httpClient: NetworkingService
     ) {
     // self.executionDispatch = executionDispatch
     // self.store = store
@@ -70,56 +70,52 @@ public class Allocator {
     // let url = URL(string: "kjnsdfjbn")! // BAD!!!! for testing
     var jsonArray = JSON()
     var cachedResponse = CachedURLResponse()
-    
-//    if #available(iOS 10.0, *) {
-//      dispatchQueue = DispatchQueue(
-//        label: urlString,
-//        qos: .default,
-//        attributes: .concurrent,
-//        autoreleaseFrequency: .workItem,
-//        target: .global())
-//    }
-    
-    let semaphore = DispatchSemaphore(value: 0)
+    let semaphore = DispatchSemaphore(value: 3)
     let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 20)
     let session = URLSession.shared.dataTask(with: url)
     
-    self.store.getCachedResponse(for: session, completionHandler: { (cachedData) in
-      if let cached = cachedData {
-        print("Cached Response: \(cached)")
-        cachedResponse = cached
+    do {
+      let cached = try LruCache.sharedInstance.getEntry(store: self.store, session: session)
+      if let c = cached {
+        cachedResponse = c
+        semaphore.signal()
       }
-    })
-    
-    
-    NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in // Needs to be abstracted out
-      
-      if let error = err {
-        self.logger.log(.debug, message: "Error : \(error.localizedDescription)")
-      }
-      
-      guard let response = res, let data = _data else {
-        // If you don't get a response here, use the data from the cache
-        self.logger.log(.debug, message: "NetworkingError data")
-        return
-      }
-      // You got data back...convert it to JSON
-      jsonArray = JSON(data)
-      // Initialize the data to be cached
-      let cachedURLResponse = CachedURLResponse(response: response, data: data, userInfo: nil, storagePolicy: .allowedInMemoryOnly)
-      // Save the data to update the date of the cached data
-      self.store.storeCachedResponse(cachedURLResponse, for: request)
-      
-      semaphore.signal() // tell the semaphore that we are done
-     })
-     _ = semaphore.wait(timeout: .distantFuture)
-    
-    // TODO: add reconciliation logic here
-    if (JSON(cachedResponse.data) == jsonArray) {
-      return JSON(cachedResponse.data)
-    } else {
-      return jsonArray
+    } catch {
+//      jsonArray = [self.resolveAllocationsFailure(session: session)]
+      // There was nothing in the cache for whatever reason(first time fetching, cache was corrupted, ect...)
     }
+    let json = httpClient.get(fromUrl: url, completion: semaphore)
+    print(json)
+//      // Needs to be abstracted out
+//      NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in
+//
+//        if let error = err {
+//          self.logger.log(.debug, message: "Error : \(error.localizedDescription)")
+//        }
+//
+//        guard let response = res, let data = _data else {
+//          self.logger.log(.debug, message: "NetworkingError data")
+//          return
+//        }
+//
+//        jsonArray = JSON(data)
+//
+//        do {
+//          let _ = try LruCache.sharedInstance.putEntry(store: self.store, request: request, response: response, data: data)
+//        } catch {
+//          // Error saving to the cache: log it or do something else???
+//        }
+//
+//
+//        semaphore.signal() // tell the semaphore that we are done
+//      })
+      _ = semaphore.wait(timeout: .distantFuture)
+      
+      // TODO: add reconciliation logic here
+      if (JSON(cachedResponse.data) == jsonArray) {
+        return JSON(cachedResponse.data)
+      }
+    return jsonArray
   }
   
   

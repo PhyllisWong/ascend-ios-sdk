@@ -8,23 +8,23 @@
 
 import Foundation
 
-//struct LruCache {
-//  static let store = LruCache()
-extension URLCache {
+struct LruCache {
+  static let sharedInstance = LruCache()
+// extension URLCache {
   
-  func getEntry(url: URL) -> Data {
+  func getEntry(store: URLCache, session: URLSessionDataTask) throws -> CachedURLResponse? {
     var cachedResponse = CachedURLResponse()
-    let session = URLSession.shared.dataTask(with: url)
-    let data = Data()
-    URLCache.shared.getCachedResponse(for: session, completionHandler: { (cachedData) in
+    store.getCachedResponse(for: session, completionHandler: { (cachedData) in
       if let cached = cachedData {
-        print("Cached Response: \(cached)")
         cachedResponse = cached
       }
     })
-    return data
+    return cachedResponse
   }
   
-  func putEntry(){}
+  func putEntry(store: URLCache, request: URLRequest, response: URLResponse, data: Data) throws -> Void {
+    let cachedURLResponse = CachedURLResponse(response: response, data: data, userInfo: nil, storagePolicy: .allowedInMemoryOnly)
+    store.storeCachedResponse(cachedURLResponse, for: request)
+  }
 }
 

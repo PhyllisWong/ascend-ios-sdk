@@ -15,12 +15,12 @@ public class AscendConfig {
   private let version: String;
   private let environmentId: String;
   // private let ascendAllocationStore: AscendAllocationStore;
-  private let httpClient: HttpClient;
+  private let httpClient: AscendHttpClient;
   // private let executionDispatch: ExecutionDispatch;
   
   init(httpScheme: String, domain: String, version: String,
        environmentId: String, // ascendAllocationStore: AscendAllocationStore,
-       httpClient: HttpClient
+       httpClient: AscendHttpClient
     ) {
     self.httpScheme = httpScheme
     self.domain = domain
@@ -31,7 +31,7 @@ public class AscendConfig {
     // self.executionDispatch = ExecutionDispatch()
   }
   
-  public func configBuilder(environmentId: String, httpClient: HttpClient) -> ConfigBuilder {
+  public func configBuilder(environmentId: String, httpClient: AscendHttpClient) -> ConfigBuilder {
     let configurationBuilder = ConfigBuilder(environmentId: environmentId, httpClient: httpClient)
     return configurationBuilder
   }
