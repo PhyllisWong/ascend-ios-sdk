@@ -11,10 +11,10 @@ import PromiseKit
 import DynamicJSON
 
 protocol Networking {
-  func get(fromUrl url: URL, completion: @escaping (Data?, URLResponse?, NetworkingError?) -> Void)
+  func get(fromUrl url: URL, completion: @escaping (Any) -> Void)
 }
 
-struct NetworkingService: Networking  {
+struct NetworkingService {
   
   static let sharedInstance = NetworkingService()
   
@@ -70,11 +70,10 @@ struct NetworkingService: Networking  {
 }
 // let safeUrlString = "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123"
 // - MARK: final class makes it so it can't be extended or overridden
-public class AscendHttpClient  {
+public class HttpClient  {
   
   // FIXME: change Any to NSDictionary for this method
   public func get(withUrl url: URL, semaphore: DispatchSemaphore) -> [JSON] {
-    
     
     var jsonArray = [JSON()]
     NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in
@@ -99,16 +98,4 @@ public class AscendHttpClient  {
   }
   
 }
-//
-//public enum Resource {
-//  case getConfig
-//
-//  public var resource: (method: HTTPMethod, route: String) {
-//    let environment_id = "5eadef5e68"
-//    switch self {
-//    case .getConfig:
-//      return (.get, "/v1/\(environment_id)/configuration")
-//    }
-//  }
-//}
 

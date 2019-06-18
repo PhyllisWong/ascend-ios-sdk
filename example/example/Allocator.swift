@@ -22,7 +22,7 @@ public class Allocator {
   private let config: AscendConfig
   private let participant: AscendParticipant
   // private let eventEmitter: EventEmitter
-  private let httpClient: NetworkingService
+  private let httpClient: HttpClient
   
   private var confirmationSandbagged: Bool = false
   private var contaminationSandbagged: Bool = false
@@ -34,7 +34,7 @@ public class Allocator {
        config: AscendConfig,
        participant: AscendParticipant,
        // eventEmitter: EventEmitter,
-       httpClient: NetworkingService
+       httpClient: HttpClient
     ) {
     // self.executionDispatch = executionDispatch
     // self.store = store
@@ -70,7 +70,7 @@ public class Allocator {
     // let url = URL(string: "kjnsdfjbn")! // BAD!!!! for testing
     var jsonArray = JSON()
     var cachedResponse = CachedURLResponse()
-    let semaphore = DispatchSemaphore(value: 3)
+    let semaphore = DispatchSemaphore(value: 0)
     let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 20)
     let session = URLSession.shared.dataTask(with: url)
     
@@ -84,31 +84,31 @@ public class Allocator {
 //      jsonArray = [self.resolveAllocationsFailure(session: session)]
       // There was nothing in the cache for whatever reason(first time fetching, cache was corrupted, ect...)
     }
-    let json = httpClient.get(fromUrl: url, completion: semaphore)
-    print(json)
-//      // Needs to be abstracted out
-//      NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in
-//
-//        if let error = err {
-//          self.logger.log(.debug, message: "Error : \(error.localizedDescription)")
-//        }
-//
-//        guard let response = res, let data = _data else {
-//          self.logger.log(.debug, message: "NetworkingError data")
-//          return
-//        }
-//
-//        jsonArray = JSON(data)
-//
-//        do {
-//          let _ = try LruCache.sharedInstance.putEntry(store: self.store, request: request, response: response, data: data)
-//        } catch {
-//          // Error saving to the cache: log it or do something else???
-//        }
-//
-//
-//        semaphore.signal() // tell the semaphore that we are done
-//      })
+//    let json = httpClient.get(fromUrl: url, completion: semaphore)
+//    print(json)
+      // Needs to be abstracted out
+      NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in
+
+        if let error = err {
+          self.logger.log(.debug, message: "Error : \(error.localizedDescription)")
+        }
+
+        guard let response = res, let data = _data else {
+          self.logger.log(.debug, message: "NetworkingError data")
+          return
+        }
+
+        jsonArray = JSON(data)
+
+        do {
+          let _ = try LruCache.sharedInstance.putEntry(store: self.store, request: request, response: response, data: data)
+        } catch {
+          // Error saving to the cache: log it or do something else???
+        }
+
+
+        semaphore.signal() // tell the semaphore that we are done
+      })
       _ = semaphore.wait(timeout: .distantFuture)
       
       // TODO: add reconciliation logic here
