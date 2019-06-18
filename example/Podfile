@@ -7,8 +7,6 @@ target 'example' do
   # Pods for ascend sdk example app
   pod 'PromiseKit', '~> 6.8'
   pod 'DynamicJSON', '~> 2.0.2'
-  # pod 'Track'
-  pod 'PINCache'
   pod 'Alamofire'
   pod 'SwiftyJSON', '~> 4.0'
 end

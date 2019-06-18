@@ -35,6 +35,7 @@
 		3664FC2A22B80664009ED0BE /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC2922B80664009ED0BE /* Log.swift */; };
 		3664FC2C22B81219009ED0BE /* AscendCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC2B22B81219009ED0BE /* AscendCommon.swift */; };
 		3664FC2E22B839B7009ED0BE /* logs.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3664FC2D22B839B7009ED0BE /* logs.txt */; };
+		3664FC3222B95B2E009ED0BE /* AscendClientImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC3122B95B2E009ED0BE /* AscendClientImpl.swift */; };
 		F00345C3683348A0B72996D8 /* Pods_example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1791950A4D5C785F26EAE579 /* Pods_example.framework */; };
 /* End PBXBuildFile section */
 
@@ -92,6 +93,7 @@
 		3664FC2922B80664009ED0BE /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		3664FC2B22B81219009ED0BE /* AscendCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendCommon.swift; sourceTree = "<group>"; };
 		3664FC2D22B839B7009ED0BE /* logs.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = logs.txt; sourceTree = "<group>"; };
+		3664FC3122B95B2E009ED0BE /* AscendClientImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendClientImpl.swift; sourceTree = "<group>"; };
 		FDEECCE933EDCA50BF9067D5 /* Pods-example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.release.xcconfig"; path = "Target Support Files/Pods-example/Pods-example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -161,6 +163,7 @@
 				3664FC0922B15F98009ED0BE /* AscendAllocationStore.swift */,
 				3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */,
 				3661DDDD22AF3890008F7017 /* AscendClient.swift */,
+				3664FC3122B95B2E009ED0BE /* AscendClientImpl.swift */,
 				3661DDE022AF4855008F7017 /* AscendParticipant.swift */,
 				3664FC0F22B187BC009ED0BE /* EventEmitter.swift */,
 				3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */,
@@ -388,7 +391,6 @@
 				"${PODS_ROOT}/Target Support Files/Pods-example/Pods-example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/DynamicJSON/DynamicJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/PINCache/PINCache.framework",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
@@ -396,7 +398,6 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DynamicJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINCache.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
@@ -440,6 +441,7 @@
 				3664FC0C22B16443009ED0BE /* MaxSizeDictionary.swift in Sources */,
 				3664FC1722B18B1A009ED0BE /* HTTPURLResponse.swift in Sources */,
 				3664FC1022B187BC009ED0BE /* EventEmitter.swift in Sources */,
+				3664FC3222B95B2E009ED0BE /* AscendClientImpl.swift in Sources */,
 				3664FC1B22B19352009ED0BE /* ExecutionDispatch.swift in Sources */,
 				3661DDE122AF4855008F7017 /* AscendParticipant.swift in Sources */,
 				3664FC2A22B80664009ED0BE /* Log.swift in Sources */,

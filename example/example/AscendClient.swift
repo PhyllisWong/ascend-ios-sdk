@@ -24,7 +24,7 @@ public protocol AscendClient {
    * @param <T> type of value to be returned
    * @return a value associated with the given key
    */
-  static func get<T>(key: String, defaultValue: T)
+  func get<T>(key: String, defaultValue: T)
   
   /**
    * Retrieves a value from Ascend asynchronously and applies some custom action.
@@ -46,7 +46,7 @@ public protocol AscendClient {
     - function:  a handler that is invoked when the allocation is updated
     - <T>: type of value to be returned
  */
-  static func subscribe<T>(key: String, defaultValue: T, AscendAction: ActionType) -> Void
+  func subscribe<T>(key: String, defaultValue: T, AscendAction: ActionType) -> Void
  
   /**
    * Emits a generic event to be recorded by Ascend.
@@ -58,7 +58,7 @@ public protocol AscendClient {
    * @param score a score to be associated with the event
    */
   
-  static func emitEvent(key: String, Score: Double) -> Void
+  func emitEvent(key: String, Score: Double) -> Void
   
   /**
    * Emits a generic event to be recorded by Ascend.
@@ -67,7 +67,7 @@ public protocol AscendClient {
    * </p>
    * @param key the identifier of the event
    */
-  static func emitEvent(key: String) -> Void
+  func emitEvent(key: String) -> Void
   
   /**
    * Sends a confirmed event to Ascend.
@@ -77,7 +77,7 @@ public protocol AscendClient {
    *     timed out or failed.
    * </p>
    */
-  static func confirm() -> Void
+  func confirm() -> Void
   
   /**
    * Sends a contamination event to Ascend.
@@ -87,5 +87,5 @@ public protocol AscendClient {
    *     that the allocation timed out or failed.
    * </p>
    */
-  static func contaminate() -> Void
+  func contaminate() -> Void
 }
