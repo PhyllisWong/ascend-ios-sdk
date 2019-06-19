@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol AscendClient {
+protocol AscendClient {
   /**
    * Retrieves a value from the participant's allocation, returns a default upon error.
    * <p>
@@ -36,8 +36,6 @@ public protocol AscendClient {
    *     has changed.
    * </p>
  */
-  // TODO: add a quick help for this thingy
-  associatedtype ActionType // FIXME: Check this is doing what I think it's doing
   
   /**
   - Parameters:
@@ -46,8 +44,9 @@ public protocol AscendClient {
     - function:  a handler that is invoked when the allocation is updated
     - <T>: type of value to be returned
  */
-  func subscribe<T>(key: String, defaultValue: T, AscendAction: ActionType) -> Void
- 
+  func subscribe<T>(key: String, defaultValue: T, AscendAction: @escaping (Any) -> Void)
+
+
   /**
    * Emits a generic event to be recorded by Ascend.
    * <p>
@@ -58,7 +57,7 @@ public protocol AscendClient {
    * @param score a score to be associated with the event
    */
   
-  func emitEvent(key: String, Score: Double) -> Void
+  func emitEvent(key: String, score: Double) -> Void
   
   /**
    * Emits a generic event to be recorded by Ascend.
