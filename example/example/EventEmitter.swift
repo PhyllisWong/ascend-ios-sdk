@@ -110,5 +110,7 @@ public class EventEmitter {
     }
   }
   
-  private func makeEventRequest(_ url: URL) -> Void {}
+  private func makeEventRequest(_ url: URL) -> Void {
+    let someString: String = ""
+  }
 }
