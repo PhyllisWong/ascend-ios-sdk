@@ -10,15 +10,15 @@ import Foundation
 import DynamicJSON
 
 public class DefaultAllocationStore : AscendAllocationStore {
-  public func get(uid: String) -> [JSON]? {
-    let fakeCache = [["key": "value"]] as [JSON]
+  public func get(uid: String) -> String? {
+    let fakeCache = "[[\"key\": \"value\"]]"
     //    return cache.getEntry(uid);
     print("FAKE CACHE VALUE: \(fakeCache)")
     return fakeCache
   }
   
-  public func put(uid: String, allocations: [JSON]) {
-    let fakeCache = [["Key": ["otherKey": "value"]]] as [JSON]
+  public func put(uid: String, allocations: String) {
+    let fakeCache: String = "[[\"Key\": [\"otherKey\": \"value\"]]]"
     print("FAKE CACHE JSON: \(fakeCache)")
   }
   
