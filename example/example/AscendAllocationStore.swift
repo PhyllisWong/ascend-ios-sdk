@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import DynamicJSON
 
 // This is the inerface for the client
 public protocol AscendAllocationStore {
@@ -22,7 +23,7 @@ public protocol AscendAllocationStore {
    */
   
   // What data type this supposed to return, and will it need to be serialized to json?
-  func get(uid: String) -> [[String: Any]?]
+  func get(uid: String) -> String?
   
   /**
    * Stores a JsonArray.
@@ -35,5 +36,5 @@ public protocol AscendAllocationStore {
   
   // Do we want to go some kind of confirmation that this was sucessful?
   // Where are we storing this data?
-  func put(uid: String, allocations: [[String: Any]]) -> ()
+  func put(uid: String, allocations: String) -> ()
 }

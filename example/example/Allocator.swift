@@ -80,18 +80,12 @@ public class Allocator {
         cachedResponse = c
       }
     } catch {
-//      jsonArray = [self.resolveAllocationsFailure(session: session)]
-      // There was nothing in the cache for whatever reason(first time fetching, cache was corrupted, ect...)
+        print("Error retrieving cached allocation")
     }
-//    let json = httpClient.get(fromUrl: url, completion: semaphore)
-//    print(json)
-      // Needs to be abstracted out
       NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in
-
         if let error = err {
           self.logger.log(.debug, message: "Error : \(error.localizedDescription)")
         }
-
         guard let response = res, let data = _data else {
           self.logger.log(.debug, message: "NetworkingError data")
           return
@@ -104,7 +98,7 @@ public class Allocator {
         } catch {
           self.logger.log(.debug, message: "Error saving to the cache")
         }
-        semaphore.signal() // tell the semaphore that we are done
+        semaphore.signal()
       })
       _ = semaphore.wait(timeout: .distantFuture)
       
