@@ -68,7 +68,7 @@ public class EventEmitter {
   // FIXME: change this to createEventUrl
   func getEventUrl(_ type: String , _ score: Double ) -> URL {
     var components = URLComponents()
-    do {
+   
       components.scheme = config.getHttpScheme()
       components.host = config.getDomain()
       components.path = "/\(config.getVersion())/\(config.getEnvironmentId())/events"
@@ -79,38 +79,49 @@ public class EventEmitter {
         URLQueryItem(name: "score", value: "\(String(score))")
       ]
       
-      if let url = components.url { return url }
-      return URL(string: "")!
-    } catch let error as Error {
-      let message: String = "Error creating event url: \(error.localizedDescription)"
-      Log.logger.log(.debug, message: message)
-    }
+      guard let url = components.url else {
+        let message: String = "Error creating event url with type and score."
+        Log.logger.log(.debug, message: message)
+        return URL(string: "")!
+      }
+      return url
   }
 
-  
   func getEventUrl(type: String, experimentId: String, candidateId: String) -> URL {
     var components = URLComponents()
-    do {
-      components.scheme = config.getHttpScheme()
-      components.host = config.getDomain()
-      components.path = "/\(config.getVersion())/\(config.getEnvironmentId())/events"
-      components.queryItems = [
-        URLQueryItem(name: "uid", value: "\(participant.getUserId())"),
-        URLQueryItem(name: "sid", value: "\(participant.getSessionId())"),
-        URLQueryItem(name: "eid", value: "\(experimentId)"),
-        URLQueryItem(name: "cid", value: "\(candidateId)"),
-        URLQueryItem(name: "type", value: "\(type)")
-      ]
-      
-      if let url = components.url { return url }
-      return URL(string: "")!
-    } catch let error as Error {
-      let message: String = "Error creating event url: \(error.localizedDescription)"
+  
+    components.scheme = config.getHttpScheme()
+    components.host = config.getDomain()
+    components.path = "/\(config.getVersion())/\(config.getEnvironmentId())/events"
+    components.queryItems = [
+      URLQueryItem(name: "uid", value: "\(participant.getUserId())"),
+      URLQueryItem(name: "sid", value: "\(participant.getSessionId())"),
+      URLQueryItem(name: "eid", value: "\(experimentId)"),
+      URLQueryItem(name: "cid", value: "\(candidateId)"),
+      URLQueryItem(name: "type", value: "\(type)")
+    ]
+    
+    guard let url = components.url else {
+      let message: String = "Error creating event url with Experiment ID and Candidate ID."
       Log.logger.log(.debug, message: message)
+      return URL(string: "")!
     }
+    return url
   }
   
-  private func makeEventRequest(_ url: URL) -> Void {
-    let someString: String = ""
+  private func makeEventRequest(_ url: URL?) -> Void {
+    let semaphore = DispatchSemaphore(value: 0) // Do we really need this here?
+    guard let url = url else {
+      let message = "The event url was nil, skipping event request."
+      Log.logger.log(.debug, message: message)
+      return
+    }
+    do {
+      httpClient.get(withUrl: url, semaphore: semaphore)
+      semaphore.signal()
+    } catch let error as NetworkingError {
+      let message: String = "There was an exception while making an event request with \(url): \(error.localizedDescription)"
+      Log.logger.log(.debug, message: message)
+    }
   }
 }
