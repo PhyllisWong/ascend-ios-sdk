@@ -36,6 +36,7 @@
 		3664FC2C22B81219009ED0BE /* AscendCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC2B22B81219009ED0BE /* AscendCommon.swift */; };
 		3664FC2E22B839B7009ED0BE /* logs.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3664FC2D22B839B7009ED0BE /* logs.txt */; };
 		3664FC3222B95B2E009ED0BE /* AscendClientImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC3122B95B2E009ED0BE /* AscendClientImpl.swift */; };
+		36D06E7F22BB093700B533B3 /* Execution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D06E7E22BB093700B533B3 /* Execution.swift */; };
 		F00345C3683348A0B72996D8 /* Pods_example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1791950A4D5C785F26EAE579 /* Pods_example.framework */; };
 /* End PBXBuildFile section */
 
@@ -94,6 +95,7 @@
 		3664FC2B22B81219009ED0BE /* AscendCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendCommon.swift; sourceTree = "<group>"; };
 		3664FC2D22B839B7009ED0BE /* logs.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = logs.txt; sourceTree = "<group>"; };
 		3664FC3122B95B2E009ED0BE /* AscendClientImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendClientImpl.swift; sourceTree = "<group>"; };
+		36D06E7E22BB093700B533B3 /* Execution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Execution.swift; sourceTree = "<group>"; };
 		FDEECCE933EDCA50BF9067D5 /* Pods-example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.release.xcconfig"; path = "Target Support Files/Pods-example/Pods-example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -168,6 +170,7 @@
 				3664FC0F22B187BC009ED0BE /* EventEmitter.swift */,
 				3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */,
 				3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */,
+				36D06E7E22BB093700B533B3 /* Execution.swift */,
 				3664FC2422B42EEF009ED0BE /* LruCache.swift */,
 				3664FC2822B80652009ED0BE /* Service Objects */,
 				3664FC1122B18A94009ED0BE /* Networking */,
@@ -441,6 +444,7 @@
 				3664FC0C22B16443009ED0BE /* MaxSizeDictionary.swift in Sources */,
 				3664FC1722B18B1A009ED0BE /* HTTPURLResponse.swift in Sources */,
 				3664FC1022B187BC009ED0BE /* EventEmitter.swift in Sources */,
+				36D06E7F22BB093700B533B3 /* Execution.swift in Sources */,
 				3664FC3222B95B2E009ED0BE /* AscendClientImpl.swift in Sources */,
 				3664FC1B22B19352009ED0BE /* ExecutionDispatch.swift in Sources */,
 				3661DDE122AF4855008F7017 /* AscendParticipant.swift in Sources */,
