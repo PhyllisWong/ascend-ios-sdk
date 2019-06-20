@@ -44,7 +44,7 @@ class Execution {
     return type(of: element)
   }
   
-  func executeWithAllocation(rawAllocations: [JSON]) throws -> Void {
+  func executeWithAllocation(rawAllocations: String) throws -> Void {
     let cls: GenericClass = GenericClass(element: defaultValue)
     let allocations = Allocations(allocations: rawAllocations)
     // let type = (cls.element).getMyType()
