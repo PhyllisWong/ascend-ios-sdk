@@ -7,7 +7,25 @@
 //
 
 import Foundation
+import DynamicJSON
 
-public class AscendAllocation {
+public class Allocations {
+  let allocations: [JSON]
+  let audience : Audience = Audience()
   
+  init (allocations: [JSON]) {
+    self.allocations = allocations
+  }
+  
+  func getMyType<T>(_ element: T) -> Any? {
+    return type(of: element)
+  }
+  
+  func getValueFromAllocations<T>(key: String, type: T, participant: AscendParticipant) throws -> [String] {
+    let keyParts: [String] = key.components(separatedBy: "\\.")
+    if (keyParts.isEmpty()) {
+      throw AscendKeyError(rawValue: "Key provided was empty.")!
+    }
+    return keyParts
+  }
 }

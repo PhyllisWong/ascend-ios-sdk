@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import DynamicJSON
 
 // TODO: move this to own file
 protocol AscendAction {
@@ -15,18 +16,6 @@ protocol AscendAction {
    * @param value any value that was requested
    */
   func apply<T>(value: T) -> Void
-}
-
-public class GenericClass<T> {
-  private let type: AnyClass
-  
-  public class GenericClass(type: Class<T>) {
-    self.type = type
-  }
-  
-  public func getMyType() -> AnyClass {
-    return self.type
-  }
 }
 
 struct Set<Element> where Element : Hashable {}
@@ -49,10 +38,17 @@ class Execution {
     self.participant = participant
   }
   
-  func getKey() -> String { return self.key }
+  func getKey() -> String { return key }
   
-  func executeWithAllocation(rawAllocations: JsonArray) throws {
-    
+  func getMyType<T>(_ element: T) -> Any? {
+    return type(of: element)
+  }
+  
+  func executeWithAllocation(rawAllocations: [JSON]) throws -> Void {
+    let cls: GenericClass = GenericClass(element: defaultValue)
+    let allocations = Allocations(allocations: rawAllocations)
+    // let type = (cls.element).getMyType()
+    // let value = allocations.getValueFromAllocations(key: key, type: (cls.element as AnyObject).getMyType(), participant: participant)
   }
   
   func executeWithDefault() {

@@ -12,7 +12,7 @@ import DynamicJSON
 class AscendClientImpl : AscendClient {
   
   private let eventEmitter: EventEmitter
-  private let futureAllocations: [JSON]
+  private let futureAllocations: [JSON]?
   private let logger = Log.logger
   private let allocator: Allocator
   private let store: AscendAllocationStore
@@ -31,10 +31,26 @@ class AscendClientImpl : AscendClient {
   }
   
   
-  public func get<T>(key: String, defaultValue: T) {}
+  public func get<T>(key: String, defaultValue: T) -> T {
+    
+    if (futureAllocations == nil) { // is this safe?
+      return defaultValue
+    }
+    // this should be a blocking call
+    let allocations: [JSON] = [allocator.fetchAllocations()]
+    
+    if (!allocator.allocationsNotEmpty(allocations: allocations)) {
+      return defaultValue
+    }
+    let cls: GenericClass = GenericClass(element: defaultValue)
+    // let type = cls.getMyType(value)
+    // let value: T = allocations(allocations).getValueFromAllocations(key, type , participant)
+    
+    return defaultValue
+  }
   
   public func subscribe<T>(key: String, defaultValue: T, AscendAction: @escaping (Any) -> Void) {
-    // add some code here
+    
   }
   
   
