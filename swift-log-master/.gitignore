@@ -1,9 +1,0 @@
-.DS_Store
-/.build
-/Packages
-/*.xcodeproj
-.xcode
-DerivedData
-
-.SourceKitten/
-docs/
