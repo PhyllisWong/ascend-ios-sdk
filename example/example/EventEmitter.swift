@@ -56,7 +56,6 @@ public class EventEmitter {
           let url = getEventUrl(type: key, experimentId: eid, candidateId: cid)
           
           makeEventRequest(url) // is this async?
-          continue
         }
       }
     } catch let error as Error { // Make this some type of error
