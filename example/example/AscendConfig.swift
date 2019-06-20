@@ -44,9 +44,10 @@ public class AscendConfig {
   
   public func getEnvironmentId() -> String { return environmentId }
   
-  // public func getAscendAllocationStore() -> AscendAllocationStore {
-    // return ascendAllocationStore
-  // }
+   public func getAscendAllocationStore() -> AscendAllocationStore {
+     let ascendAllocationStore = LruCache()
+     return ascendAllocationStore as! AscendAllocationStore
+   }
   
   public func getHttpClient() -> HttpClient {
     return self.httpClient

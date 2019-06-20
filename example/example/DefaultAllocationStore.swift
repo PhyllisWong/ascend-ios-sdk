@@ -7,9 +7,20 @@
 //
 
 import Foundation
+import DynamicJSON
 
 public class DefaultAllocationStore : AscendAllocationStore {
-
+  public func get(uid: String) -> String? {
+    let fakeCache = "[[\"key\": \"value\"]]"
+    //    return cache.getEntry(uid);
+    print("FAKE CACHE VALUE: \(fakeCache)")
+    return fakeCache
+  }
+  
+  public func put(uid: String, allocations: String) {
+    let fakeCache: String = "[[\"Key\": [\"otherKey\": \"value\"]]]"
+    print("FAKE CACHE JSON: \(fakeCache)")
+  }
   
 //  private LruCache cache;
   
@@ -18,14 +29,4 @@ public class DefaultAllocationStore : AscendAllocationStore {
   // TODO: figure out the cache situation
   }
 
-  public func get(uid: String) -> [[String : Any]?] {
-    let fakeCache = [["key": "value"]]
-    //    return cache.getEntry(uid);
-    return fakeCache
-  }
-  
-  public func put(uid: String, allocations: [[String: Any]]) {
-//    cache.putEntry(uid, allocations);
-    let fakeCache = [["Key": ["otherKey": "value"]]]
-  }
 }
