@@ -85,9 +85,10 @@ class AscendClientImpl : AscendClient {
       allocator.sandbagContamination()
     } else if (allocationStatus == Allocator.AllocationStatus.RETRIEVED) {
       // let alloc = store.get(uid: participant.getUserId()) // can this ever be nil?
+      let request = URLRequest(url: allocator.createAllocationsUrl())
       let alloc = store.cachedResponse(for: request)
       if let allocation = alloc {
-        eventEmitter.contaminate(allocations: allocation)
+        eventEmitter.contaminate(allocations: allocation as! String)
       }
     }
   }
