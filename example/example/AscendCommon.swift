@@ -14,7 +14,7 @@ public typealias AscendAllocationKey = String
 ///An object can own an observer for as long as the object exists. Swift structs and enums cannot be observer owners.
 public typealias AscendObserverOwner = AnyObject
 ///A closure used to notify an observer owner of a change to a single allocation's value.
-public typealias AscendAllocationChangeHandler = (AscendAllocation) -> Void
+public typealias AscendAllocationChangeHandler = (Allocations) -> Void
 ///A closure used to notify an observer owner of a change to the allocation in a collection of `AscendChangedAllocations`.
 public typealias AscendAllocationCollectionChangeHandler = ([AscendAllocationKey: AscendChangedAllocation]) -> Void
 ///A closure used to notify an observer owner that a allocation request resulted in no changes to any allocation.

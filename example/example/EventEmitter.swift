@@ -58,7 +58,7 @@ public class EventEmitter {
           makeEventRequest(url) // is this async?
         }
       }
-    } catch let error as Error { // Make this some type of error
+    } catch let error as Error { // Make this specific type of error
       let message: String = "Error sending allocation event: \(error.localizedDescription)"
       Log.logger.log(.debug, message: message)
     }

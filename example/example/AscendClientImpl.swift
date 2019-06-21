@@ -12,7 +12,7 @@ import DynamicJSON
 class AscendClientImpl : AscendClient {
   
   private let eventEmitter: EventEmitter
-  private let futureAllocations: [JSON]
+  private let futureAllocations: [JSON]?
   private let logger = Log.logger
   private let allocator: Allocator
   // FIXME: the cache does not work
@@ -55,7 +55,7 @@ class AscendClientImpl : AscendClient {
   }
   
   public func subscribe<T>(key: String, defaultValue: T, AscendAction: @escaping (Any) -> Void) {
-    // add some code here
+    
   }
   
   

@@ -7,8 +7,11 @@
 //
 
 import Foundation
+import DynamicJSON
 
-public class AscendAllocation {
+public class Allocations {
+  let allocations: String
+  let audience : Audience = Audience()
   
   init (allocations: String) {
     self.allocations = allocations
@@ -18,9 +21,14 @@ public class AscendAllocation {
     return type(of: element)
   }
   
+
   typealias JsonElement = Any
   
-  func getValueFromAllocations<T>(key: String, type: T, participant: AscendParticipant) throws -> T {
+  // func getValueFromAllocations<T>(key: String, type: T, participant: AscendParticipant) throws -> T {
+
+  
+  func getValueFromAllocations<T>(key: String, type: T, participant: AscendParticipant) throws -> Dictionary<String,Any> {
+
     let data = allocations.data(using: .utf8)!
     var keyParts = [String]()
     var allocation = [String: Any]()
@@ -38,6 +46,7 @@ public class AscendAllocation {
         for a in jsonArray {
           allocation = a
           print("Iterating through the array \(a)")
+
         }
         
       } else {
@@ -46,13 +55,14 @@ public class AscendAllocation {
         Log.logger.log(.debug, message: "Unable to find key \(keyPartsStr) in experiement \(String(describing: eid))")
       }
     } catch let error {
-      Log.logger.log(.debug, message: "Key provided was empty. \(error.localizedDescription)")
-      return ["":""] as! T
+      Log.logger.log(.debug, message: "Key provided was empty.")
+      return ["":""]
     }
-    return  ["":""] as! T
+    return  ["":""]
   }
   
-  private func getElementFromGenome(genome: Any, keyParts: [String]) throws -> Any {
+  typealias JsonElement = Any
+  func getElementFromGenome(genome: Any, keyParts: [String]) throws -> Any {
     var element: JsonElement? = genome
     if element == nil { // is this a safe check?
       throw AscendKeyError(rawValue: "Allocation genome was empty")!
@@ -64,4 +74,5 @@ public class AscendAllocation {
     }
     return element
   }
+}
 }

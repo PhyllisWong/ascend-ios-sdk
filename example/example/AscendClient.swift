@@ -24,7 +24,7 @@ protocol AscendClient {
    * @param <T> type of value to be returned
    * @return a value associated with the given key
    */
-  func get<T>(key: String, defaultValue: T)
+  func get<T>(key: String, defaultValue: T) -> T
   
   /**
    * Retrieves a value from Ascend asynchronously and applies some custom action.
