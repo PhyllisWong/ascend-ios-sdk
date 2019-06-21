@@ -37,6 +37,11 @@
 		3664FC2E22B839B7009ED0BE /* logs.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3664FC2D22B839B7009ED0BE /* logs.txt */; };
 		3664FC3222B95B2E009ED0BE /* AscendClientImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC3122B95B2E009ED0BE /* AscendClientImpl.swift */; };
 		36D06E7F22BB093700B533B3 /* Execution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D06E7E22BB093700B533B3 /* Execution.swift */; };
+		36D06E8222BBF4A300B533B3 /* GenericClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D06E8122BBF4A300B533B3 /* GenericClass.swift */; };
+		36D06E8422BC0CD200B533B3 /* Dict.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D06E8322BC0CD200B533B3 /* Dict.swift */; };
+		36D06E8622BC1F9900B533B3 /* Audience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D06E8522BC1F9900B533B3 /* Audience.swift */; };
+		36D06E8922BC325800B533B3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D06E8822BC325800B533B3 /* Extensions.swift */; };
+		36D06E8B22BC542000B533B3 /* AscendAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D06E8A22BC542000B533B3 /* AscendAction.swift */; };
 		F00345C3683348A0B72996D8 /* Pods_example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1791950A4D5C785F26EAE579 /* Pods_example.framework */; };
 /* End PBXBuildFile section */
 
@@ -96,6 +101,11 @@
 		3664FC2D22B839B7009ED0BE /* logs.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = logs.txt; sourceTree = "<group>"; };
 		3664FC3122B95B2E009ED0BE /* AscendClientImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendClientImpl.swift; sourceTree = "<group>"; };
 		36D06E7E22BB093700B533B3 /* Execution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Execution.swift; sourceTree = "<group>"; };
+		36D06E8122BBF4A300B533B3 /* GenericClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericClass.swift; sourceTree = "<group>"; };
+		36D06E8322BC0CD200B533B3 /* Dict.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dict.swift; sourceTree = "<group>"; };
+		36D06E8522BC1F9900B533B3 /* Audience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audience.swift; sourceTree = "<group>"; };
+		36D06E8822BC325800B533B3 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		36D06E8A22BC542000B533B3 /* AscendAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendAction.swift; sourceTree = "<group>"; };
 		FDEECCE933EDCA50BF9067D5 /* Pods-example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.release.xcconfig"; path = "Target Support Files/Pods-example/Pods-example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -156,22 +166,24 @@
 				3661DDB622AF3012008F7017 /* LaunchScreen.storyboard */,
 				3661DDB422AF3012008F7017 /* Assets.xcassets */,
 				3661DDB922AF3012008F7017 /* Info.plist */,
-				3664FC2B22B81219009ED0BE /* AscendCommon.swift */,
-				3661DDDB22AF3599008F7017 /* Allocator.swift */,
-				3664FC2622B803CA009ED0BE /* ErrorObserver.swift */,
-				3664FC2D22B839B7009ED0BE /* logs.txt */,
-				3664FC1C22B19392009ED0BE /* AscendConfig.swift */,
 				3664FC0D22B17F69009ED0BE /* Allocations.swift */,
+				3661DDDB22AF3599008F7017 /* Allocator.swift */,
+				36D06E8A22BC542000B533B3 /* AscendAction.swift */,
 				3664FC0922B15F98009ED0BE /* AscendAllocationStore.swift */,
-				3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */,
+				3664FC2B22B81219009ED0BE /* AscendCommon.swift */,
 				3661DDDD22AF3890008F7017 /* AscendClient.swift */,
 				3664FC3122B95B2E009ED0BE /* AscendClientImpl.swift */,
+				3664FC1C22B19392009ED0BE /* AscendConfig.swift */,
 				3661DDE022AF4855008F7017 /* AscendParticipant.swift */,
+				36D06E8522BC1F9900B533B3 /* Audience.swift */,
+				3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */,
+				3664FC2622B803CA009ED0BE /* ErrorObserver.swift */,
 				3664FC0F22B187BC009ED0BE /* EventEmitter.swift */,
-				3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */,
-				3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */,
 				36D06E7E22BB093700B533B3 /* Execution.swift */,
-				3664FC2422B42EEF009ED0BE /* LruCache.swift */,
+				3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */,
+				3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */,
+				36D06E8022BBEF5E00B533B3 /* Generics */,
+				36D06E8722BC323B00B533B3 /* Utility */,
 				3664FC2822B80652009ED0BE /* Service Objects */,
 				3664FC1122B18A94009ED0BE /* Networking */,
 			);
@@ -446,6 +458,7 @@
 				3664FC1022B187BC009ED0BE /* EventEmitter.swift in Sources */,
 				36D06E7F22BB093700B533B3 /* Execution.swift in Sources */,
 				3664FC3222B95B2E009ED0BE /* AscendClientImpl.swift in Sources */,
+				36D06E8B22BC542000B533B3 /* AscendAction.swift in Sources */,
 				3664FC1B22B19352009ED0BE /* ExecutionDispatch.swift in Sources */,
 				3661DDE122AF4855008F7017 /* AscendParticipant.swift in Sources */,
 				3664FC2A22B80664009ED0BE /* Log.swift in Sources */,

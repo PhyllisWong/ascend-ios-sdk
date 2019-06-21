@@ -18,9 +18,9 @@ public class EventEmitter {
   let config: AscendConfig
   let participant: AscendParticipant
   
-  // let audience = Audience() // TODO: create a skeleton of this class
+  let audience = Audience()
   
-  private init(httpClient: HttpClient,
+  init(httpClient: HttpClient,
                config: AscendConfig,
                participant: AscendParticipant) {
     self.httpClient = httpClient

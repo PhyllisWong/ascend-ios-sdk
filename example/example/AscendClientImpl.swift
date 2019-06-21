@@ -15,14 +15,15 @@ class AscendClientImpl : AscendClient {
   private let futureAllocations: [JSON]
   private let logger = Log.logger
   private let allocator: Allocator
-  private let store: AscendAllocationStore
+  // FIXME: the cache does not work
+  // private let store: AscendAllocationStore
   private let previousAllocations: Bool
   private let participant: AscendParticipant
   
   init(config: AscendConfig, allocator: Allocator,
        previousAllocations: Bool, participant: AscendParticipant,
        eventEmitter: EventEmitter, futureAllocations: [JSON]) {
-    self.store = config.getAscendAllocationStore()
+    // self.store = config.getAscendAllocationStore()
     self.allocator = allocator
     self.previousAllocations = previousAllocations
     self.participant = participant
@@ -30,8 +31,28 @@ class AscendClientImpl : AscendClient {
     self.futureAllocations = futureAllocations
   }
   
+  func getMyType<T>(_ element: T) -> Any? {
+    return type(of: element)
+  }
   
-  public func get<T>(key: String, defaultValue: T) {}
+  public func get<T>(key: String, defaultValue: T) -> T {
+    
+    if (futureAllocations == nil) { // is this safe?
+      return defaultValue
+    }
+    // this should be a blocking call
+    // let allocations: [JSON] = [allocator.fetchAllocations()]
+    let allocations = "[{\"audience_query\":\"<null>\",\"cid\":\"1cc385bf3757:9b0e33b869\",\"eid\":\"9b0e33b869\",\"excluded\":\"0\",\"genome\": {\"background\": {\"height\": 90, \"width\": \"0.5\"}, \"button\": \"yellow\"}, \"uid\": \"1AEA8FDC-42B4-4737-8267-4E1B851C2BB4\"}]"
+    let jsonAlloc = [JSON(allocations)]
+    print("JSON ALLOCATIONS: \(jsonAlloc)")
+    if (!allocator.allocationsNotEmpty(allocations: jsonAlloc)) {
+      return defaultValue
+    }
+    // let type = getMyType(element)
+    // let value = Allocations(allocations: allocations).getValueFromAllocations(key, type, participant)
+    
+    return defaultValue
+  }
   
   public func subscribe<T>(key: String, defaultValue: T, AscendAction: @escaping (Any) -> Void) {
     // add some code here
