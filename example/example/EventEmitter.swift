@@ -38,18 +38,18 @@ public class EventEmitter {
     makeEventRequest(url);
   }
   
-  public func confirm(allocations: String) -> Void {
+  public func confirm(allocations: CachedURLResponse) -> Void {
     sendAllocationEvents(EventEmitter.CONFIRM_KEY, allocations);
   }
   
-  public func contaminate(allocations: String) -> Void {
+  public func contaminate(allocations: CachedURLResponse) -> Void {
     sendAllocationEvents(EventEmitter.CONTAMINATE_KEY, allocations);
   }
 
-  public func sendAllocationEvents(_ key: String, _ allocations: String) {
-    let data = allocations.data(using: .utf8)!
+  public func sendAllocationEvents(_ key: String, _ allocations: CachedURLResponse) {
+    // let data = allocations.data(using: .utf8)!
     do {
-      if let jsonArray = try JSONSerialization.jsonObject(with: data, options:.allowFragments) as? [Dictionary<String,Any>] {
+      if let jsonArray = try JSONSerialization.jsonObject(with: allocations, options:.allowFragments) as? [Dictionary<String,Any>] {
         for allocation in jsonArray {
           let eid = allocation["eid"] as! String
           let cid = allocation["cid"] as! String

@@ -72,7 +72,9 @@ class AscendClientImpl : AscendClient {
     if (allocationStatus == Allocator.AllocationStatus.FETCHING) {
       allocator.sandbagConfirmation()
     } else if (allocationStatus == Allocator.AllocationStatus.RETRIEVED) {
-      let alloc = store.get(uid: participant.getUserId()) // can this ever be nil?
+      // let alloc = store.get(uid: participant.getUserId()) // can this ever be nil?
+      let request = URLRequest(url: allocator.createAllocationsUrl())
+      let alloc = store.cachedResponse(for: request)
       if let allocation = alloc {
         eventEmitter.confirm(allocations: allocation)
       }
@@ -88,7 +90,7 @@ class AscendClientImpl : AscendClient {
       let request = URLRequest(url: allocator.createAllocationsUrl())
       let alloc = store.cachedResponse(for: request)
       if let allocation = alloc {
-        eventEmitter.contaminate(allocations: allocation as! String)
+        eventEmitter.contaminate(allocations: allocation)
       }
     }
   }
