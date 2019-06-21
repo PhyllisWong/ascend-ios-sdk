@@ -48,8 +48,10 @@ public class EventEmitter {
 
   public func sendAllocationEvents(_ key: String, _ allocations: CachedURLResponse) {
     // let data = allocations.data(using: .utf8)!
+    let alloc = allocations.data
+    
     do {
-      if let jsonArray = try JSONSerialization.jsonObject(with: allocations, options:.allowFragments) as? [Dictionary<String,Any>] {
+      if let jsonArray = try JSONSerialization.jsonObject(with: alloc, options:.allowFragments) as? [Dictionary<String,Any>] {
         for allocation in jsonArray {
           let eid = allocation["eid"] as! String
           let cid = allocation["cid"] as! String

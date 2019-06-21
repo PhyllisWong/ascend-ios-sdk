@@ -72,17 +72,17 @@ public class Allocator {
     var jsonArray = JSON()
     var cachedResponse = CachedURLResponse()
     let semaphore = DispatchSemaphore(value: 0)
-    let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 20)
-    let session = URLSession.shared.dataTask(with: url)
-    
-    do {
-      let cached = try LruCache.sharedInstance.getEntry(store: self.store, session: session)
-      if let c = cached {
-        cachedResponse = c
-      }
-    } catch {
-        print("Error retrieving cached allocation")
-    }
+//    let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 20)
+//    let session = URLSession.shared.dataTask(with: url)
+//
+//    do {
+//      let cached = try LruCache.sharedInstance.getEntry(store: self.store, session: session)
+//      if let c = cached {
+//        cachedResponse = c
+//      }
+//    } catch {
+//        print("Error retrieving cached allocation")
+//    }
       NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in
         if let error = err {
           self.logger.log(.debug, message: "Error : \(error.localizedDescription)")
@@ -93,12 +93,12 @@ public class Allocator {
         }
 
         jsonArray = JSON(data)
-
-        do {
-          let _ = try LruCache.sharedInstance.putEntry(store: self.store, request: request, response: response, data: data)
-        } catch {
-          self.logger.log(.debug, message: "Error saving to the cache")
-        }
+//
+//        do {
+//          let _ = try LruCache.sharedInstance.putEntry(store: self.store, request: request, response: response, data: data)
+//        } catch {
+//          self.logger.log(.debug, message: "Error saving to the cache")
+//        }
         semaphore.signal()
       })
       _ = semaphore.wait(timeout: .distantFuture)
