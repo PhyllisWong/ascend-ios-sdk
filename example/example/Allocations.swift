@@ -61,7 +61,6 @@ public class Allocations {
     return  ["":""]
   }
   
-  typealias JsonElement = Any
   func getElementFromGenome(genome: Any, keyParts: [String]) throws -> Any {
     var element: JsonElement? = genome
     if element == nil { // is this a safe check?
@@ -74,5 +73,4 @@ public class Allocations {
     }
     return element
   }
-}
 }

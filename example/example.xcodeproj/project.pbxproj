@@ -133,6 +133,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3642C26522BD623A00EF8271 /* Super Standup */ = {
+			isa = PBXGroup;
+			children = (
+				3664FC1C22B19392009ED0BE /* AscendConfig.swift */,
+				3661DDE022AF4855008F7017 /* AscendParticipant.swift */,
+				3661DDDB22AF3599008F7017 /* Allocator.swift */,
+				3664FC0F22B187BC009ED0BE /* EventEmitter.swift */,
+				3664FC3122B95B2E009ED0BE /* AscendClientImpl.swift */,
+			);
+			name = "Super Standup";
+			sourceTree = "<group>";
+		};
 		3661DDA122AF3012008F7017 = {
 			isa = PBXGroup;
 			children = (
@@ -164,19 +176,15 @@
 				3661DDB622AF3012008F7017 /* LaunchScreen.storyboard */,
 				3661DDB422AF3012008F7017 /* Assets.xcassets */,
 				3661DDB922AF3012008F7017 /* Info.plist */,
+				3642C26522BD623A00EF8271 /* Super Standup */,
 				3664FC0D22B17F69009ED0BE /* Allocations.swift */,
-				3661DDDB22AF3599008F7017 /* Allocator.swift */,
 				36D06E8A22BC542000B533B3 /* AscendAction.swift */,
 				3664FC0922B15F98009ED0BE /* AscendAllocationStore.swift */,
 				3664FC2B22B81219009ED0BE /* AscendCommon.swift */,
 				3661DDDD22AF3890008F7017 /* AscendClient.swift */,
-				3664FC3122B95B2E009ED0BE /* AscendClientImpl.swift */,
-				3664FC1C22B19392009ED0BE /* AscendConfig.swift */,
-				3661DDE022AF4855008F7017 /* AscendParticipant.swift */,
 				36D06E8522BC1F9900B533B3 /* Audience.swift */,
 				3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */,
 				3664FC2622B803CA009ED0BE /* ErrorObserver.swift */,
-				3664FC0F22B187BC009ED0BE /* EventEmitter.swift */,
 				36D06E7E22BB093700B533B3 /* Execution.swift */,
 				3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */,
 				3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */,

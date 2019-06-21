@@ -16,14 +16,14 @@ class AscendClientImpl : AscendClient {
   private let logger = Log.logger
   private let allocator: Allocator
   // FIXME: the cache does not work
-  // private let store: AscendAllocationStore
+  private let store: AscendAllocationStore
   private let previousAllocations: Bool
   private let participant: AscendParticipant
   
   init(config: AscendConfig, allocator: Allocator,
        previousAllocations: Bool, participant: AscendParticipant,
        eventEmitter: EventEmitter, futureAllocations: [JSON]) {
-    // self.store = config.getAscendAllocationStore()
+    self.store = config.getAscendAllocationStore()
     self.allocator = allocator
     self.previousAllocations = previousAllocations
     self.participant = participant

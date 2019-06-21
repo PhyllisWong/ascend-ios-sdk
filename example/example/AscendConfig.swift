@@ -46,7 +46,7 @@ public class AscendConfig {
   
    public func getAscendAllocationStore() -> AscendAllocationStore {
      let ascendAllocationStore = LruCache()
-     return ascendAllocationStore as! AscendAllocationStore
+    return ascendAllocationStore as! AscendAllocationStore
    }
   
   public func getHttpClient() -> HttpClient {
@@ -76,9 +76,9 @@ public class ConfigBuilder {
   
   
   /**
-   * Responsible for creating an instance of AscendClientImpl.
+   * Responsible for creating an instance of AscendConfig.
    * <p>
-   *     Builds an instance of the AscendClientImpl. The only required parameter is the
+   *     Builds an instance of the AscendConfig. The only required parameter is the
    *     customer's environment id.
    * </p>
    * @param environmentId unique id representing a customer's environment
@@ -90,8 +90,8 @@ public class ConfigBuilder {
     self.version = DEFAULT_API_VERSION
     
     self.environmentId = environmentId
-    if (httpClient != nil) {
-      self.httpClient = httpClient! // FIXME: perform safe unwrap here
+    if let httpClient = httpClient {
+      self.httpClient = httpClient
     } else {
       self.httpClient = HttpClient()
     }

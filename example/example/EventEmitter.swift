@@ -29,12 +29,12 @@ public class EventEmitter {
   }
   
   func emit(_ key: String) -> Void {
-    let url: URL = getEventUrl(key, 1.0)
+    let url: URL = createEventUrl(key, 1.0)
     makeEventRequest(url)
   }
   
   func emit(_ key: String, _ score: Double) -> Void {
-    let url: URL = getEventUrl(key, score);
+    let url: URL = createEventUrl(key, score);
     makeEventRequest(url);
   }
   
@@ -53,19 +53,18 @@ public class EventEmitter {
         for allocation in jsonArray {
           let eid = allocation["eid"] as! String
           let cid = allocation["cid"] as! String
-          let url = getEventUrl(type: key, experimentId: eid, candidateId: cid)
+          let url = createEventUrl(type: key, experimentId: eid, candidateId: cid)
           
-          makeEventRequest(url) // is this async?
+          makeEventRequest(url) // confirm this is async
         }
       }
-    } catch let error as Error { // Make this specific type of error
+    } catch let error { // Make this an AscendError type
       let message: String = "Error sending allocation event: \(error.localizedDescription)"
       Log.logger.log(.debug, message: message)
     }
   }
   
-  // FIXME: change this to createEventUrl
-  func getEventUrl(_ type: String , _ score: Double ) -> URL {
+  func createEventUrl(_ type: String , _ score: Double ) -> URL {
     var components = URLComponents()
    
       components.scheme = config.getHttpScheme()
@@ -86,7 +85,7 @@ public class EventEmitter {
       return url
   }
 
-  func getEventUrl(type: String, experimentId: String, candidateId: String) -> URL {
+  func createEventUrl(type: String, experimentId: String, candidateId: String) -> URL {
     var components = URLComponents()
   
     components.scheme = config.getHttpScheme()

@@ -18,8 +18,8 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
-    // self.getJsonData()
-    self.getOtherShit()
+    self.getJsonData()
+    // self.getOtherShit()
   }
 }
 
