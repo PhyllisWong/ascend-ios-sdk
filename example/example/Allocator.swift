@@ -18,7 +18,8 @@ public class Allocator {
     case FETCHING, RETRIEVED, FAILED
   }
   
-  let store = URLCache.shared // TODO: change this with abstracted class
+  // TODO: change this with abstracted class
+  let store = URLCache.shared
   private let config: AscendConfig
   private let participant: AscendParticipant
   // private let eventEmitter: EventEmitter
@@ -119,7 +120,7 @@ public class Allocator {
         print("Cached Response: \(cached)")
         previousAllocations = [JSON(cached)]
       }
-      semaphore.signal() // tell the semaphore that we are done
+      semaphore.signal()
     })
      _ = semaphore.wait(timeout: .distantFuture)
     

@@ -114,12 +114,8 @@ public class EventEmitter {
       Log.logger.log(.debug, message: message)
       return
     }
-    do {
-      httpClient.get(withUrl: url, semaphore: semaphore)
-      semaphore.signal()
-    } catch let error as NetworkingError {
-      let message: String = "There was an exception while making an event request with \(url): \(error.localizedDescription)"
-      Log.logger.log(.debug, message: message)
-    }
+
+    httpClient.get(withUrl: url, semaphore: semaphore)
+    semaphore.signal()
   }
 }

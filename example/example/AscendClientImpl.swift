@@ -15,15 +15,15 @@ class AscendClientImpl : AscendClient {
   private let futureAllocations: [JSON]?
   private let logger = Log.logger
   private let allocator: Allocator
-  // FIXME: the cache does not work
-  private let store: AscendAllocationStore
+  
+  let store = URLCache.shared
+  
   private let previousAllocations: Bool
   private let participant: AscendParticipant
   
   init(config: AscendConfig, allocator: Allocator,
        previousAllocations: Bool, participant: AscendParticipant,
        eventEmitter: EventEmitter, futureAllocations: [JSON]) {
-    self.store = config.getAscendAllocationStore()
     self.allocator = allocator
     self.previousAllocations = previousAllocations
     self.participant = participant
@@ -84,7 +84,8 @@ class AscendClientImpl : AscendClient {
     if (allocationStatus == Allocator.AllocationStatus.FETCHING) {
       allocator.sandbagContamination()
     } else if (allocationStatus == Allocator.AllocationStatus.RETRIEVED) {
-      let alloc = store.get(uid: participant.getUserId()) // can this ever be nil?
+      // let alloc = store.get(uid: participant.getUserId()) // can this ever be nil?
+      let alloc = store.cachedResponse(for: request)
       if let allocation = alloc {
         eventEmitter.contaminate(allocations: allocation)
       }
