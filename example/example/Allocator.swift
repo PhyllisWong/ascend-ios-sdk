@@ -79,7 +79,7 @@ public class Allocator {
       previousAllocations = cachedAlloc
       print("Previous allocations: \(String(describing: previousAllocations))")
     } else {
-      
+      // IT HITS HERE EACH TIME
       print("Error getting previous allocations")
     }
     
@@ -91,7 +91,7 @@ public class Allocator {
         self.logger.log(.debug, message: "NetworkingError data")
         return
       }
-
+      print("RESPONSE: \(response)")
       jsonArray = [JSON(data)]
       
       self.store.set(stringUrl, val: JSON(data))
@@ -102,29 +102,8 @@ public class Allocator {
     if previousAllocations.count > 0 {
       jsonArray = previousAllocations
     }
-    print(jsonArray)
     return jsonArray
   }
-  
-  
-//  public func resolveAllocationsFailure(session: URLSessionDataTask) -> [JSON] {
-//    var previousAllocations = [JSON]()
-//
-//    let semaphore = DispatchSemaphore(value: 0)
-//    self.store.getCachedResponse(for: session, completionHandler: { (cachedData) in
-//      if let cached = cachedData {
-//        print("Cached Response: \(cached)")
-//        previousAllocations = [JSON(cached)]
-//      }
-//      semaphore.signal()
-//    })
-//     _ = semaphore.wait(timeout: .distantFuture)
-//
-//    if (allocationsNotEmpty(allocations: previousAllocations)) {
-//      logger.log(.debug, message: "Falling back to participant's previous allocation.")
-//    }
-//    return previousAllocations
-//  }
 
   func allocationsNotEmpty(allocations: [JSON]?) -> Bool {
     guard let allocationsArray = allocations else {

@@ -15,10 +15,14 @@ class ViewController: UIViewController {
     case taskError
   }
 
+  @IBAction func didPressAlloc(_ sender: Any) {
+    self.getJsonData()
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
-    self.getJsonData()
+    
     // self.getOtherShit()
   }
 }
