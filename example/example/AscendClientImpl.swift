@@ -43,9 +43,9 @@ class AscendClientImpl : AscendClient {
     // this should be a blocking call
     // let allocations: [JSON] = [allocator.fetchAllocations()]
     let allocations = "[{\"audience_query\":\"<null>\",\"cid\":\"1cc385bf3757:9b0e33b869\",\"eid\":\"9b0e33b869\",\"excluded\":\"0\",\"genome\": {\"background\": {\"height\": 90, \"width\": \"0.5\"}, \"button\": \"yellow\"}, \"uid\": \"1AEA8FDC-42B4-4737-8267-4E1B851C2BB4\"}]"
-    let jsonAlloc = [JSON(allocations)]
-    print("JSON ALLOCATIONS: \(jsonAlloc)")
-    if (!allocator.allocationsNotEmpty(allocations: jsonAlloc)) {
+    
+    print("JSON ALLOCATIONS: \(allocations)")
+    if (!allocator.allocationsNotEmpty(allocations: allocations)) {
       return defaultValue
     }
     // let type = getMyType(element)
