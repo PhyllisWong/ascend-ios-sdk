@@ -43,19 +43,19 @@ private extension ViewController {
     print("YOUR FETCHED ALLOCATION: \(String(describing: results))")
   }
   
-  private func getOtherShit() {
-    let participantBuilder = ParticipantBuilder()
-    
-    let participant = participantBuilder.build()
-    let httpClient = HttpClient()
-    let envId = "40ebcd9abf"
-    let config = ConfigBuilder(environmentId: envId).buildConfig()
-    let store = LRUCache<String>(10)
-    let alloc = Allocator(store: store, config: config, participant: participant, httpClient: httpClient)
-    let futureAloc = alloc.fetchAllocations()
-    let emitter = EventEmitter(httpClient: httpClient, config: config, participant: participant)
-    let ascender = AscendClientImpl(config: config, allocator: alloc, previousAllocations: false, participant: participant, eventEmitter: emitter, futureAllocations: futureAloc)
-    let value = ascender.get(key: "button", defaultValue: "green")
-    print("THIS IS YOUR VALUE: \(value)")
-  }
+//  private func getOtherShit() {
+//    let participantBuilder = ParticipantBuilder()
+//    
+//    let participant = participantBuilder.build()
+//    let httpClient = HttpClient()
+//    let envId = "40ebcd9abf"
+//    let config = ConfigBuilder(environmentId: envId).buildConfig()
+//    let store = LRUCache<String>(10)
+//    let alloc = Allocator(store: store, config: config, participant: participant, httpClient: httpClient)
+//    let futureAloc = alloc.fetchAllocations()
+//    let emitter = EventEmitter(httpClient: httpClient, config: config, participant: participant)
+//    let ascender = AscendClientImpl(config: config, allocator: alloc, previousAllocations: false, participant: participant, eventEmitter: emitter, futureAllocations: futureAloc)
+//    let value = ascender.get(key: "button", defaultValue: "green")
+//    print("THIS IS YOUR VALUE: \(value)")
+//  }
 }

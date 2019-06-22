@@ -65,11 +65,11 @@ public class Allocator {
     return URL(string: "")!
   }
   
-  public func fetchAllocations() -> [JSON] {
+  public func fetchAllocations() -> [Dictionary<String, Any>] {
     let url = self.createAllocationsUrl()
-    let stringUrl = String(describing: url) // guard this...it can fail?
+    let stringUrl = String(describing: url)
     // let url = URL(string: "kjnsdfjbn")! // BAD!!!! for testing
-    var jsonArray = [JSON]()
+    var jsonArray = [Dictionary<String, Any>]()
     var previousAllocations = [JSON]()
     
     let semaphore = DispatchSemaphore(value: 0)
@@ -92,27 +92,28 @@ public class Allocator {
         return
       }
       
-      if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-        print("RESPONSE: \(json)")
-        if let gnomes = json["genomes"] as? [String] {
+      if let jsonArr = try? JSONSerialization.jsonObject(with: data, options: []) as? [Dictionary<String,Any>]  {
+        print("RESPONSE: \(jsonArr)")
+        if let gnomes = jsonArr[0]["genome"] {
           print(gnomes)
         }
+        jsonArray = jsonArr
       }
       // print("RESPONSE: \(json)")
-      jsonArray = [JSON(data)]
+      
       
       self.store.set(stringUrl, val: data)
       let cached = self.store.get(stringUrl)
       
       print("Cached: \(JSON(cached!))")
-      previousAllocations = [JSON(cached as! Data)]
+      // previousAllocations = [JSON(cached as! Data)]
       semaphore.signal()
     })
     _ = semaphore.wait(timeout: .distantFuture)
     
-    if previousAllocations.count > 0 {
-      jsonArray = previousAllocations
-    }
+//    if previousAllocations.count > 0 {
+//      jsonArray = previousAllocations
+//    }
     return jsonArray
   }
 
