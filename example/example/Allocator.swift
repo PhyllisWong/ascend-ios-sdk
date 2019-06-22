@@ -91,7 +91,14 @@ public class Allocator {
         self.logger.log(.debug, message: "NetworkingError data")
         return
       }
-      print("RESPONSE: \(response)")
+      
+      if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+        print("RESPONSE: \(json)")
+        if let gnomes = json["genomes"] as? [String] {
+          print(gnomes)
+        }
+      }
+      // print("RESPONSE: \(json)")
       jsonArray = [JSON(data)]
       
       self.store.set(stringUrl, val: JSON(data))
