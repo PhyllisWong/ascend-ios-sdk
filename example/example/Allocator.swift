@@ -101,7 +101,11 @@ public class Allocator {
       // print("RESPONSE: \(json)")
       jsonArray = [JSON(data)]
       
-      self.store.set(stringUrl, val: JSON(data))
+      self.store.set(stringUrl, val: data)
+      let cached = self.store.get(stringUrl)
+      
+      print("Cached: \(JSON(cached!))")
+      previousAllocations = [JSON(cached as! Data)]
       semaphore.signal()
     })
     _ = semaphore.wait(timeout: .distantFuture)
