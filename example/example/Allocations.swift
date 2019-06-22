@@ -21,8 +21,14 @@ public class Allocations {
     return type(of: element)
   }
   
+
+  typealias JsonElement = Any
+  
+  // func getValueFromAllocations<T>(key: String, type: T, participant: AscendParticipant) throws -> T {
+
   
   func getValueFromAllocations<T>(key: String, type: T, participant: AscendParticipant) throws -> Dictionary<String,Any> {
+
     let data = allocations.data(using: .utf8)!
     var keyParts = [String]()
     var allocation = [String: Any]()
@@ -39,6 +45,8 @@ public class Allocations {
         
         for a in jsonArray {
           allocation = a
+          print("Iterating through the array \(a)")
+
         }
         
       } else {
@@ -53,8 +61,7 @@ public class Allocations {
     return  ["":""]
   }
   
-  typealias JsonElement = Any
-  private func getElementFromGenome(genome: Any, keyParts: [String]) throws -> Any {
+  func getElementFromGenome(genome: Any, keyParts: [String]) throws -> Any {
     var element: JsonElement? = genome
     if element == nil { // is this a safe check?
       throw AscendKeyError(rawValue: "Allocation genome was empty")!

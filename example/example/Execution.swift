@@ -9,7 +9,7 @@
 import Foundation
 import DynamicJSON
 
-// TODO: move this to own file
+
 protocol AscendAction {
   /**
    * Applies a given value to a set of instructions.

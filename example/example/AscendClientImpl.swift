@@ -15,14 +15,15 @@ class AscendClientImpl : AscendClient {
   private let futureAllocations: [JSON]?
   private let logger = Log.logger
   private let allocator: Allocator
-  private let store: AscendAllocationStore
+  
+  let store = URLCache.shared
+  
   private let previousAllocations: Bool
   private let participant: AscendParticipant
   
   init(config: AscendConfig, allocator: Allocator,
        previousAllocations: Bool, participant: AscendParticipant,
        eventEmitter: EventEmitter, futureAllocations: [JSON]) {
-    self.store = config.getAscendAllocationStore()
     self.allocator = allocator
     self.previousAllocations = previousAllocations
     self.participant = participant
@@ -30,6 +31,9 @@ class AscendClientImpl : AscendClient {
     self.futureAllocations = futureAllocations
   }
   
+  func getMyType<T>(_ element: T) -> Any? {
+    return type(of: element)
+  }
   
   public func get<T>(key: String, defaultValue: T) -> T {
     
@@ -37,14 +41,15 @@ class AscendClientImpl : AscendClient {
       return defaultValue
     }
     // this should be a blocking call
-    let allocations: [JSON] = [allocator.fetchAllocations()]
-    
-    if (!allocator.allocationsNotEmpty(allocations: allocations)) {
+    // let allocations: [JSON] = [allocator.fetchAllocations()]
+    let allocations = "[{\"audience_query\":\"<null>\",\"cid\":\"1cc385bf3757:9b0e33b869\",\"eid\":\"9b0e33b869\",\"excluded\":\"0\",\"genome\": {\"background\": {\"height\": 90, \"width\": \"0.5\"}, \"button\": \"yellow\"}, \"uid\": \"1AEA8FDC-42B4-4737-8267-4E1B851C2BB4\"}]"
+    let jsonAlloc = [JSON(allocations)]
+    print("JSON ALLOCATIONS: \(jsonAlloc)")
+    if (!allocator.allocationsNotEmpty(allocations: jsonAlloc)) {
       return defaultValue
     }
-    let cls: GenericClass = GenericClass(element: defaultValue)
-    // let type = cls.getMyType(value)
-    // let value: T = allocations(allocations).getValueFromAllocations(key, type , participant)
+    // let type = getMyType(element)
+    // let value = Allocations(allocations: allocations).getValueFromAllocations(key, type, participant)
     
     return defaultValue
   }
@@ -67,7 +72,9 @@ class AscendClientImpl : AscendClient {
     if (allocationStatus == Allocator.AllocationStatus.FETCHING) {
       allocator.sandbagConfirmation()
     } else if (allocationStatus == Allocator.AllocationStatus.RETRIEVED) {
-      let alloc = store.get(uid: participant.getUserId()) // can this ever be nil?
+      // let alloc = store.get(uid: participant.getUserId()) // can this ever be nil?
+      let request = URLRequest(url: allocator.createAllocationsUrl())
+      let alloc = store.cachedResponse(for: request)
       if let allocation = alloc {
         eventEmitter.confirm(allocations: allocation)
       }
@@ -79,7 +86,9 @@ class AscendClientImpl : AscendClient {
     if (allocationStatus == Allocator.AllocationStatus.FETCHING) {
       allocator.sandbagContamination()
     } else if (allocationStatus == Allocator.AllocationStatus.RETRIEVED) {
-      let alloc = store.get(uid: participant.getUserId()) // can this ever be nil?
+      // let alloc = store.get(uid: participant.getUserId()) // can this ever be nil?
+      let request = URLRequest(url: allocator.createAllocationsUrl())
+      let alloc = store.cachedResponse(for: request)
       if let allocation = alloc {
         eventEmitter.contaminate(allocations: allocation)
       }

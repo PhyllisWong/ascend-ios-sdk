@@ -18,36 +18,36 @@ public class Allocator {
     case FETCHING, RETRIEVED, FAILED
   }
   
-  let store = URLCache.shared // TODO: change this with abstracted class
+  private let store: LRUCache<String>
   private let config: AscendConfig
   private let participant: AscendParticipant
-  // private let eventEmitter: EventEmitter
   private let httpClient: HttpClient
+  // private let eventEmitter: EventEmitter
   
   private var confirmationSandbagged: Bool = false
   private var contaminationSandbagged: Bool = false
   private var logger: Logger
   private var allocationStatus: AllocationStatus
   
-  init(//executionDispatch: ExecutionDispatch,
-       //store: AscendAllocationStore,
+  init(
+       store: LRUCache<String>,
        config: AscendConfig,
        participant: AscendParticipant,
-       // eventEmitter: EventEmitter,
        httpClient: HttpClient
+       // eventEmitter: EventEmitter,
+       // executionDispatch: ExecutionDispatch
     ) {
-    // self.executionDispatch = executionDispatch
-    // self.store = store
+    self.store = LRUCache(10)
     self.config = config
     self.participant = participant
-    // self.eventEmitter = eventEmitter
     self.httpClient = httpClient
     self.allocationStatus = AllocationStatus.FETCHING
     self.logger = Log.logger
+    // self.executionDispatch = executionDispatch
+    // self.eventEmitter = eventEmitter
   }
   
   func getAllocationStatus() -> AllocationStatus { return allocationStatus }
-  
   func sandbagConfirmation() -> () { confirmationSandbagged = true }
   func sandbagContamination() -> () { contaminationSandbagged = true }
   
@@ -65,70 +65,46 @@ public class Allocator {
     return URL(string: "")!
   }
   
-  public func fetchAllocations() -> JSON {
+  public func fetchAllocations() -> [JSON] {
     let url = self.createAllocationsUrl()
+    let stringUrl = String(describing: url) // guard this...it can fail?
     // let url = URL(string: "kjnsdfjbn")! // BAD!!!! for testing
-    var jsonArray = JSON()
-    var cachedResponse = CachedURLResponse()
-    let semaphore = DispatchSemaphore(value: 0)
-    let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 20)
-    let session = URLSession.shared.dataTask(with: url)
-    
-    do {
-      let cached = try LruCache.sharedInstance.getEntry(store: self.store, session: session)
-      if let c = cached {
-        cachedResponse = c
-      }
-    } catch {
-        print("Error retrieving cached allocation")
-    }
-      NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in
-        if let error = err {
-          self.logger.log(.debug, message: "Error : \(error.localizedDescription)")
-        }
-        guard let response = res, let data = _data else {
-          self.logger.log(.debug, message: "NetworkingError data")
-          return
-        }
-
-        jsonArray = JSON(data)
-
-        do {
-          let _ = try LruCache.sharedInstance.putEntry(store: self.store, request: request, response: response, data: data)
-        } catch {
-          self.logger.log(.debug, message: "Error saving to the cache")
-        }
-        semaphore.signal()
-      })
-      _ = semaphore.wait(timeout: .distantFuture)
-      
-      // TODO: add reconciliation logic here
-      if (JSON(cachedResponse.data) == jsonArray) {
-        return JSON(cachedResponse.data)
-      }
-    return jsonArray
-  }
-  
-  
-  public func resolveAllocationsFailure(session: URLSessionDataTask) -> [JSON] {
+    var jsonArray = [JSON]()
     var previousAllocations = [JSON]()
     
     let semaphore = DispatchSemaphore(value: 0)
-    self.store.getCachedResponse(for: session, completionHandler: { (cachedData) in
-      if let cached = cachedData {
-        print("Cached Response: \(cached)")
-        previousAllocations = [JSON(cached)]
-      }
-      semaphore.signal() // tell the semaphore that we are done
-    })
-     _ = semaphore.wait(timeout: .distantFuture)
-    
-    if (allocationsNotEmpty(allocations: previousAllocations)) {
-      logger.log(.debug, message: "Falling back to participant's previous allocation.")
+    let cached = store.get(stringUrl) as! [JSON]?
+    if let cachedAlloc = cached {
+      // you have some previous stuff here
+      previousAllocations = cachedAlloc
+      print("Previous allocations: \(String(describing: previousAllocations))")
+    } else {
+      // IT HITS HERE EACH TIME
+      print("Error getting previous allocations")
     }
-    return previousAllocations
+    
+    NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in
+      if let error = err {
+        self.logger.log(.debug, message: "Error : \(error.localizedDescription)")
+      }
+      guard let response = res, let data = _data else {
+        self.logger.log(.debug, message: "NetworkingError data")
+        return
+      }
+      print("RESPONSE: \(response)")
+      jsonArray = [JSON(data)]
+      
+      self.store.set(stringUrl, val: JSON(data))
+      semaphore.signal()
+    })
+    _ = semaphore.wait(timeout: .distantFuture)
+    
+    if previousAllocations.count > 0 {
+      jsonArray = previousAllocations
+    }
+    return jsonArray
   }
-  
+
   func allocationsNotEmpty(allocations: [JSON]?) -> Bool {
     guard let allocationsArray = allocations else {
       return false

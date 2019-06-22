@@ -27,11 +27,20 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vbn-Mi-BJo">
+                                <rect key="frame" x="191" y="598" width="32" height="30"/>
+                                <state key="normal" title="alloc"/>
+                                <connections>
+                                    <action selector="didPressAlloc:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nKI-gm-W1f"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="OIW-PL-qdH" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="12Z-MO-i1g"/>
                             <constraint firstItem="OIW-PL-qdH" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="BAf-PN-eaX"/>
+                            <constraint firstItem="Vbn-Mi-BJo" firstAttribute="centerX" secondItem="OIW-PL-qdH" secondAttribute="centerX" id="Dxb-GD-Xqg"/>
+                            <constraint firstItem="2nc-wQ-Avs" firstAttribute="top" secondItem="Vbn-Mi-BJo" secondAttribute="bottom" constant="234" id="Vrl-2R-mhK"/>
                         </constraints>
                     </view>
                 </viewController>

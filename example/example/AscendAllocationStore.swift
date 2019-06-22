@@ -22,9 +22,8 @@ public protocol AscendAllocationStore {
    * @return an allocation if one exists else an empty JsonArray
    */
   
-  // What data type this supposed to return, and will it need to be serialized to json?
   func get(uid: String) -> String?
-  
+  // func getEntry(store: URLCache, session: URLSessionDataTask) throws -> CachedURLResponse?
   /**
    * Stores a JsonArray.
    * <p>
@@ -37,4 +36,5 @@ public protocol AscendAllocationStore {
   // Do we want to go some kind of confirmation that this was sucessful?
   // Where are we storing this data?
   func put(uid: String, allocations: String) -> ()
+  // func putEntry(store: URLCache, request: URLRequest, response: URLResponse, data: Data) throws -> Void
 }

@@ -18,9 +18,9 @@ public class EventEmitter {
   let config: AscendConfig
   let participant: AscendParticipant
   
-  // let audience = Audience() // TODO: create a skeleton of this class
+  let audience = Audience()
   
-  private init(httpClient: HttpClient,
+  init(httpClient: HttpClient,
                config: AscendConfig,
                participant: AscendParticipant) {
     self.httpClient = httpClient
@@ -29,43 +29,44 @@ public class EventEmitter {
   }
   
   func emit(_ key: String) -> Void {
-    let url: URL = getEventUrl(key, 1.0)
+    let url: URL = createEventUrl(key, 1.0)
     makeEventRequest(url)
   }
   
   func emit(_ key: String, _ score: Double) -> Void {
-    let url: URL = getEventUrl(key, score);
+    let url: URL = createEventUrl(key, score);
     makeEventRequest(url);
   }
   
-  public func confirm(allocations: String) -> Void {
+  public func confirm(allocations: CachedURLResponse) -> Void {
     sendAllocationEvents(EventEmitter.CONFIRM_KEY, allocations);
   }
   
-  public func contaminate(allocations: String) -> Void {
+  public func contaminate(allocations: CachedURLResponse) -> Void {
     sendAllocationEvents(EventEmitter.CONTAMINATE_KEY, allocations);
   }
 
-  public func sendAllocationEvents(_ key: String, _ allocations: String) {
-    let data = allocations.data(using: .utf8)!
+  public func sendAllocationEvents(_ key: String, _ allocations: CachedURLResponse) {
+    // let data = allocations.data(using: .utf8)!
+    let alloc = allocations.data
+    
     do {
-      if let jsonArray = try JSONSerialization.jsonObject(with: data, options:.allowFragments) as? [Dictionary<String,Any>] {
+      if let jsonArray = try JSONSerialization.jsonObject(with: alloc, options:.allowFragments) as? [Dictionary<String,Any>] {
         for allocation in jsonArray {
           let eid = allocation["eid"] as! String
           let cid = allocation["cid"] as! String
-          let url = getEventUrl(type: key, experimentId: eid, candidateId: cid)
+          let url = createEventUrl(type: key, experimentId: eid, candidateId: cid)
           
-          makeEventRequest(url) // is this async?
+          makeEventRequest(url) // confirm this is async
         }
       }
-    } catch let error as Error { // Make this specific type of error
+    } catch let error { // Make this an AscendError type
       let message: String = "Error sending allocation event: \(error.localizedDescription)"
       Log.logger.log(.debug, message: message)
     }
   }
   
-  // FIXME: change this to createEventUrl
-  func getEventUrl(_ type: String , _ score: Double ) -> URL {
+  func createEventUrl(_ type: String , _ score: Double ) -> URL {
     var components = URLComponents()
    
       components.scheme = config.getHttpScheme()
@@ -86,7 +87,7 @@ public class EventEmitter {
       return url
   }
 
-  func getEventUrl(type: String, experimentId: String, candidateId: String) -> URL {
+  func createEventUrl(type: String, experimentId: String, candidateId: String) -> URL {
     var components = URLComponents()
   
     components.scheme = config.getHttpScheme()
@@ -115,12 +116,8 @@ public class EventEmitter {
       Log.logger.log(.debug, message: message)
       return
     }
-    do {
-      httpClient.get(withUrl: url, semaphore: semaphore)
-      semaphore.signal()
-    } catch let error as NetworkingError {
-      let message: String = "There was an exception while making an event request with \(url): \(error.localizedDescription)"
-      Log.logger.log(.debug, message: message)
-    }
+
+    httpClient.get(withUrl: url, semaphore: semaphore)
+    semaphore.signal()
   }
 }
