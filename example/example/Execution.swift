@@ -20,16 +20,16 @@ protocol AscendAction {
 
 struct Set<Element> where Element : Hashable {}
 
-class Execution {
+class Execution<T: GenericValue<Any>> {
   
   private let key: String
-  private let defaultValue: Any // Generic
+  private let defaultValue: GenericValue<Any> // Generic
   private let function: AscendAction
   private let participant: AscendParticipant
   
   private var alreadyExecuted: Set<String> = Set()
   
-  init(key: String, defaultValue: Any,
+  init(key: String, defaultValue: GenericValue<Any>,
        function: AscendAction,
        participant: AscendParticipant) {
     self.key = key
@@ -40,12 +40,12 @@ class Execution {
   
   func getKey() -> String { return key }
   
-  func getMyType<T>(_ element: T) -> Any? {
+  func getMyType(_ element: Any) -> Any.Type {
     return type(of: element)
   }
   
   func executeWithAllocation(rawAllocations: String) throws -> Void {
-    let cls: GenericClass = GenericClass(element: defaultValue)
+    let type = getMyType(defaultValue)
     let allocations = Allocations(allocations: rawAllocations)
     // let type = (cls.element).getMyType()
     // let value = allocations.getValueFromAllocations(key: key, type: (cls.element as AnyObject).getMyType(), participant: participant)

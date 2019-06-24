@@ -9,6 +9,7 @@
 import Foundation
 
 public class LRUCache<KeyType: Hashable> {
+  
   private let maxSize: Int
   private var cache: [KeyType: Any] = [:]
   private var priority: LinkedList<KeyType> = LinkedList<KeyType>()

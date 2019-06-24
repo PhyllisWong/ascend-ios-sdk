@@ -69,12 +69,13 @@ public class Allocator {
   public func fetchAllocations() -> JsonArray {
     let url = self.createAllocationsUrl()
     let stringUrl = String(describing: url)
-    // let url = URL(string: "kjnsdfjbn")! // BAD!!!! for testing
+    let cacheUrl = URL(string: "kjnsdfjbn")! // BAD!!!! for testing
     var jsonArray = JsonArray()
     var previousAllocations = [Dictionary<String, Any>]()
     
     let semaphore = DispatchSemaphore(value: 0)
-    let cached = store.get(stringUrl) as? JsonArray
+    let cached = store.get(String(describing: cacheUrl)) as? JsonArray
+    print("Previously cached: \(String(describing: cached))")
     if let cachedAlloc = cached {
       // you have some previous stuff here
       previousAllocations = cachedAlloc
@@ -88,21 +89,21 @@ public class Allocator {
       if let error = err {
         self.logger.log(.debug, message: "Error : \(error.localizedDescription)")
       }
-      guard let response = res, let data = _data else {
+      guard let _ = res, let data = _data else {
         self.logger.log(.debug, message: "NetworkingError data")
         return
       }
       
       if let jsonArr = try? JSONSerialization.jsonObject(with: data, options: []) as? JsonArray  {
         print("RESPONSE: \(jsonArr)")
-        if let gnomes = jsonArr[0]["genome"] {
-          print(gnomes)
+        if let gnomes = jsonArr[0]["genome"] { // as? Dictionary<String, Any> {
+          print("GENOMES: \(gnomes)")
         }
         jsonArray = jsonArr
       }
       
-      self.store.set(stringUrl, val: data)
-      let cached = self.store.get(stringUrl)
+      self.store.set(String(describing: cacheUrl), val: data)
+      let cached = self.store.get(String(describing: cacheUrl))
       
       print("Cached: \(JSON(cached!))")
       // previousAllocations = [JSON(cached as! Data)]
