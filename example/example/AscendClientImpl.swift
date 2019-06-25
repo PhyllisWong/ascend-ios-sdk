@@ -8,12 +8,13 @@
 
 import Foundation
 import SwiftyJSON
+import PromiseKit
 
 class AscendClientImpl : AscendClient {
   
   private let eventEmitter: EventEmitter
   private let allocator: Allocator
-  private let futureAllocations: [JSON]?
+  private let futureAllocations: Promise<Void>?
   
   let store = LRUCache(10)
   
@@ -21,7 +22,7 @@ class AscendClientImpl : AscendClient {
   private let participant: AscendParticipant
   
   init(config: AscendConfig, allocator: Allocator,
-       previousAllocations: Bool, participant: AscendParticipant, eventEmitter: EventEmitter, futureAllocations: [JSON]) {
+       previousAllocations: Bool, participant: AscendParticipant, eventEmitter: EventEmitter, futureAllocations: Promise<Void>) {
    
     self.allocator = allocator
     self.previousAllocations = previousAllocations
@@ -40,7 +41,7 @@ class AscendClientImpl : AscendClient {
       return defaultValue
     }
     // this should be a blocking call
-    let allocations = "[{\"audience_query\":\"<null>\",\"cid\":\"1cc385bf3757:9b0e33b869\",\"eid\":\"9b0e33b869\",\"excluded\":\"0\",\"genome\": {\"background\": {\"height\": 90, \"width\": \"0.5\"}, \"button\": \"yellow\"}, \"uid\": \"1AEA8FDC-42B4-4737-8267-4E1B851C2BB4\"}]"
+    let allocations = [JSON(["{\"audience_query\":\"<null>\",\"cid\":\"1cc385bf3757:9b0e33b869\",\"eid\":\"9b0e33b869\",\"excluded\":\"0\",\"genome\": {\"background\": {\"height\": 90, \"width\": \"0.5\"}, \"button\": \"yellow\"}, \"uid\": \"1AEA8FDC-42B4-4737-8267-4E1B851C2BB4\"}"])]
     
     print("JSON ALLOCATIONS: \(allocations)")
     store.set(key, val: allocations)

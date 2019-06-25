@@ -11,8 +11,6 @@ import Alamofire
 import SwiftyJSON
 import PromiseKit
 
-public typealias JsonArray = [[String: Any]]?
-
 public class Allocator {
   
   enum AllocationStatus {
@@ -62,29 +60,34 @@ public class Allocator {
     return URL(string: "")!
   }
   
-  public func fetchAllocations() -> Promise<JSON> {
+  public func fetchAllocations() -> Promise<Void> {
     var url: URL { return createAllocationsUrl() }
     var allocationsFuture = Promise()
+    var allocations = JsonArray()
     
     let responsePromise = httpClient.get(url).done { (fetchedJSON) in
-      var allocations = JSON(fetchedJSON)
-      
-      let eid = String(describing: fetchedJSON[0]["eid"])
-      let previousAlloc = self.store.get(eid) as! [JSON]
-     
-      if previousAlloc.count > 0 {
-        allocations = Allocations.reconcileAllocations(previousAlloc, allocations)
-      }
-      self.store.set(eid, val: allocations)
-      self.allocationStatus = AllocationStatus.RETRIEVED
-      
-      if self.confirmationSandbagged {
-        eventEmitter.confirm(allocations)
+      let fetchedAlloc: JsonArray = JSON(fetchedJSON).array ?? []
+      if fetchedAlloc.count > 0 {
+        let eid = String(describing: fetchedAlloc[0]["eid"])
+        let previousAlloc = self.store.get(eid)
+        
+        if let previousAllocations = previousAlloc {
+          if previousAllocations.count > 0 {
+            allocations = Allocations.reconcileAllocations(previousAllocations, allocations)
+          }
+        }
+        self.store.set(eid, val: allocations)
+        self.allocationStatus = AllocationStatus.RETRIEVED
+        
+        if self.confirmationSandbagged {
+          self.eventEmitter.confirm(allocations)
+        }
       }
     }
+    return responsePromise
   }
 
-  static func allocationsNotEmpty(allocations: String?) -> Bool {
+  static func allocationsNotEmpty(allocations: JsonArray?) -> Bool {
     guard let allocationsArray = allocations else {
       return false
     }

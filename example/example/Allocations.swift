@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import DynamicJSON
+import SwiftyJSON
 
 public class Allocations {
   let allocations: String
@@ -75,8 +75,8 @@ public class Allocations {
   }
   
   // TODO: complete this method
-  static func reconcileAllocations(_ previousAllocations: JSON,_ fetchedAllocations: JSON) -> [JSON] {
-    var allocations = [JSON]()
+  static func reconcileAllocations(_ previousAllocations: JsonArray,_ fetchedAllocations: JsonArray) -> JsonArray {
+    var allocations = JsonArray()
     return allocations
   }
 }

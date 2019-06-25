@@ -8,7 +8,7 @@
 
 import Foundation
 import PromiseKit
-import DynamicJSON
+import SwiftyJSON
 import Alamofire
 
 public protocol HttpProtocol {
@@ -41,7 +41,7 @@ public protocol HttpProtocol {
 
 }
 
-
+public typealias JsonArray = [JSON]
 public class HttpClient: HttpProtocol {
   
     public func get(_ url: URL) -> Promise<JSON> {

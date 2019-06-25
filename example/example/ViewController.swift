@@ -15,7 +15,7 @@ class ViewController: UIViewController {
   
   @IBOutlet weak var textLabel: UITextField!
   let store = LRUCache.share
-  var allocations = [JSON]()
+  var allocations = JsonArray()
   enum DataError: Error { // move this somewhere more sensible
     case taskError
   }

@@ -11,15 +11,15 @@ import PromiseKit
 import SwiftyJSON
 
 public protocol AllocationsStore {
-  func get<T>(_ key: String) -> T?
-  func set<T>(_ key: String, val: T)
+  func get(_ key: String) -> JsonArray?
+  func set(_ key: String, val: JsonArray)
 }
 
 public class LRUCache: AllocationsStore {
 
   
   static var maxSize: Int = 10
-  private var cache = [String: AnyObject]()
+  private var cache = [String: JsonArray]()
   private var priority: LinkedList<String> = LinkedList<String>()
   private var key2node: [String: LinkedList<String>.LinkedListNode<String>] = [:]
   
@@ -27,22 +27,22 @@ public class LRUCache: AllocationsStore {
   
   public init(_ maxSize: Int = 10) {}
   
-  public func get<T>(_ key: String) -> T? {
+  public func get(_ key: String) -> JsonArray? {
     guard let val = cache[key] else {
       return nil
     }
     remove(key)
     insert(key, val: val)
-    return (val as! T)
+    return (val)
   }
   
-  public func set<T>(_ key: String, val: T) {
+  public func set(_ key: String, val: JsonArray) {
     if cache[key] != nil {
       remove(key)
     } else if priority.count >= LRUCache.maxSize, let keyToRemove = priority.last?.value {
       remove(keyToRemove)
     }
-    insert(key, val: T.self)
+    insert(key, val: val)
   }
   
   private func remove(_ key: String) {
@@ -54,8 +54,8 @@ public class LRUCache: AllocationsStore {
     key2node.removeValue(forKey: key)
   }
   
-  private func insert<T>(_ key: String, val: T) {
-    cache[key] = val as AnyObject
+  private func insert(_ key: String, val: JsonArray) {
+    cache[key] = val
     priority.insert(key, atIndex: 0)
     guard let first = priority.first else {
       return

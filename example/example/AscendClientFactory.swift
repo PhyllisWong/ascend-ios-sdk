@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import PromiseKit
 
 public class AscendClientFactory {
   private static let LOGGER = Log.logger
@@ -39,20 +40,17 @@ public class AscendClientFactory {
   
   private static func createClient(config: AscendConfig, participant: AscendParticipant) -> AscendClient {
     let store = config.getAscendAllocationStore()
-    let previousAllocations: [JSON] = store.get(participant.getUserId()) ?? []
+    let previousAllocations: JsonArray = store.get(participant.getUserId()) ?? []
     let httpClient = HttpClient()
     let eventEmitter = EventEmitter(httpClient: httpClient, config: config, participant: participant)
     let allocator: Allocator = Allocator(config: config, participant: participant, httpClient: httpClient)
-    var futureAllocations = [JSON]()
     // fetch and reconcile allocations asynchronously
-    let allocationsPromise = allocator.fetchAllocations().done { (fetched) in
-      futureAllocations.append(JSON(fetched))
-    }
+    let allocationsFuture = allocator.fetchAllocations()
     let ascendClientImpl = AscendClientImpl(config: config,
                                             allocator: allocator,
                                             previousAllocations: Allocator.allocationsNotEmpty(allocations: previousAllocations),
                                             participant: participant, eventEmitter: eventEmitter,
-                                            futureAllocations: futureAllocations)
+                                            futureAllocations: allocationsFuture)
     return ascendClientImpl
   }
 }

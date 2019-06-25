@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import DynamicJSON
+import SwiftyJSON
 
 public class EventEmitter {
   
@@ -38,15 +38,15 @@ public class EventEmitter {
     makeEventRequest(url);
   }
   
-  public func confirm(_ allocations: [JSON]) -> Void {
+  public func confirm(_ allocations: JsonArray) -> Void {
     sendAllocationEvents(EventEmitter.CONFIRM_KEY, allocations);
   }
   
-  public func contaminate(allocations: [JSON]) -> Void {
+  public func contaminate(allocations: JsonArray) -> Void {
     sendAllocationEvents(EventEmitter.CONTAMINATE_KEY, allocations);
   }
 
-  public func sendAllocationEvents(_ key: String, _ allocations: [JSON]) {
+  public func sendAllocationEvents(_ key: String, _ allocations: JsonArray) {
     // let data = allocations.data(using: .utf8)!
     do {
       for allocation in allocations {
