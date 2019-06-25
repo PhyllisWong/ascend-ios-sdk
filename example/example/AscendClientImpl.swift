@@ -15,7 +15,7 @@ class AscendClientImpl : AscendClient {
   private let allocator: Allocator
   private let futureAllocations: [JSON]?
   
-  let store = LRUCache<String>(10)
+  let store = LRUCache(10)
   
   private let previousAllocations: Bool
   private let participant: AscendParticipant

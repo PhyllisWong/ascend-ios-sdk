@@ -19,7 +19,7 @@ public class Allocator {
     case FETCHING, RETRIEVED, FAILED
   }
   
-  private let store: LRUCache<String>
+  private let store: LRUCache
   private let config: AscendConfig
   private let participant: AscendParticipant
   private let httpClient: HttpClient

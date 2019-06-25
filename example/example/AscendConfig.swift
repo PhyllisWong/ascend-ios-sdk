@@ -14,12 +14,12 @@ public class AscendConfig {
   private let domain: String
   private let version: String
   private let environmentId: String
-  private let ascendAllocationStore: LRUCache<String>
+  private let ascendAllocationStore: LRUCache
   private let httpClient: HttpClient
   // private let executionDispatch: ExecutionDispatch
   
   init(httpScheme: String, domain: String, version: String,
-       environmentId: String, ascendAllocationStore: LRUCache<String>,
+       environmentId: String, ascendAllocationStore: LRUCache,
        httpClient: HttpClient
     ) {
     self.httpScheme = httpScheme
@@ -44,8 +44,8 @@ public class AscendConfig {
   
   public func getEnvironmentId() -> String { return environmentId }
   
-  public func getAscendAllocationStore() -> LRUCache<String> {
-    let ascendAllocationStore = LRUCache<String>(5)
+  public func getAscendAllocationStore() -> LRUCache {
+    let ascendAllocationStore = LRUCache(5)
     return ascendAllocationStore
    }
   
@@ -162,7 +162,7 @@ public class ConfigBuilder {
     let version = self.version
     let environmentId = self.environmentId
     let httpClient = self.httpClient
-    let store = LRUCache<String>(10)
+    let store = LRUCache(10)
 
     let ascendConfig = AscendConfig(httpScheme: httpScheme, domain: domain,
                                     version: version, environmentId: environmentId, ascendAllocationStore: store,
