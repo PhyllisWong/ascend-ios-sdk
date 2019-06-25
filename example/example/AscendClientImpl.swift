@@ -7,14 +7,13 @@
 //
 
 import Foundation
-import DynamicJSON
+import SwiftyJSON
 
 class AscendClientImpl : AscendClient {
   
   private let eventEmitter: EventEmitter
-  private let futureAllocations: JsonArray?
-  private let logger = Log.logger
   private let allocator: Allocator
+  private let futureAllocations: [JSON]?
   
   let store = LRUCache<String>(10)
   
@@ -22,13 +21,13 @@ class AscendClientImpl : AscendClient {
   private let participant: AscendParticipant
   
   init(config: AscendConfig, allocator: Allocator,
-       previousAllocations: Bool, participant: AscendParticipant,
-       eventEmitter: EventEmitter, futureAllocations: JsonArray) {
+       previousAllocations: Bool, participant: AscendParticipant, eventEmitter: EventEmitter, futureAllocations: [JSON]) {
+   
     self.allocator = allocator
     self.previousAllocations = previousAllocations
     self.participant = participant
     self.eventEmitter = eventEmitter
-    self.futureAllocations = futureAllocations
+    self.futureAllocations = Allocator.fetchAllocations(self.allocator)()
   }
   
   func getMyType<T>(_ element: T) -> Any? {
@@ -47,7 +46,7 @@ class AscendClientImpl : AscendClient {
     store.set(key, val: allocations)
     let storedAlloc = store.get(key)
     print("STORED ALLOCATIONS: \(String(describing: storedAlloc))")
-    if (!allocator.allocationsNotEmpty(allocations: allocations)) {
+    if (!Allocator.allocationsNotEmpty(allocations: allocations)) {
       return allocations as! T
     }
     // let type = getMyType(element)

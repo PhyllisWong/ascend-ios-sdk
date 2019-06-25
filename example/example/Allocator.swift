@@ -7,8 +7,9 @@
 //
 
 import Foundation
-import DynamicJSON
 import Alamofire
+import SwiftyJSON
+import PromiseKit
 
 public typealias JsonArray = [[String: Any]]?
 
@@ -22,29 +23,26 @@ public class Allocator {
   private let config: AscendConfig
   private let participant: AscendParticipant
   private let httpClient: HttpClient
-  // private let eventEmitter: EventEmitter
+  private let eventEmitter: EventEmitter
   
   private var confirmationSandbagged: Bool = false
   private var contaminationSandbagged: Bool = false
   private var logger: Logger
   private var allocationStatus: AllocationStatus
+  // private var allocationFuture: Any?
   
   init(
-       store: LRUCache<String>,
        config: AscendConfig,
-       participant: AscendParticipant,
-       httpClient: HttpClient
-       // eventEmitter: EventEmitter,
-       // executionDispatch: ExecutionDispatch
-    ) {
+       participant: AscendParticipant) {
     self.store = LRUCache(10)
     self.config = config
     self.participant = participant
-    self.httpClient = httpClient
+    self.httpClient = HttpClient()
     self.allocationStatus = AllocationStatus.FETCHING
     self.logger = Log.logger
+    // self.allocationFuture = Allocator.fetchAllocations()
     // self.executionDispatch = executionDispatch
-    // self.eventEmitter = eventEmitter
+    self.eventEmitter = EventEmitter(config: config, participant: participant)
   }
   
   func getAllocationStatus() -> AllocationStatus { return allocationStatus }
@@ -65,59 +63,31 @@ public class Allocator {
     return URL(string: "")!
   }
   
-  public typealias JsonArray = [Dictionary<String, Any>]
-  public func fetchAllocations() -> JsonArray {
+  // public typealias JsonArray = [Dictionary<String, Any>]
+  public typealias JsonArray = [JSON]
+  public func fetchAllocations() -> [JSON] {
     let url = self.createAllocationsUrl()
     let stringUrl = String(describing: url)
     let cacheUrl = URL(string: "kjnsdfjbn")! // BAD!!!! for testing
-    var jsonArray = JsonArray()
-    var previousAllocations = [Dictionary<String, Any>]()
-    
-    let semaphore = DispatchSemaphore(value: 0)
-    let cached = store.get(String(describing: cacheUrl)) as? JsonArray
-    print("Previously cached: \(String(describing: cached))")
-    if let cachedAlloc = cached {
-      // you have some previous stuff here
-      previousAllocations = cachedAlloc
-      print("Previous allocations: \(String(describing: previousAllocations))")
-    } else {
-      // IT HITS HERE EACH TIME
-      print("Error getting previous allocations")
+    var jsonArray = [JSON]()
+    let previousAllocations = [JSON]()
+    let apiService = ApiService()
+    let futures = apiService.get(url: url) { (JSON) in
+      return JSON
     }
     
-    NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in
-      if let error = err {
-        self.logger.log(.debug, message: "Error : \(error.localizedDescription)")
-      }
-      guard let _ = res, let data = _data else {
-        self.logger.log(.debug, message: "NetworkingError data")
-        return
-      }
-      
-      if let jsonArr = try? JSONSerialization.jsonObject(with: data, options: []) as? JsonArray  {
-        print("RESPONSE: \(jsonArr)")
-        if let gnomes = jsonArr[0]["genome"] { // as? Dictionary<String, Any> {
-          print("GENOMES: \(gnomes)")
-        }
-        jsonArray = jsonArr
-      }
-      
-      self.store.set(String(describing: cacheUrl), val: data)
-      let cached = self.store.get(String(describing: cacheUrl))
-      
-      print("Cached: \(JSON(cached!))")
-      // previousAllocations = [JSON(cached as! Data)]
-      semaphore.signal()
-    })
-    _ = semaphore.wait(timeout: .distantFuture)
-    
+    // _ = semaphore.wait(timeout: .distantFuture)
     if previousAllocations.count > 0 {
       jsonArray = previousAllocations
+    }
+    let cachedJsonArray = self.store.get(self.config.getEnvironmentId()) as? [JSON]
+    if let cached = cachedJsonArray {
+      jsonArray = cached
     }
     return jsonArray
   }
 
-  func allocationsNotEmpty(allocations: String?) -> Bool {
+  static func allocationsNotEmpty(allocations: String?) -> Bool {
     guard let allocationsArray = allocations else {
       return false
     }

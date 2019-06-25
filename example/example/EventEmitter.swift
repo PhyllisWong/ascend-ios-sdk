@@ -20,7 +20,7 @@ public class EventEmitter {
   
   let audience = Audience()
   
-  init(httpClient: HttpClient,
+  init(httpClient: HttpClient = HttpClient(),
                config: AscendConfig,
                participant: AscendParticipant) {
     self.httpClient = httpClient
@@ -117,7 +117,7 @@ public class EventEmitter {
       return
     }
 
-    httpClient.get(withUrl: url, semaphore: semaphore)
-    semaphore.signal()
+//    httpClient.get(withUrl: url, semaphore: semaphore)
+//    semaphore.signal()
   }
 }

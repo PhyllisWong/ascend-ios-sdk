@@ -9,6 +9,7 @@
 import Foundation
 import PromiseKit
 import DynamicJSON
+import Alamofire
 
 protocol Networking {
   func get(fromUrl url: URL, completion: @escaping (Any) -> Void)
@@ -96,6 +97,29 @@ public class HttpClient  {
   public func post(url: String, jsonArray: [[String : Any]]) {
     print("working on it")
   }
-  
+}
+
+public class ApiService {
+  public func get(url: URL, completion: @escaping (Any?) -> ()) -> JSON {
+    let semaphore = DispatchSemaphore(value: 0)
+    var json = JSON()
+    Alamofire.request(url).responseData() { (response) in
+      guard response.result.isSuccess else {
+        return
+      }
+      if let data = response.data {
+        do {
+          let jsonData = try JSON(data: data)
+          print("JSON: \(jsonData)")
+          json = jsonData
+          semaphore.signal()
+        } catch {
+          print("JSON ERROR")
+        }
+      }
+    }
+    _ = semaphore.wait(timeout: .distantFuture)
+    return json
+  }
 }
 

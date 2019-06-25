@@ -7,7 +7,9 @@
 //
 
 import UIKit
-import DynamicJSON
+import SwiftyJSON
+import Alamofire
+import PromiseKit
 
 class ViewController: UIViewController {
   
@@ -16,31 +18,80 @@ class ViewController: UIViewController {
   }
 
   @IBAction func didPressAlloc(_ sender: Any) {
-    self.getJsonData()
+    // self.getJsonData()
+    let jsonPromise = download()
+    print("PROMISE: \(jsonPromise)")
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
     
-    self.getData()
+    // self.getData()
+//    let client = buildClient()
+//    print(client)
   }
 }
 
 
 private extension ViewController {
   
+  func download() -> Promise<JSON> {
+    let envId = "40ebcd9abf"
+    let config = ConfigBuilder(environmentId: envId).buildConfig()
+    let store = LRUCache<String>(10)
+    let pastCached = store.get(config.getEnvironmentId())
+    print("PASTED CACHED: \(pastCached)")
+    return Promise<JSON> { resolver -> Void in
+      let url = URL(string: "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123")
+      Alamofire.request(url!)
+        .validate()
+        .responseJSON { response in
+          switch response.result {
+          case .success(let json):
+            let json = JSON()
+            if let data = response.data {
+              guard let json = try? JSON(data: data) else {
+                resolver.reject("Error" as! Error)
+                return
+              }
+              
+              store.set(config.getEnvironmentId(), val: json)
+              print("UR PROMISED JSON: \(json)")
+              let cached = store.get(config.getEnvironmentId())
+              print("CACHED: \(cached)")
+              resolver.fulfill(json)
+            }
+            
+          case .failure(let error):
+            resolver.reject(error)
+          }
+      }
+    }
+  }
+  
   private func getJsonData() {
     let participantBuilder = ParticipantBuilder()
-    
     let participant = participantBuilder.build()
+    let client = buildClient()
+    print(client)
     let httpClient = HttpClient()
     let envId = "40ebcd9abf"
     let config = ConfigBuilder(environmentId: envId).buildConfig()
     let store = LRUCache<String>(10)
-    let alloc = Allocator(store: store, config: config, participant: participant, httpClient: httpClient)
+    let alloc = Allocator(config: config, participant: participant)
     let results = alloc.fetchAllocations()
+    let cached = store.get(config.getEnvironmentId())
     print("YOUR FETCHED ALLOCATION: \(String(describing: results))")
+    print("YOUR CACHED ALLOCATION: \(String(describing: cached))")
+  }
+  
+  private func buildClient() -> AscendClientFactory {
+    let envId = "40ebcd9abf"
+    let config = ConfigBuilder(environmentId: envId).buildConfig()
+    let participantBuilder = ParticipantBuilder()
+    let participant = participantBuilder.build()
+    return AscendClientFactory(config: config, participant: participant)
   }
   
   private func getData() {
@@ -51,10 +102,10 @@ private extension ViewController {
     let envId = "40ebcd9abf"
     let config = ConfigBuilder(environmentId: envId).buildConfig()
     let store = LRUCache<String>(10)
-    let alloc = Allocator(store: store, config: config, participant: participant, httpClient: httpClient)
-    let futureAloc = alloc.fetchAllocations()
+    let alloc = Allocator(config: config, participant: participant)
+    let futureAlloc = alloc.fetchAllocations()
     let emitter = EventEmitter(httpClient: httpClient, config: config, participant: participant)
-    let ascender = AscendClientImpl(config: config, allocator: alloc, previousAllocations: false, participant: participant, eventEmitter: emitter, futureAllocations: futureAloc)
+    let ascender = AscendClientImpl(config: config, allocator: alloc, previousAllocations: false, participant: participant, eventEmitter: emitter, futureAllocations: futureAlloc)
     let value = ascender.get(key: "button", defaultValue: "green")
     print("THIS IS YOUR VALUE: \(value)")
   }

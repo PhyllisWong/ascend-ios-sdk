@@ -10,23 +10,23 @@ import Foundation
 
 public class AscendConfig {
   
-  private let httpScheme: String;
-  private let domain: String;
-  private let version: String;
-  private let environmentId: String;
-  // private let ascendAllocationStore: AscendAllocationStore;
-  private let httpClient: HttpClient;
-  // private let executionDispatch: ExecutionDispatch;
+  private let httpScheme: String
+  private let domain: String
+  private let version: String
+  private let environmentId: String
+  private let ascendAllocationStore: LRUCache<String>
+  private let httpClient: HttpClient
+  // private let executionDispatch: ExecutionDispatch
   
   init(httpScheme: String, domain: String, version: String,
-       environmentId: String, // ascendAllocationStore: AscendAllocationStore,
+       environmentId: String, ascendAllocationStore: LRUCache<String>,
        httpClient: HttpClient
     ) {
     self.httpScheme = httpScheme
     self.domain = domain
     self.version = version
     self.environmentId = environmentId
-    // self.ascendAllocationStore = ascendAllocationStore
+    self.ascendAllocationStore = ascendAllocationStore
     self.httpClient = httpClient
     // self.executionDispatch = ExecutionDispatch()
   }
@@ -162,9 +162,10 @@ public class ConfigBuilder {
     let version = self.version
     let environmentId = self.environmentId
     let httpClient = self.httpClient
+    let store = LRUCache<String>(10)
 
     let ascendConfig = AscendConfig(httpScheme: httpScheme, domain: domain,
-                                    version: version, environmentId: environmentId,
+                                    version: version, environmentId: environmentId, ascendAllocationStore: store,
                                     httpClient: httpClient)
     return ascendConfig
   }
