@@ -15,12 +15,12 @@ public class AscendConfig {
   private let version: String
   private let environmentId: String
   private let ascendAllocationStore: LRUCache
-  private let httpClient: HttpClient
+  private let httpClient: HttpProtocol
   // private let executionDispatch: ExecutionDispatch
   
   init(httpScheme: String, domain: String, version: String,
        environmentId: String, ascendAllocationStore: LRUCache,
-       httpClient: HttpClient
+       httpClient: HttpProtocol
     ) {
     self.httpScheme = httpScheme
     self.domain = domain
@@ -31,7 +31,7 @@ public class AscendConfig {
     // self.executionDispatch = ExecutionDispatch()
   }
   
-  public func configBuilder(environmentId: String, httpClient: HttpClient) -> ConfigBuilder {
+  public func configBuilder(environmentId: String, httpClient: HttpProtocol) -> ConfigBuilder {
     let configurationBuilder = ConfigBuilder(environmentId: environmentId, httpClient: httpClient)
     return configurationBuilder
   }
@@ -49,7 +49,7 @@ public class AscendConfig {
     return ascendAllocationStore
    }
   
-  public func getHttpClient() -> HttpClient {
+  public func getHttpClient() -> HttpProtocol {
     return self.httpClient
   }
   
@@ -67,7 +67,7 @@ public class ConfigBuilder {
   private var allocationStore: AscendAllocationStore?
   
   private var environmentId: String
-  private var httpClient: HttpClient
+  private var httpClient: HttpProtocol
   
   private let DEFAULT_HTTP_SCHEME: String = "https"
   private let DEFAULT_DOMAIN: String = "participants-phyllis.evolv.ai"
@@ -83,7 +83,7 @@ public class ConfigBuilder {
    * </p>
    * @param environmentId unique id representing a customer's environment
    */
-  init(environmentId: String, httpClient: HttpClient? = nil) {
+  init(environmentId: String, httpClient: HttpProtocol? = nil) {
     self.allocationStoreSize = DEFAULT_ALLOCATION_STORE_SIZE
     self.httpScheme = DEFAULT_HTTP_SCHEME
     self.domain = DEFAULT_DOMAIN

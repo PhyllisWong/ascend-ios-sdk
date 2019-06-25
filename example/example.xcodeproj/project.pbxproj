@@ -20,7 +20,7 @@
 		3661DDDE22AF3890008F7017 /* AscendClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3661DDDD22AF3890008F7017 /* AscendClient.swift */; };
 		3661DDE122AF4855008F7017 /* AscendParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3661DDE022AF4855008F7017 /* AscendParticipant.swift */; };
 		3661DDE322AF6160008F7017 /* AscendService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3661DDE222AF6160008F7017 /* AscendService.swift */; };
-		3664FC0822B084F7009ED0BE /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC0722B084F7009ED0BE /* HttpClient.swift */; };
+		3664FC0822B084F7009ED0BE /* HttpProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC0722B084F7009ED0BE /* HttpProtocol.swift */; };
 		3664FC0A22B15F98009ED0BE /* AscendAllocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC0922B15F98009ED0BE /* AscendAllocationStore.swift */; };
 		3664FC0C22B16443009ED0BE /* MaxSizeDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */; };
 		3664FC0E22B17F69009ED0BE /* Allocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC0D22B17F69009ED0BE /* Allocations.swift */; };
@@ -85,7 +85,7 @@
 		3661DDDD22AF3890008F7017 /* AscendClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendClient.swift; sourceTree = "<group>"; };
 		3661DDE022AF4855008F7017 /* AscendParticipant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendParticipant.swift; sourceTree = "<group>"; };
 		3661DDE222AF6160008F7017 /* AscendService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendService.swift; sourceTree = "<group>"; };
-		3664FC0722B084F7009ED0BE /* HttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpClient.swift; sourceTree = "<group>"; };
+		3664FC0722B084F7009ED0BE /* HttpProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpProtocol.swift; sourceTree = "<group>"; };
 		3664FC0922B15F98009ED0BE /* AscendAllocationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendAllocationStore.swift; sourceTree = "<group>"; };
 		3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxSizeDictionary.swift; sourceTree = "<group>"; };
 		3664FC0D22B17F69009ED0BE /* Allocations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Allocations.swift; sourceTree = "<group>"; };
@@ -215,7 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				3661DDE222AF6160008F7017 /* AscendService.swift */,
-				3664FC0722B084F7009ED0BE /* HttpClient.swift */,
+				3664FC0722B084F7009ED0BE /* HttpProtocol.swift */,
 				3664FC1422B18B06009ED0BE /* HTTPURLRequest.swift */,
 				3664FC1622B18B1A009ED0BE /* HTTPURLResponse.swift */,
 				3664FC1822B18B31009ED0BE /* URLResponse.swift */,
@@ -490,7 +490,7 @@
 				3661DDE322AF6160008F7017 /* AscendService.swift in Sources */,
 				3664FC2522B42EEF009ED0BE /* LruCache.swift in Sources */,
 				3664FC1922B18B31009ED0BE /* URLResponse.swift in Sources */,
-				3664FC0822B084F7009ED0BE /* HttpClient.swift in Sources */,
+				3664FC0822B084F7009ED0BE /* HttpProtocol.swift in Sources */,
 				3661DDDE22AF3890008F7017 /* AscendClient.swift in Sources */,
 				3664FC0E22B17F69009ED0BE /* Allocations.swift in Sources */,
 				3661DDAE22AF3012008F7017 /* AppDelegate.swift in Sources */,

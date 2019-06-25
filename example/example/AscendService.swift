@@ -11,9 +11,40 @@ import PromiseKit
 import DynamicJSON
 import Alamofire
 
-class HttpClient: HttpService {
+public protocol HttpProtocol {
+
+  /**
+   * Performs a GET request using the provided url.
+   * <p>
+   *     This call is asynchronous, the request is sent and a completable future
+   *     is returned. The future is completed when the result of the request returns.
+   *     The timeout of the request is determined in the implementation of the
+   *     HttpClient.
+   * </p>
+   * @param url a valid url representing a call to the Participant API.
+   * @return a response future
+   */
+  func get(_ url: URL) -> PromiseKit.Promise<JSON>
+
+  /**
+   * Performs a POST request using the provided url.
+   * <p>
+   *     This call is asynchronous, the request is sent and a completable future
+   *     is returned. The future is completed when the result of the request returns.
+   *     The timeout of the request is determined in the implementation of the
+   *     HttpClient.
+   * </p>
+   * @param url a valid url representing a call to the Participant API.
+   * @return a response future
+   */
+  func post(_ url: URL) -> PromiseKit.Promise<JSON>
+
+}
+
+
+public class HttpClient: HttpProtocol {
   
-  static func get(url: URL) -> Promise<JSON> {
+    public func get(_ url: URL) -> Promise<JSON> {
     return Promise<JSON> { resolver -> Void in
       
       Alamofire.request(url)
@@ -37,7 +68,7 @@ class HttpClient: HttpService {
     }
   }
   
-  static func post(url: URL) -> Promise<JSON> {
+  public func post(_ url: URL) -> Promise<JSON> {
     return Promise<JSON> { resolver -> Void in
       
       Alamofire.request(url, method: .post, encoding: JSONEncoding.default)
@@ -58,5 +89,7 @@ class HttpClient: HttpService {
       }
       
     }
+    
   }
 }
+

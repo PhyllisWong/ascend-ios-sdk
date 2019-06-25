@@ -73,4 +73,10 @@ public class Allocations {
     }
     return element
   }
+  
+  // TODO: complete this method
+  static func reconcileAllocations(_ previousAllocations: JSON,_ fetchedAllocations: JSON) -> [JSON] {
+    var allocations = [JSON]()
+    return allocations
+  }
 }

@@ -38,28 +38,25 @@ public class EventEmitter {
     makeEventRequest(url);
   }
   
-  public func confirm(allocations: Data) -> Void {
+  public func confirm(_ allocations: [JSON]) -> Void {
     sendAllocationEvents(EventEmitter.CONFIRM_KEY, allocations);
   }
   
-  public func contaminate(allocations: Data) -> Void {
+  public func contaminate(allocations: [JSON]) -> Void {
     sendAllocationEvents(EventEmitter.CONTAMINATE_KEY, allocations);
   }
 
-  public func sendAllocationEvents(_ key: String, _ allocations: Data) {
+  public func sendAllocationEvents(_ key: String, _ allocations: [JSON]) {
     // let data = allocations.data(using: .utf8)!
-    let alloc = allocations
-    
     do {
-      if let jsonArray = try JSONSerialization.jsonObject(with: alloc, options:.allowFragments) as? [Dictionary<String,Any>] {
-        for allocation in jsonArray {
-          let eid = allocation["eid"] as! String
-          let cid = allocation["cid"] as! String
-          let url = createEventUrl(type: key, experimentId: eid, candidateId: cid)
-          
-          makeEventRequest(url) // confirm this is async
-        }
+      for allocation in allocations {
+        let eid = String(describing: allocation["eid"])
+        let cid = String(describing: allocation["cid"])
+        let url = createEventUrl(type: key, experimentId: eid, candidateId: cid)
+        
+        makeEventRequest(url) // confirm this is async
       }
+      
     } catch let error { // Make this an AscendError type
       let message: String = "Error sending allocation event: \(error.localizedDescription)"
       Log.logger.log(.debug, message: message)

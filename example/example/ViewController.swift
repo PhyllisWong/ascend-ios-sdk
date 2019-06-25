@@ -22,9 +22,11 @@ class ViewController: UIViewController {
 
   @IBAction func didPressAlloc(_ sender: Any) {
     let url = URL(string: "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123")!
-    let jsonPromise = HttpClient.get(url: url).done { (fetched) in
-      self.allocations.append(JSON(fetched))
-    }
+    let httpClient = HttpClient()
+//    let jsonPromise = httpClient.get(url: url).done { (fetched) in
+//      self.allocations.append(JSON(fetched))
+//    }
+    // FIXME: call the alloc.fetch method here to test > you want to get a promise back
     let cacheName = "MyCache"
     store.set(cacheName, val: allocations)
     let cached = store.get(cacheName)

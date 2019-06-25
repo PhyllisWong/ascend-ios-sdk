@@ -98,7 +98,7 @@ class AscendClientImpl : AscendClient {
       // let request = URLRequest(url: allocator.createAllocationsUrl())
       let alloc = store.get(participant.getUserId())
       if let allocation = alloc {
-        eventEmitter.confirm(allocations: allocation as! Data)
+        eventEmitter.confirm(allocation)
       }
     }
   }
@@ -112,7 +112,7 @@ class AscendClientImpl : AscendClient {
 //      let request = URLRequest(url: allocator.createAllocationsUrl())
 //      let alloc = store.cachedResponse(for: request)
       if let allocation = alloc {
-        eventEmitter.contaminate(allocations: allocation as! Data)
+        eventEmitter.contaminate(allocations: allocation)
       }
     }
   }
