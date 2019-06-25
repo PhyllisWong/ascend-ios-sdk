@@ -63,7 +63,6 @@ public class Allocator {
     return URL(string: "")!
   }
   
-  // public typealias JsonArray = [Dictionary<String, Any>]
   public typealias JsonArray = [JSON]
   public func fetchAllocations() -> [JSON] {
     let url = self.createAllocationsUrl()
@@ -71,12 +70,10 @@ public class Allocator {
     let cacheUrl = URL(string: "kjnsdfjbn")! // BAD!!!! for testing
     var jsonArray = [JSON]()
     let previousAllocations = [JSON]()
-    let apiService = ApiService()
-    let futures = apiService.get(url: url) { (JSON) in
-      return JSON
-    }
+    let apiService = HttpClient()
+    let futuresAllocations = HttpClient.get(url: url)
+
     
-    // _ = semaphore.wait(timeout: .distantFuture)
     if previousAllocations.count > 0 {
       jsonArray = previousAllocations
     }

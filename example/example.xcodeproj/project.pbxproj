@@ -215,11 +215,11 @@
 			isa = PBXGroup;
 			children = (
 				3661DDE222AF6160008F7017 /* AscendService.swift */,
+				3664FC0722B084F7009ED0BE /* HttpClient.swift */,
 				3664FC1422B18B06009ED0BE /* HTTPURLRequest.swift */,
 				3664FC1622B18B1A009ED0BE /* HTTPURLResponse.swift */,
 				3664FC1822B18B31009ED0BE /* URLResponse.swift */,
 				3664FC1222B18AC9009ED0BE /* HTTPHeaders.swift */,
-				3664FC0722B084F7009ED0BE /* HttpClient.swift */,
 			);
 			name = Networking;
 			sourceTree = "<group>";

@@ -7,8 +7,11 @@
 //
 
 import Foundation
+import PromiseKit
+import SwiftyJSON
+import Alamofire
 
-protocol HttpServiceProvider: class {
+public protocol HttpService {
 
   /**
    * Performs a GET request using the provided url.
@@ -21,9 +24,8 @@ protocol HttpServiceProvider: class {
    * @param url a valid url representing a call to the Participant API.
    * @return a response future
    */
-  static func get(url: URL, completion: @escaping (Any?) -> ())
-  
-  // TODO: this is a copy pasta from get method, FIXME
+  static func get(url: URL) -> PromiseKit.Promise<JSON>
+
   /**
    * Performs a POST request using the provided url.
    * <p>
@@ -35,5 +37,6 @@ protocol HttpServiceProvider: class {
    * @param url a valid url representing a call to the Participant API.
    * @return a response future
    */
-  static func post(url: String, jsonArray: [[String: Any]])
+  static func post(url: URL) -> PromiseKit.Promise<JSON>
+  
 }
