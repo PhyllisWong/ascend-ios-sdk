@@ -36,10 +36,7 @@ public class DefaultAllocationStore : AscendAllocationStore {
 
   
 //  private LruCache cache;
-  
   init(size: Int) {
-//    this.cache = new LruCache(size);
-  // TODO: figure out the cache situation
   }
 
 }

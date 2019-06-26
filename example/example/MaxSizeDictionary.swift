@@ -8,8 +8,7 @@
 
 import Foundation
 
-// FIXME: This solves the problem of not overloading virtual memory on the device
-//extension Dictionary where Key:Hashable, Value:AnyObject {
+// This solves the problem of not overloading virtual memory on the device
 public struct MaxSizeDictionary<T: Hashable, U> {
   private let _limit: UInt
   private var dictionary = [T: U]()
@@ -31,18 +30,3 @@ public struct MaxSizeDictionary<T: Hashable, U> {
   }
   func getDictionary() {}
 }
-
-
-
-//public class MaxSizeHashMap<K, V> extends LinkedHashMap<K, V> {
-//  private final int maxSize;
-//
-//  public MaxSizeHashMap(int maxSize) {
-//    this.maxSize = maxSize;
-//  }
-//
-//  @Override
-//  protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
-//    return size() > maxSize;
-//  }
-//}

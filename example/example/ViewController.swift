@@ -38,7 +38,7 @@ class ViewController: UIViewController {
     
     let cached = store.get(cacheName)
     self.textView.text = String(describing: cached)
-    print("CACHED: \(cached)")
+    print("CACHED: \(String(describing: cached))")
   }
   
   override func viewDidLoad() {
