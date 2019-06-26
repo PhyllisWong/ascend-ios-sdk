@@ -42,6 +42,7 @@ public protocol HttpProtocol {
 }
 
 public typealias JsonArray = [JSON]
+
 public class HttpClient: HttpProtocol {
   
     public func get(_ url: URL) -> Promise<JSON> {
@@ -58,7 +59,6 @@ public class HttpClient: HttpProtocol {
                 resolver.reject("Error" as! Error)
                 return
               }
-              print("UR PROMISED JSON: \(json)")
               resolver.fulfill(json)
             }
           case .failure(let error):

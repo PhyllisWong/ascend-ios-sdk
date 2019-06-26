@@ -60,23 +60,22 @@ public class Allocator {
     return URL(string: "")!
   }
   
-  public func fetchAllocations() -> Promise<Void> {
-    var url: URL { return createAllocationsUrl() }
-    var allocationsFuture = Promise()
+  public func fetchAllocations() -> Promise<JSON> {
+    let url: URL = createAllocationsUrl()
     var allocations = JsonArray()
     
     let responsePromise = httpClient.get(url).done { (fetchedJSON) in
       let fetchedAlloc: JsonArray = JSON(fetchedJSON).array ?? []
       if fetchedAlloc.count > 0 {
-        let eid = String(describing: fetchedAlloc[0]["eid"])
-        let previousAlloc = self.store.get(eid)
+        
+        let previousAlloc = self.store.get(self.participant.getUserId())
         
         if let previousAllocations = previousAlloc {
           if previousAllocations.count > 0 {
             allocations = Allocations.reconcileAllocations(previousAllocations, allocations)
           }
         }
-        self.store.set(eid, val: allocations)
+        self.store.set(self.participant.getUserId(), val: allocations)
         self.allocationStatus = AllocationStatus.RETRIEVED
         
         if self.confirmationSandbagged {

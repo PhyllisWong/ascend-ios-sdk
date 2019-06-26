@@ -21,32 +21,33 @@ class ViewController: UIViewController {
   }
 
   @IBAction func didPressAlloc(_ sender: Any) {
-    let url = URL(string: "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123")!
     let httpClient = HttpClient()
-//    let jsonPromise = httpClient.get(url: url).done { (fetched) in
-//      self.allocations.append(JSON(fetched))
-//    }
     // FIXME: call the alloc.fetch method here to test > you want to get a promise back
-    let cacheName = "MyCache"
-    store.set(cacheName, val: allocations)
-    let cached = store.get(cacheName)
-    print("CACHED: \(cached)")
+    let participantBuilder = ParticipantBuilder()
+    let participant = participantBuilder.build()
+    let client = buildClient()
+    let envId = "40ebcd9abf"
+    let config = ConfigBuilder(environmentId: envId).buildConfig()
+    let store = LRUCache(10)
+    let alloc = Allocator(config: config, participant: participant, httpClient: httpClient)
+    let promise = alloc.fetchAllocations().done { (json) in
+      self.allocations = [json]
+    }
+  
+    let cached = store.get(participant.getUserId())
+    print("YOUR FETCHED ALLOCATION: \(String(describing: self.allocations))")
+    print("YOUR CACHED ALLOCATION: \(String(describing: cached))")
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
-    let store = LRUCache.share
-    // self.getData()
-//    let client = buildClient()
-//    print(client)
   }
 }
 
 
 private extension ViewController {
   
- 
 //  private func getJsonData() {
 //    let participantBuilder = ParticipantBuilder()
 //    let participant = participantBuilder.build()
@@ -56,7 +57,7 @@ private extension ViewController {
 //    let envId = "40ebcd9abf"
 //    let config = ConfigBuilder(environmentId: envId).buildConfig()
 //    let store = LRUCache(10)
-//    let alloc = Allocator(config: config, participant: participant)
+//    let alloc = Allocator(config: config, participant: participant, httpClient: httpClient)
 //    let results = alloc.fetchAllocations()
 //    let cached = store.get(config.getEnvironmentId())
 //    print("YOUR FETCHED ALLOCATION: \(String(describing: results))")

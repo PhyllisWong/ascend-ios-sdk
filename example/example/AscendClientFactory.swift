@@ -51,6 +51,6 @@ public class AscendClientFactory {
                                             previousAllocations: Allocator.allocationsNotEmpty(allocations: previousAllocations),
                                             participant: participant, eventEmitter: eventEmitter,
                                             futureAllocations: allocationsFuture)
-    return ascendClientImpl
+    return ascendClientImpl as! AscendClient
   }
 }
