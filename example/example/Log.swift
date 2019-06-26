@@ -28,7 +28,7 @@ struct Log {
       
       switch level {
       case .debug:
-        prefix = "Ascend"
+        prefix = "Evolv"
       case .noLogging:
         prefix = ""
       case .error:

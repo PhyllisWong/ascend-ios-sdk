@@ -1,5 +1,5 @@
 //
-//  AscendConfig.swift
+//  EvolvConfig.swift
 //  example
 //
 //  Created by phyllis.wong on 6/12/19.
@@ -8,25 +8,25 @@
 
 import Foundation
 
-public class AscendConfig {
+public class EvolvConfig {
   
   private let httpScheme: String
   private let domain: String
   private let version: String
   private let environmentId: String
-  private let ascendAllocationStore: LRUCache
+  private let evolvAllocationStore: LRUCache
   private let httpClient: HttpProtocol
   // private let executionDispatch: ExecutionDispatch
   
   init(httpScheme: String, domain: String, version: String,
-       environmentId: String, ascendAllocationStore: LRUCache,
+       environmentId: String, evolvAllocationStore: LRUCache,
        httpClient: HttpProtocol
     ) {
     self.httpScheme = httpScheme
     self.domain = domain
     self.version = version
     self.environmentId = environmentId
-    self.ascendAllocationStore = ascendAllocationStore
+    self.evolvAllocationStore = evolvAllocationStore
     self.httpClient = httpClient
     // self.executionDispatch = ExecutionDispatch()
   }
@@ -44,9 +44,9 @@ public class AscendConfig {
   
   public func getEnvironmentId() -> String { return environmentId }
   
-  public func getAscendAllocationStore() -> LRUCache {
-    let ascendAllocationStore = LRUCache(5)
-    return ascendAllocationStore
+  public func getEvolvAllocationStore() -> LRUCache {
+    let evolvAllocationStore = LRUCache(5)
+    return evolvAllocationStore
    }
   
   public func getHttpClient() -> HttpProtocol {
@@ -64,7 +64,7 @@ public class ConfigBuilder {
   private var httpScheme: String
   private var domain: String
   private var version: String
-  private var allocationStore: AscendAllocationStore?
+  private var allocationStore: EvolvAllocationStore?
   
   private var environmentId: String
   private var httpClient: HttpProtocol
@@ -76,9 +76,9 @@ public class ConfigBuilder {
   
   
   /**
-   * Responsible for creating an instance of AscendConfig.
+   * Responsible for creating an instance of EvolvConfig.
    * <p>
-   *     Builds an instance of the AscendConfig. The only required parameter is the
+   *     Builds an instance of the EvolvConfig. The only required parameter is the
    *     customer's environment id.
    * </p>
    * @param environmentId unique id representing a customer's environment
@@ -98,9 +98,9 @@ public class ConfigBuilder {
   }
   
   /**
-   * Sets the domain of the underlying ascendParticipant api.
-   * @param domain the domain of the ascendParticipant api
-   * @return AscendClientBuilder class
+   * Sets the domain of the underlying evolvParticipant api.
+   * @param domain the domain of the evolvParticipant api
+   * @return EvolvClientBuilder class
    */
   public func setDomain(domain: String) -> ConfigBuilder {
     self.domain = domain
@@ -108,9 +108,9 @@ public class ConfigBuilder {
   }
   
   /**
-   * Version of the underlying ascendParticipant api.
-   * @param version representation of the required ascendParticipant api version
-   * @return AscendClientBuilder class
+   * Version of the underlying evolvParticipant api.
+   * @param version representation of the required evolvParticipant api version
+   * @return EvolvClientBuilder class
    */
   public func setVersion(version: String) -> ConfigBuilder {
     self.version = version
@@ -118,12 +118,12 @@ public class ConfigBuilder {
   }
   
   /**
-   * Sets up a custom AscendAllocationStore. Store needs to implement the
-   * AscendAllocationStore interface.
+   * Sets up a custom EvolvAllocationStore. Store needs to implement the
+   * EvolvAllocationStore interface.
    * @param allocationStore a custom built allocation store
-   * @return AscendClientBuilder class
+   * @return EvolvClientBuilder class
    */
-  public func setAscendAllocationStore(allocationStore: AscendAllocationStore) -> ConfigBuilder {
+  public func setEvolvAllocationStore(allocationStore: EvolvAllocationStore) -> ConfigBuilder {
     self.allocationStore = allocationStore
     return self
   }
@@ -131,7 +131,7 @@ public class ConfigBuilder {
   /**
    * Tells the SDK to use either http or https.
    * @param scheme either http or https
-   * @return AscendClientBuilder class
+   * @return EvolvClientBuilder class
    */
   public func setHttpScheme(scheme: String) -> ConfigBuilder {
     self.httpScheme = scheme
@@ -141,7 +141,7 @@ public class ConfigBuilder {
   /**
    * Sets the DefaultAllocationStores size.
    * @param size number of entries allowed in the default allocation store
-   * @return AscendClientBuilder class
+   * @return EvolvClientBuilder class
    */
   public func setDefaultAllocationStoreSize(size: Int) -> ConfigBuilder {
     self.allocationStoreSize = size
@@ -149,10 +149,10 @@ public class ConfigBuilder {
   }
   
   /**
-   * Builds an instance of AscendClientImpl.
-   * @return an AscendClientImpl instance
+   * Builds an instance of EvolvClientImpl.
+   * @return an EvolvClientImpl instance
    */
-  public func buildConfig() -> AscendConfig {
+  public func buildConfig() -> EvolvConfig {
     var allocationStore = self.allocationStore
     if (allocationStore == nil) {
       allocationStore = DefaultAllocationStore(size: allocationStoreSize)
@@ -164,10 +164,10 @@ public class ConfigBuilder {
     let httpClient = self.httpClient
     let store = LRUCache(10)
 
-    let ascendConfig = AscendConfig(httpScheme: httpScheme, domain: domain,
-                                    version: version, environmentId: environmentId, ascendAllocationStore: store,
+    let evolvConfig = EvolvConfig(httpScheme: httpScheme, domain: domain,
+                                    version: version, environmentId: environmentId, evolvAllocationStore: store,
                                     httpClient: httpClient)
-    return ascendConfig
+    return evolvConfig
   }
 }
 

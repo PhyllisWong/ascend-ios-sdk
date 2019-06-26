@@ -1,5 +1,5 @@
 //
-//  AscendClient.swift
+//  EvolvClient.swift
 //  example
 //
 //  Created by phyllis.wong on 6/10/19.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol AscendClient {
+protocol EvolvClient {
   /**
    * Retrieves a value from the participant's allocation, returns a default upon error.
    * <p>
@@ -27,7 +27,7 @@ protocol AscendClient {
   func get<T>(key: String, defaultValue: T) -> T
   
   /**
-   * Retrieves a value from Ascend asynchronously and applies some custom action.
+   * Retrieves a value from Evolv asynchronously and applies some custom action.
    * <p>
    *     This method is non blocking. It will preform the programmed action once
    *     the allocation is available. If there is already of stored allocation
@@ -44,13 +44,13 @@ protocol AscendClient {
     - function:  a handler that is invoked when the allocation is updated
     - <T>: type of value to be returned
  */
-  func subscribe<T>(key: String, defaultValue: T, AscendAction: @escaping (Any) -> Void)
+  func subscribe<T>(key: String, defaultValue: T, EvolvAction: @escaping (Any) -> Void)
 
 
   /**
-   * Emits a generic event to be recorded by Ascend.
+   * Emits a generic event to be recorded by Evolv.
    * <p>
-   *     Sends an event to Ascend to be recorded and reported upon. Also records
+   *     Sends an event to Evolv to be recorded and reported upon. Also records
    *     a generic score value to be associated with the event.
    * </p>
    * @param key the identifier of the event
@@ -60,16 +60,16 @@ protocol AscendClient {
   func emitEvent(key: String, score: Double) -> Void
   
   /**
-   * Emits a generic event to be recorded by Ascend.
+   * Emits a generic event to be recorded by Evolv.
    * <p>
-   *     Sends an event to Ascend to be recorded and reported upon.
+   *     Sends an event to Evolv to be recorded and reported upon.
    * </p>
    * @param key the identifier of the event
    */
   func emitEvent(key: String) -> Void
   
   /**
-   * Sends a confirmed event to Ascend.
+   * Sends a confirmed event to Evolv.
    * <p>
    *     Method produces a confirmed event which confirms the participant's
    *     allocation. Method will not do anything in the event that the allocation
@@ -79,7 +79,7 @@ protocol AscendClient {
   func confirm() -> Void
   
   /**
-   * Sends a contamination event to Ascend.
+   * Sends a contamination event to Evolv.
    * <p>
    *     Method produces a contamination event which will contaminate the
    *     participant's allocation. Method will not do anything in the event

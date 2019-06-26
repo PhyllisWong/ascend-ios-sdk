@@ -67,12 +67,12 @@ private extension ViewController {
     print("YOUR CACHED ALLOCATION: \(String(describing: cached))")
   }
   
-  private func buildClient() -> AscendClientFactory {
+  private func buildClient() -> EvolvClientFactory {
     let envId = "40ebcd9abf"
     let config = ConfigBuilder(environmentId: envId).buildConfig()
     let participantBuilder = ParticipantBuilder()
     let participant = participantBuilder.build()
-    return AscendClientFactory(config: config, participant: participant)
+    return EvolvClientFactory(config: config, participant: participant)
   }
   
 //  private func getData() {
@@ -86,8 +86,8 @@ private extension ViewController {
 //    let alloc = Allocator(config: config, participant: participant)
 //    let futureAlloc = alloc.fetchAllocations()
 //    let emitter = EventEmitter(httpClient: httpClient, config: config, participant: participant)
-//    let ascender = AscendClientImpl(config: config, allocator: alloc, previousAllocations: false, participant: participant, eventEmitter: emitter, futureAllocations: futureAlloc)
-//    let value = ascender.get(key: "button", defaultValue: "green")
+//    let evolver = EvolvClientImpl(config: config, allocator: alloc, previousAllocations: false, participant: participant, eventEmitter: emitter, futureAllocations: futureAlloc)
+//    let value = evolver.get(key: "button", defaultValue: "green")
 //    print("THIS IS YOUR VALUE: \(value)")
 //  }
 }

@@ -20,21 +20,21 @@ extension NetworkingError: LocalizedError {
   var errorDescription: String? { return NSLocalizedString(rawValue, comment: "") }
 }
 
-enum AscendKeyError: String, Error {
+enum EvolvKeyError: String, Error {
   case keyError = "Invalid Key"
 }
 
-extension AscendKeyError: LocalizedError {
+extension EvolvKeyError: LocalizedError {
   var errorDescription: String? { return NSLocalizedString(rawValue, comment: "") }
 }
 
 
 struct ErrorObserver {
   private(set) var key: UUID
-  weak private(set) var owner: AscendObserverOwner?
-  var errorHandler: AscendErrorHandler?
+  weak private(set) var owner: EvolvObserverOwner?
+  var errorHandler: EvolvErrorHandler?
   
-  init(owner: AscendObserverOwner, errorHandler: @escaping AscendErrorHandler) {
+  init(owner: EvolvObserverOwner, errorHandler: @escaping EvolvErrorHandler) {
     key = UUID()
     self.owner = owner
     self.errorHandler = errorHandler

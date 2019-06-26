@@ -20,8 +20,8 @@ public class Allocator {
   }
   
   private let store: LRUCache
-  private let config: AscendConfig
-  private let participant: AscendParticipant
+  private let config: EvolvConfig
+  private let participant: EvolvParticipant
   private let httpClient: HttpClient
   private let eventEmitter: EventEmitter
   
@@ -32,8 +32,8 @@ public class Allocator {
   // private var allocationFuture: Promise<JSON>
   
   init(
-       config: AscendConfig,
-       participant: AscendParticipant) {
+       config: EvolvConfig,
+       participant: EvolvParticipant) {
     self.store = LRUCache.share
     self.config = config
     self.participant = participant
