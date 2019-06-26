@@ -21,12 +21,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Default Text" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OIW-PL-qdH">
-                                <rect key="frame" x="157.5" y="433" width="99" height="30"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vbn-Mi-BJo">
                                 <rect key="frame" x="191" y="598" width="32" height="30"/>
                                 <state key="normal" title="alloc"/>
@@ -34,21 +28,33 @@
                                     <action selector="didPressAlloc:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nKI-gm-W1f"/>
                                 </connections>
                             </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ZSi-Qj-eUt">
+                                <rect key="frame" x="16" y="101" width="382" height="385"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="385" id="jA4-Ol-FsW"/>
+                                </constraints>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="OIW-PL-qdH" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="12Z-MO-i1g"/>
-                            <constraint firstItem="OIW-PL-qdH" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="BAf-PN-eaX"/>
-                            <constraint firstItem="Vbn-Mi-BJo" firstAttribute="centerX" secondItem="OIW-PL-qdH" secondAttribute="centerX" id="Dxb-GD-Xqg"/>
+                            <constraint firstItem="ZSi-Qj-eUt" firstAttribute="top" secondItem="dmA-in-doM" secondAttribute="bottom" constant="57" id="EYi-bO-0Ej"/>
+                            <constraint firstAttribute="trailing" secondItem="ZSi-Qj-eUt" secondAttribute="trailing" constant="16" id="H8L-4B-nNo"/>
+                            <constraint firstItem="ZSi-Qj-eUt" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Qrb-ah-W4L"/>
                             <constraint firstItem="2nc-wQ-Avs" firstAttribute="top" secondItem="Vbn-Mi-BJo" secondAttribute="bottom" constant="234" id="Vrl-2R-mhK"/>
+                            <constraint firstItem="ZSi-Qj-eUt" firstAttribute="centerX" secondItem="Vbn-Mi-BJo" secondAttribute="centerX" id="Xk8-2X-oMf"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="textLabel" destination="OIW-PL-qdH" id="K65-bP-Czf"/>
+                        <outlet property="textView" destination="ZSi-Qj-eUt" id="yeu-GC-HjQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="137.68115942028987" y="138.61607142857142"/>
         </scene>
     </scenes>
 </document>

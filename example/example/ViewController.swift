@@ -13,9 +13,12 @@ import PromiseKit
 
 class ViewController: UIViewController {
   
-  @IBOutlet weak var textLabel: UITextField!
+ 
+  @IBOutlet weak var textView: UITextView!
+  
   let store = LRUCache.share
-  var allocations = [JSON]()
+  let cacheName = "MyCache"
+  var allocations = JSON()
   enum DataError: Error { // move this somewhere more sensible
     case taskError
   }
@@ -23,21 +26,23 @@ class ViewController: UIViewController {
   @IBAction func didPressAlloc(_ sender: Any) {
     let url = URL(string: "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123")!
     let jsonPromise = HttpClient.get(url: url).done { (fetched) in
-      self.allocations.append(JSON(fetched))
+      self.allocations = JSON(fetched)
+      let previous = self.store.get(self.cacheName)
+      if previous != nil {
+        self.textView.text = String(describing: previous)
+      } else {
+        self.store.set(self.cacheName, val: self.allocations)
+        self.textView.text = String(describing: self.allocations)
+      }
     }
-    let cacheName = "MyCache"
-    store.set(cacheName, val: allocations)
+    
     let cached = store.get(cacheName)
+    self.textView.text = String(describing: cached)
     print("CACHED: \(cached)")
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view.
-    let store = LRUCache.share
-    // self.getData()
-//    let client = buildClient()
-//    print(client)
   }
 }
 
