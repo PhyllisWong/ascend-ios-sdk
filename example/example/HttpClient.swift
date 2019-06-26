@@ -24,7 +24,7 @@ public protocol HttpProtocol {
    * @param url a valid url representing a call to the Participant API.
    * @return a response future
    */
-  static func get(url: URL) -> PromiseKit.Promise<JSON>
+  static func get(url: URL) -> PromiseKit.Promise<String>
 
   /**
    * Performs a POST request using the provided url.

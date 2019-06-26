@@ -73,4 +73,29 @@ public class Allocations {
     }
     return element
   }
+  
+  static public func reconcileAllocations(previousAllocations: JSON, currentAllocations: JSON) -> [JSON] {
+    let current = currentAllocations.arrayValue
+    let previous = previousAllocations.arrayValue
+    var allocations = [JSON]()
+    
+    for ca in current {
+      let currentEid = String(describing: ca["eid"])
+      var previousFound = false
+      
+      for pa in previous {
+        var previousEid = String(describing: pa["eid"])
+        
+        if currentEid.elementsEqual(previousEid) {
+          allocations.append(pa)
+          previousFound = true
+        }
+      }
+      
+      if !previousFound {
+        allocations.append(ca)
+      }
+    }
+    return allocations
+  }
 }

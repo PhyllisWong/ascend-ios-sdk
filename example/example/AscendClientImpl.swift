@@ -2,12 +2,14 @@ import Foundation
 import SwiftyJSON
 import PromiseKit
 
+// developer interacts with these methods
+// EVERYTHING that is labed Ascend is what the client interacts with
+// change everything to Evolv from Ascend
 class AscendClientImpl {
   
   private let eventEmitter: EventEmitter
   private let allocator: Allocator
-  // private let futureAllocations: Promise<JSON>?
-  private let futureAllocations: [JSON]?
+  private let futureAllocations: Promise<JSON>?
   
   private let store = LRUCache.share
   
@@ -33,10 +35,10 @@ class AscendClientImpl {
     if (futureAllocations == nil) { // is this safe?
       return defaultValue
     }
-    // this should be a blocking call
+    // this should be a blocking call DONT DO THIS HERE
     let futureAllocations = allocator.fetchAllocations()
     // unpack the promise here
-    let allocations: JsonArray = []
+    let allocations = JSON()
     // print("JSON ALLOCATIONS: \(allocations)")
     store.set(key, val: allocations)
     let storedAlloc = store.get(key)
@@ -50,6 +52,7 @@ class AscendClientImpl {
     return defaultValue
   }
   
+  // meant to be async
   public func subscribe<T>(key: String, defaultValue: T, function: @escaping (T) -> T) {
     let execution = Execution(key: key, defaultValue: defaultValue as! GenericValue<Any>, function: function as! AscendAction, participant: participant)
     let previousAlloc = self.store.get(self.participant.getUserId())

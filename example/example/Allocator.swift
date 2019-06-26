@@ -29,12 +29,12 @@ public class Allocator {
   private var contaminationSandbagged: Bool = false
   private var logger: Logger
   private var allocationStatus: AllocationStatus
-  // private var allocationFuture: Any?
+  // private var allocationFuture: Promise<JSON>
   
   init(
        config: AscendConfig,
        participant: AscendParticipant) {
-    self.store = LRUCache(10)
+    self.store = LRUCache.share
     self.config = config
     self.participant = participant
     self.httpClient = HttpClient()
@@ -64,27 +64,39 @@ public class Allocator {
   }
   
   public typealias JsonArray = [JSON]
-  public func fetchAllocations() -> [JSON] {
-    let url = self.createAllocationsUrl()
-    let stringUrl = String(describing: url)
-    let cacheUrl = URL(string: "kjnsdfjbn")! // BAD!!!! for testing
-    var jsonArray = [JSON]()
-    let previousAllocations = [JSON]()
-    let apiService = HttpClient()
-    let futuresAllocations = HttpClient.get(url: url)
-
-    
-    if previousAllocations.count > 0 {
-      jsonArray = previousAllocations
+  public func fetchAllocations() -> Promise<JSON> {
+    return Promise { resolve in
+      let url = self.createAllocationsUrl()
+      // let stringUrl = String(describing: url)
+      // var jsonArray = [JSON]()
+      
+      let strPromise = HttpClient.get(url: url).done { (stringJSON) in
+        var allocationsArray = JSON.init(parseJSON: stringJSON).arrayValue
+        print(allocationsArray[0]["eid"])
+        let previous = self.store.get(self.participant.getUserId())
+        if let prevAlloc = previous {
+          if Allocator.allocationsNotEmpty(allocations: previous) {            
+            allocationsArray = Allocations.reconcileAllocations(previousAllocations: prevAlloc, currentAllocations: allocationsArray)
+          }
+        }
+        
+        self.store.set(self.participant.getUserId(), val: allocationsArray)
+        self.allocationStatus = AllocationStatus.RETRIEVED
+        
+        if (self.confirmationSandbagged) {
+          self.eventEmitter.confirm(allocations: allocationsArray)
+        }
+        
+        if self.contaminationSandbagged {
+          self.eventEmitter.contaminate(allocations: allocationsArray)
+        }
+        // execute with all values
+        resolve.fulfill(allocationsArray)
+      }
     }
-    let cachedJsonArray = self.store.get(self.config.getEnvironmentId()) as? [JSON]
-    if let cached = cachedJsonArray {
-      jsonArray = cached
-    }
-    return jsonArray
   }
 
-  static func allocationsNotEmpty(allocations: JsonArray?) -> Bool {
+  static func allocationsNotEmpty(allocations: JSON?) -> Bool {
     guard let allocationsArray = allocations else {
       return false
     }
