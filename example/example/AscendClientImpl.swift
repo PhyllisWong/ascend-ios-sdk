@@ -9,7 +9,7 @@ class AscendClientImpl {
   
   private let eventEmitter: EventEmitter
   private let allocator: Allocator
-  private let futureAllocations: Promise<JSON>?
+  private let futureAllocations: Promise<[JSON]>?
   
   private let store = LRUCache.share
   
@@ -38,9 +38,9 @@ class AscendClientImpl {
     // this should be a blocking call DONT DO THIS HERE
     let futureAllocations = allocator.fetchAllocations()
     // unpack the promise here
-    let allocations = JSON()
+    let allocations = [JSON]()
     // print("JSON ALLOCATIONS: \(allocations)")
-    store.set(key, val: allocations)
+    // store.set(key, val: allocations)
     let storedAlloc = store.get(key)
     print("STORED ALLOCATIONS: \(String(describing: storedAlloc))")
     if (!Allocator.allocationsNotEmpty(allocations: allocations)) {

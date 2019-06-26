@@ -74,9 +74,9 @@ public class Allocations {
     return element
   }
   
-  static public func reconcileAllocations(previousAllocations: JSON, currentAllocations: JSON) -> [JSON] {
-    let current = currentAllocations.arrayValue
-    let previous = previousAllocations.arrayValue
+  static public func reconcileAllocations(previousAllocations: [JSON], currentAllocations: [JSON]) -> [JSON] {
+    let current = currentAllocations
+    let previous = previousAllocations
     var allocations = [JSON]()
     
     for ca in current {

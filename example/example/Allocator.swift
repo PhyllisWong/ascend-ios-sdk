@@ -64,18 +64,18 @@ public class Allocator {
   }
   
   public typealias JsonArray = [JSON]
-  public func fetchAllocations() -> Promise<JSON> {
+  
+  public func fetchAllocations() -> Promise<[JSON]> {
+    
     return Promise { resolve in
       let url = self.createAllocationsUrl()
-      // let stringUrl = String(describing: url)
-      // var jsonArray = [JSON]()
-      
+ 
       let strPromise = HttpClient.get(url: url).done { (stringJSON) in
         var allocationsArray = JSON.init(parseJSON: stringJSON).arrayValue
         print(allocationsArray[0]["eid"])
         let previous = self.store.get(self.participant.getUserId())
         if let prevAlloc = previous {
-          if Allocator.allocationsNotEmpty(allocations: previous) {            
+          if Allocator.allocationsNotEmpty(allocations: prevAlloc) {
             allocationsArray = Allocations.reconcileAllocations(previousAllocations: prevAlloc, currentAllocations: allocationsArray)
           }
         }
@@ -96,11 +96,11 @@ public class Allocator {
     }
   }
 
-  static func allocationsNotEmpty(allocations: JSON?) -> Bool {
-    guard let allocationsArray = allocations else {
+  static func allocationsNotEmpty(allocations: [JSON]?) -> Bool {
+    guard let allocArray = allocations else {
       return false
     }
-    return allocationsArray.count > 0
+    return allocArray.count > 0
   }
   
 }

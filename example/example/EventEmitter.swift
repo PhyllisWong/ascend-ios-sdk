@@ -38,18 +38,17 @@ public class EventEmitter {
     makeEventRequest(url);
   }
   
-  public func confirm(allocations: JSON) -> Void {
+  public func confirm(allocations: [JSON]) -> Void {
     sendAllocationEvents(EventEmitter.CONFIRM_KEY, allocations);
   }
   
-  public func contaminate(allocations: JSON) -> Void {
+  public func contaminate(allocations: [JSON]) -> Void {
     sendAllocationEvents(EventEmitter.CONTAMINATE_KEY, allocations);
   }
 
-  public func sendAllocationEvents(_ key: String, _ allocations: JSON) {
-    let allocArray = allocations.arrayValue
-    if allocArray.count > 0 {
-      for a in allocArray {
+  public func sendAllocationEvents(_ key: String, _ allocations: [JSON]) {
+    if allocations.count > 0 {
+      for a in allocations {
         let eid = String(describing: a["eid"])
         let cid = String(describing: a["cid"])
         let url = createEventUrl(type: key, experimentId: eid, candidateId: cid)
