@@ -24,26 +24,11 @@ class ViewController: UIViewController {
   }
 
   @IBAction func didPressAlloc(_ sender: Any) {
-    let url = URL(string: "https://participants-phyllis.evolv.ai/v1/40ebcd9abf/allocations?uid=123")!
-    let jsonPromise = HttpClient.get(url: url).done { (fetched) in
-      self.allocations = [JSON(fetched)]
-      let previous = self.store.get(self.cacheName)
-      if previous != nil {
-        self.textView.text = String(describing: previous)
-      } else {
-        self.store.set(self.cacheName, val: self.allocations)
-        self.textView.text = String(describing: self.allocations)
-      }
-    }
-    
-    let cached = store.get(cacheName)
-    self.textView.text = String(describing: cached)
-    print("CACHED: \(String(describing: cached))")
+   getJsonData()
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    getJsonData()
   }
 }
 
@@ -54,17 +39,12 @@ private extension ViewController {
   private func getJsonData() {
     let participantBuilder = ParticipantBuilder()
     let participant = participantBuilder.build()
-    let client = buildClient()
-    print(client)
-    let httpClient = HttpClient()
     let envId = "40ebcd9abf"
     let config = ConfigBuilder(environmentId: envId).buildConfig()
-    let store = LRUCache(10)
+    let store = LRUCache.share
     let alloc = Allocator(config: config, participant: participant)
     let results = alloc.fetchAllocations()
-    let cached = store.get(config.getEnvironmentId())
     print("YOUR FETCHED ALLOCATION: \(String(describing: results))")
-    print("YOUR CACHED ALLOCATION: \(String(describing: cached))")
   }
   
   private func buildClient() -> EvolvClientFactory {
