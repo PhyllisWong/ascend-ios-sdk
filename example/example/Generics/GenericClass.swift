@@ -7,19 +7,6 @@
 //
 
 import Foundation
-//
-//protocol DataType {}
-//
-//extension DataType {
-//  func getMyType() -> Self.Type {
-//    return type(of: self)
-//  }
-//}
-//
-//protocol DataProvider {
-//  associatedtype ProvidedData: DataType
-//  func giveData() -> ProvidedData
-//}
 
 class GenericValue<T> {
   

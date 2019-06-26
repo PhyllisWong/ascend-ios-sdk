@@ -29,7 +29,6 @@ public class Allocator {
   private var contaminationSandbagged: Bool = false
   private var logger: Logger
   private var allocationStatus: AllocationStatus
-  // private var allocationFuture: Promise<JSON>
   
   init(
        config: EvolvConfig,
@@ -40,7 +39,6 @@ public class Allocator {
     self.httpClient = HttpClient()
     self.allocationStatus = AllocationStatus.FETCHING
     self.logger = Log.logger
-    // self.allocationFuture = Allocator.fetchAllocations()
     // self.executionDispatch = executionDispatch
     self.eventEmitter = EventEmitter(config: config, participant: participant)
   }
@@ -90,8 +88,8 @@ public class Allocator {
         if self.contaminationSandbagged {
           self.eventEmitter.contaminate(allocations: allocationsArray)
         }
-        // execute with all values
         resolve.fulfill(allocationsArray)
+        // execute with all values
       }
     }
   }
