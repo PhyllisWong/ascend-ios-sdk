@@ -1,5 +1,5 @@
 //
-//  AscendAllocationStore.swift
+//  EvolvAllocationStore.swift
 //  example
 //
 //  Created by phyllis.wong on 6/12/19.
@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 // This is the inerface for the client
-public protocol AscendAllocationStore {
+public protocol EvolvAllocationStore {
   
   /**
    * Retrieves a JsonArray.

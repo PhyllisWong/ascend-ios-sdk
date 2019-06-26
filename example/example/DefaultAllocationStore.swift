@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-public class DefaultAllocationStore : AscendAllocationStore {
+public class DefaultAllocationStore : EvolvAllocationStore {
   public func get(uid: String) -> String? {
     let fakeCache = "[[\"key\": \"value\"]]"
     //    return cache.getEntry(uid);

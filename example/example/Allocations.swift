@@ -24,10 +24,10 @@ public class Allocations {
 
   typealias JsonElement = Any
   
-  // func getValueFromAllocations<T>(key: String, type: T, participant: AscendParticipant) throws -> T {
+  // func getValueFromAllocations<T>(key: String, type: T, participant: EvolvParticipant) throws -> T {
 
   
-  func getValueFromAllocations<T>(key: String, type: T, participant: AscendParticipant) throws -> Dictionary<String,Any> {
+  func getValueFromAllocations<T>(key: String, type: T, participant: EvolvParticipant) throws -> Dictionary<String,Any> {
 
     let data = allocations.data(using: .utf8)!
     var keyParts = [String]()
@@ -35,7 +35,7 @@ public class Allocations {
     do {
       if let jsonArray = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [Dictionary<String,Any>] {
         keyParts = key.components(separatedBy: "\\.")
-        if (keyParts.isEmpty()) { throw AscendKeyError(rawValue: "Key provided was empty.")! }
+        if (keyParts.isEmpty()) { throw EvolvKeyError(rawValue: "Key provided was empty.")! }
         
         // iterate through the array of json
         // convert each item into a json object
@@ -64,7 +64,7 @@ public class Allocations {
   func getElementFromGenome(genome: Any, keyParts: [String]) throws -> Any {
     var element: JsonElement? = genome
     if element == nil { // is this a safe check?
-      throw AscendKeyError(rawValue: "Allocation genome was empty")!
+      throw EvolvKeyError(rawValue: "Allocation genome was empty")!
     }
     for part: String in keyParts {
       // convert element to json object
@@ -75,15 +75,13 @@ public class Allocations {
   }
   
   static public func reconcileAllocations(previousAllocations: [JSON], currentAllocations: [JSON]) -> [JSON] {
-    let current = currentAllocations
-    let previous = previousAllocations
     var allocations = [JSON]()
     
-    for ca in current {
+    for ca in currentAllocations {
       let currentEid = String(describing: ca["eid"])
       var previousFound = false
       
-      for pa in previous {
+      for pa in previousAllocations {
         var previousEid = String(describing: pa["eid"])
         
         if currentEid.elementsEqual(previousEid) {
@@ -92,9 +90,7 @@ public class Allocations {
         }
       }
       
-      if !previousFound {
-        allocations.append(ca)
-      }
+      if !previousFound { allocations.append(ca) }
     }
     return allocations
   }

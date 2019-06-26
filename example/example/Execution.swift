@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 
-protocol AscendAction {
+protocol EvolvAction {
   /**
    * Applies a given value to a set of instructions.
    * @param value any value that was requested
@@ -24,14 +24,14 @@ class Execution<T: GenericValue<Any>> {
   
   private let key: String
   private let defaultValue: GenericValue<Any> // Generic
-  private let function: AscendAction
-  private let participant: AscendParticipant
+  private let function: EvolvAction
+  private let participant: EvolvParticipant
   
   private var alreadyExecuted: Set<String> = Set()
   
   init(key: String, defaultValue: GenericValue<Any>,
-       function: AscendAction,
-       participant: AscendParticipant) {
+       function: EvolvAction,
+       participant: EvolvParticipant) {
     self.key = key
     self.defaultValue = defaultValue
     self.function = function

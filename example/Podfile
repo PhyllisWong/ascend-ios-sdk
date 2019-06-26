@@ -4,7 +4,7 @@ platform :ios, '9.0'
 target 'example' do
   use_frameworks!
 
-  # Pods for ascend sdk example app
+  # Pods for evolv sdk example app
   pod 'PromiseKit', '~> 6.8'
   pod 'Alamofire'
   pod 'SwiftyJSON', '~> 4.0'

@@ -1,5 +1,5 @@
 //
-//  AscendParticipant.swift
+//  EvolvParticipant.swift
 //  example
 //
 //  Created by phyllis.wong on 6/10/19.
@@ -9,7 +9,7 @@
 import Foundation
 
 
-public class AscendParticipant {
+public class EvolvParticipant {
   private let sessionId: String // immuntable
   private var userId: String
   private var userAttributes: [String : String]
@@ -76,14 +76,14 @@ public class ParticipantBuilder {
   }
   
   /**
-   * Builds the AscendParticipant instance.
-   * @return an AscendParticipant instance.
+   * Builds the EvolvParticipant instance.
+   * @return an EvolvParticipant instance.
    */
-  public func build() -> AscendParticipant {
+  public func build() -> EvolvParticipant {
     let uid = self.userId
     let sid = self.sessionId
     let ua = self.userAttributes
-    let participant = AscendParticipant(userId: uid, sessionId: sid, userAttributes: ua)
+    let participant = EvolvParticipant(userId: uid, sessionId: sid, userAttributes: ua)
     return participant
   }
 }

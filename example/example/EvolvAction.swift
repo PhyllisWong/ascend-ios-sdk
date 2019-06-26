@@ -1,5 +1,5 @@
 //
-//  AscendAction.swift
+//  EvolvAction.swift
 //  example
 //
 //  Created by phyllis.wong on 6/20/19.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-//protocol AscendAction {
+//protocol EvolvAction {
 //  /**
 //   * Applies a given value to a set of instructions.
 //   * @param value any value that was requested
