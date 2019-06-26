@@ -7,10 +7,9 @@
 //
 
 import Foundation
-import DynamicJSON
 import Alamofire
-
-public typealias JsonArray = [[String: Any]]?
+import SwiftyJSON
+import PromiseKit
 
 public class Allocator {
   
@@ -18,25 +17,21 @@ public class Allocator {
     case FETCHING, RETRIEVED, FAILED
   }
   
-  private let store: LRUCache<String>
+  private let store: LRUCache
   private let config: AscendConfig
   private let participant: AscendParticipant
-  private let httpClient: HttpClient
-  // private let eventEmitter: EventEmitter
+  private let httpClient: HttpProtocol
+  private let eventEmitter: EventEmitter
+  private var allocationStatus: AllocationStatus
   
   private var confirmationSandbagged: Bool = false
   private var contaminationSandbagged: Bool = false
   private var logger: Logger
-  private var allocationStatus: AllocationStatus
   
   init(
-       store: LRUCache<String>,
        config: AscendConfig,
        participant: AscendParticipant,
-       httpClient: HttpClient
-       // eventEmitter: EventEmitter,
-       // executionDispatch: ExecutionDispatch
-    ) {
+       httpClient: HttpProtocol) {
     self.store = LRUCache(10)
     self.config = config
     self.participant = participant
@@ -44,7 +39,7 @@ public class Allocator {
     self.allocationStatus = AllocationStatus.FETCHING
     self.logger = Log.logger
     // self.executionDispatch = executionDispatch
-    // self.eventEmitter = eventEmitter
+    self.eventEmitter = EventEmitter(config: config, participant: participant)
   }
   
   func getAllocationStatus() -> AllocationStatus { return allocationStatus }
@@ -52,7 +47,7 @@ public class Allocator {
   func sandbagContamination() -> () { contaminationSandbagged = true }
   
   
-  public func createAllocationsUrl() -> URL {
+  func createAllocationsUrl() -> URL {
     var components = URLComponents()
     components.scheme = config.getHttpScheme()
     components.host = config.getDomain()
@@ -65,58 +60,33 @@ public class Allocator {
     return URL(string: "")!
   }
   
-  public typealias JsonArray = [Dictionary<String, Any>]
-  public func fetchAllocations() -> JsonArray {
-    let url = self.createAllocationsUrl()
-    let stringUrl = String(describing: url)
-    // let url = URL(string: "kjnsdfjbn")! // BAD!!!! for testing
-    var jsonArray = JsonArray()
-    var previousAllocations = [Dictionary<String, Any>]()
+  public func fetchAllocations() -> Promise<JSON> {
+    let url: URL = createAllocationsUrl()
+    var allocations = JsonArray()
     
-    let semaphore = DispatchSemaphore(value: 0)
-    let cached = store.get(stringUrl) as? JsonArray
-    if let cachedAlloc = cached {
-      // you have some previous stuff here
-      previousAllocations = cachedAlloc
-      print("Previous allocations: \(String(describing: previousAllocations))")
-    } else {
-      // IT HITS HERE EACH TIME
-      print("Error getting previous allocations")
-    }
-    
-    NetworkingService.sharedInstance.get(fromUrl: url, completion: { (_data, res, err) in
-      if let error = err {
-        self.logger.log(.debug, message: "Error : \(error.localizedDescription)")
-      }
-      guard let response = res, let data = _data else {
-        self.logger.log(.debug, message: "NetworkingError data")
-        return
-      }
-      
-      if let jsonArr = try? JSONSerialization.jsonObject(with: data, options: []) as? JsonArray  {
-        print("RESPONSE: \(jsonArr)")
-        if let gnomes = jsonArr[0]["genome"] {
-          print(gnomes)
+    let responsePromise = httpClient.get(url).done { (fetchedJSON) in
+      let fetchedAlloc: JsonArray = JSON(fetchedJSON).array ?? []
+      if fetchedAlloc.count > 0 {
+        
+        let previousAlloc = self.store.get(self.participant.getUserId())
+        
+        if let previousAllocations = previousAlloc {
+          if previousAllocations.count > 0 {
+            allocations = Allocations.reconcileAllocations(previousAllocations, allocations)
+          }
         }
-        jsonArray = jsonArr
+        self.store.set(self.participant.getUserId(), val: allocations)
+        self.allocationStatus = AllocationStatus.RETRIEVED
+        
+        if self.confirmationSandbagged {
+          self.eventEmitter.confirm(allocations)
+        }
       }
-      
-      self.store.set(stringUrl, val: data)
-      let cached = self.store.get(stringUrl)
-      
-      print("Cached: \(JSON(cached!))")
-      // previousAllocations = [JSON(cached as! Data)]
-      semaphore.signal()
-    })
-    _ = semaphore.wait(timeout: .distantFuture)
-    
-    if previousAllocations.count > 0 {
-      jsonArray = previousAllocations
     }
-    return jsonArray
+    return responsePromise
   }
 
-  func allocationsNotEmpty(allocations: String?) -> Bool {
+  static func allocationsNotEmpty(allocations: JsonArray?) -> Bool {
     guard let allocationsArray = allocations else {
       return false
     }

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import DynamicJSON
+import SwiftyJSON
 
 public class EventEmitter {
   
@@ -20,7 +20,7 @@ public class EventEmitter {
   
   let audience = Audience()
   
-  init(httpClient: HttpClient,
+  init(httpClient: HttpClient = HttpClient(),
                config: AscendConfig,
                participant: AscendParticipant) {
     self.httpClient = httpClient
@@ -38,28 +38,25 @@ public class EventEmitter {
     makeEventRequest(url);
   }
   
-  public func confirm(allocations: CachedURLResponse) -> Void {
+  public func confirm(_ allocations: JsonArray) -> Void {
     sendAllocationEvents(EventEmitter.CONFIRM_KEY, allocations);
   }
   
-  public func contaminate(allocations: CachedURLResponse) -> Void {
+  public func contaminate(allocations: JsonArray) -> Void {
     sendAllocationEvents(EventEmitter.CONTAMINATE_KEY, allocations);
   }
 
-  public func sendAllocationEvents(_ key: String, _ allocations: CachedURLResponse) {
+  public func sendAllocationEvents(_ key: String, _ allocations: JsonArray) {
     // let data = allocations.data(using: .utf8)!
-    let alloc = allocations.data
-    
     do {
-      if let jsonArray = try JSONSerialization.jsonObject(with: alloc, options:.allowFragments) as? [Dictionary<String,Any>] {
-        for allocation in jsonArray {
-          let eid = allocation["eid"] as! String
-          let cid = allocation["cid"] as! String
-          let url = createEventUrl(type: key, experimentId: eid, candidateId: cid)
-          
-          makeEventRequest(url) // confirm this is async
-        }
+      for allocation in allocations {
+        let eid = String(describing: allocation["eid"])
+        let cid = String(describing: allocation["cid"])
+        let url = createEventUrl(type: key, experimentId: eid, candidateId: cid)
+        
+        makeEventRequest(url) // confirm this is async
       }
+      
     } catch let error { // Make this an AscendError type
       let message: String = "Error sending allocation event: \(error.localizedDescription)"
       Log.logger.log(.debug, message: message)
@@ -117,7 +114,7 @@ public class EventEmitter {
       return
     }
 
-    httpClient.get(withUrl: url, semaphore: semaphore)
-    semaphore.signal()
+//    httpClient.get(withUrl: url, semaphore: semaphore)
+//    semaphore.signal()
   }
 }

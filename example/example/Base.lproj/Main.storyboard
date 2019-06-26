@@ -43,6 +43,9 @@
                             <constraint firstItem="2nc-wQ-Avs" firstAttribute="top" secondItem="Vbn-Mi-BJo" secondAttribute="bottom" constant="234" id="Vrl-2R-mhK"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="textLabel" destination="OIW-PL-qdH" id="K65-bP-Czf"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

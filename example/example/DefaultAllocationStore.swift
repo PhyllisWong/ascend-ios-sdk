@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import DynamicJSON
+import SwiftyJSON
 
 public class DefaultAllocationStore : AscendAllocationStore {
   public func get(uid: String) -> String? {

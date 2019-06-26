@@ -7,30 +7,36 @@
 //
 
 import Foundation
+//
+//protocol DataType {}
+//
+//extension DataType {
+//  func getMyType() -> Self.Type {
+//    return type(of: self)
+//  }
+//}
+//
+//protocol DataProvider {
+//  associatedtype ProvidedData: DataType
+//  func giveData() -> ProvidedData
+//}
 
-protocol DataType {}
-
-extension DataType {
-  func getMyType() -> Self.Type {
-    return type(of: self)
-  }
-}
-
-protocol DataProvider {
-  associatedtype ProvidedData: DataType
-  func giveData() -> ProvidedData
-}
-
-class GenericClass<T> {
-  typealias ProvidedData = DataType
+class GenericValue<T> {
   
-  let element: T
-  
-  init (element: T) {
-    self.element = element
+  let value: T
+  init(_ value: T) {
+    self.value = value
   }
   
   func getMyType<T>() -> T.Type.Type {
     return type(of: T.self)
   }
 }
+
+class IntValue: GenericValue<Int> {}
+class StringValue: GenericValue<String> {}
+
+
+
+
+

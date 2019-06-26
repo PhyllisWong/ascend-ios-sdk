@@ -7,54 +7,83 @@
 //
 
 import UIKit
-import DynamicJSON
+import SwiftyJSON
+import Alamofire
+import PromiseKit
 
 class ViewController: UIViewController {
   
+  @IBOutlet weak var textLabel: UITextField!
+  let store = LRUCache.share
+  var allocations = JsonArray()
   enum DataError: Error { // move this somewhere more sensible
     case taskError
   }
 
   @IBAction func didPressAlloc(_ sender: Any) {
-    self.getJsonData()
+    let httpClient = HttpClient()
+    // FIXME: call the alloc.fetch method here to test > you want to get a promise back
+    let participantBuilder = ParticipantBuilder()
+    let participant = participantBuilder.build()
+    let client = buildClient()
+    let envId = "40ebcd9abf"
+    let config = ConfigBuilder(environmentId: envId).buildConfig()
+    let store = LRUCache(10)
+    let alloc = Allocator(config: config, participant: participant, httpClient: httpClient)
+    let promise = alloc.fetchAllocations().done { (json) in
+      self.allocations = [json]
+    }
+  
+    let cached = store.get(participant.getUserId())
+    print("YOUR FETCHED ALLOCATION: \(String(describing: self.allocations))")
+    print("YOUR CACHED ALLOCATION: \(String(describing: cached))")
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
-    
-    // self.getOtherShit()
   }
 }
 
 
 private extension ViewController {
   
-  private func getJsonData() {
-    let participantBuilder = ParticipantBuilder()
-    
-    let participant = participantBuilder.build()
-    let httpClient = HttpClient()
+//  private func getJsonData() {
+//    let participantBuilder = ParticipantBuilder()
+//    let participant = participantBuilder.build()
+//    let client = buildClient()
+//    print(client)
+//    let httpClient = HttpClient()
+//    let envId = "40ebcd9abf"
+//    let config = ConfigBuilder(environmentId: envId).buildConfig()
+//    let store = LRUCache(10)
+//    let alloc = Allocator(config: config, participant: participant, httpClient: httpClient)
+//    let results = alloc.fetchAllocations()
+//    let cached = store.get(config.getEnvironmentId())
+//    print("YOUR FETCHED ALLOCATION: \(String(describing: results))")
+//    print("YOUR CACHED ALLOCATION: \(String(describing: cached))")
+//  }
+  
+  private func buildClient() -> AscendClientFactory {
     let envId = "40ebcd9abf"
     let config = ConfigBuilder(environmentId: envId).buildConfig()
-    let store = LRUCache<String>(10)
-    let alloc = Allocator(store: store, config: config, participant: participant, httpClient: httpClient)
-    let results = alloc.fetchAllocations()
-    print("YOUR FETCHED ALLOCATION: \(String(describing: results))")
+    let participantBuilder = ParticipantBuilder()
+    let participant = participantBuilder.build()
+    return AscendClientFactory(config: config, participant: participant)
   }
   
-//  private func getOtherShit() {
+//  private func getData() {
 //    let participantBuilder = ParticipantBuilder()
-//    
+//
 //    let participant = participantBuilder.build()
 //    let httpClient = HttpClient()
 //    let envId = "40ebcd9abf"
 //    let config = ConfigBuilder(environmentId: envId).buildConfig()
-//    let store = LRUCache<String>(10)
-//    let alloc = Allocator(store: store, config: config, participant: participant, httpClient: httpClient)
-//    let futureAloc = alloc.fetchAllocations()
+//    let store = LRUCache(10)
+//    let alloc = Allocator(config: config, participant: participant)
+//    let futureAlloc = alloc.fetchAllocations()
 //    let emitter = EventEmitter(httpClient: httpClient, config: config, participant: participant)
-//    let ascender = AscendClientImpl(config: config, allocator: alloc, previousAllocations: false, participant: participant, eventEmitter: emitter, futureAllocations: futureAloc)
+//    let ascender = AscendClientImpl(config: config, allocator: alloc, previousAllocations: false, participant: participant, eventEmitter: emitter, futureAllocations: futureAlloc)
 //    let value = ascender.get(key: "button", defaultValue: "green")
 //    print("THIS IS YOUR VALUE: \(value)")
 //  }

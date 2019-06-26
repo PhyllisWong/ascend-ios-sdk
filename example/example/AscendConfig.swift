@@ -10,28 +10,28 @@ import Foundation
 
 public class AscendConfig {
   
-  private let httpScheme: String;
-  private let domain: String;
-  private let version: String;
-  private let environmentId: String;
-  // private let ascendAllocationStore: AscendAllocationStore;
-  private let httpClient: HttpClient;
-  // private let executionDispatch: ExecutionDispatch;
+  private let httpScheme: String
+  private let domain: String
+  private let version: String
+  private let environmentId: String
+  private let ascendAllocationStore: LRUCache
+  private let httpClient: HttpProtocol
+  // private let executionDispatch: ExecutionDispatch
   
   init(httpScheme: String, domain: String, version: String,
-       environmentId: String, // ascendAllocationStore: AscendAllocationStore,
-       httpClient: HttpClient
+       environmentId: String, ascendAllocationStore: LRUCache,
+       httpClient: HttpProtocol
     ) {
     self.httpScheme = httpScheme
     self.domain = domain
     self.version = version
     self.environmentId = environmentId
-    // self.ascendAllocationStore = ascendAllocationStore
+    self.ascendAllocationStore = ascendAllocationStore
     self.httpClient = httpClient
     // self.executionDispatch = ExecutionDispatch()
   }
   
-  public func configBuilder(environmentId: String, httpClient: HttpClient) -> ConfigBuilder {
+  public func configBuilder(environmentId: String, httpClient: HttpProtocol) -> ConfigBuilder {
     let configurationBuilder = ConfigBuilder(environmentId: environmentId, httpClient: httpClient)
     return configurationBuilder
   }
@@ -44,12 +44,12 @@ public class AscendConfig {
   
   public func getEnvironmentId() -> String { return environmentId }
   
-  public func getAscendAllocationStore() -> LRUCache<String> {
-    let ascendAllocationStore = LRUCache<String>(5)
+  public func getAscendAllocationStore() -> LRUCache {
+    let ascendAllocationStore = LRUCache(5)
     return ascendAllocationStore
    }
   
-  public func getHttpClient() -> HttpClient {
+  public func getHttpClient() -> HttpProtocol {
     return self.httpClient
   }
   
@@ -67,7 +67,7 @@ public class ConfigBuilder {
   private var allocationStore: AscendAllocationStore?
   
   private var environmentId: String
-  private var httpClient: HttpClient
+  private var httpClient: HttpProtocol
   
   private let DEFAULT_HTTP_SCHEME: String = "https"
   private let DEFAULT_DOMAIN: String = "participants-phyllis.evolv.ai"
@@ -83,7 +83,7 @@ public class ConfigBuilder {
    * </p>
    * @param environmentId unique id representing a customer's environment
    */
-  init(environmentId: String, httpClient: HttpClient? = nil) {
+  init(environmentId: String, httpClient: HttpProtocol? = nil) {
     self.allocationStoreSize = DEFAULT_ALLOCATION_STORE_SIZE
     self.httpScheme = DEFAULT_HTTP_SCHEME
     self.domain = DEFAULT_DOMAIN
@@ -162,9 +162,10 @@ public class ConfigBuilder {
     let version = self.version
     let environmentId = self.environmentId
     let httpClient = self.httpClient
+    let store = LRUCache(10)
 
     let ascendConfig = AscendConfig(httpScheme: httpScheme, domain: domain,
-                                    version: version, environmentId: environmentId,
+                                    version: version, environmentId: environmentId, ascendAllocationStore: store,
                                     httpClient: httpClient)
     return ascendConfig
   }

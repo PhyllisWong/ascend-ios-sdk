@@ -7,13 +7,13 @@
 //
 
 import Foundation
-import DynamicJSON
+import SwiftyJSON
 
 public class Allocations {
-  let allocations: String
+  let allocations: JsonArray
   let audience : Audience = Audience()
   
-  init (allocations: String) {
+  init (allocations: JsonArray) {
     self.allocations = allocations
   }
   
@@ -25,35 +25,30 @@ public class Allocations {
   typealias JsonElement = Any
   
   // func getValueFromAllocations<T>(key: String, type: T, participant: AscendParticipant) throws -> T {
-
-  
   func getValueFromAllocations<T>(key: String, type: T, participant: AscendParticipant) throws -> Dictionary<String,Any> {
-
-    let data = allocations.data(using: .utf8)!
+    var dict = [String: Any]()
     var keyParts = [String]()
     var allocation = [String: Any]()
-    do {
-      if let jsonArray = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [Dictionary<String,Any>] {
-        keyParts = key.components(separatedBy: "\\.")
-        if (keyParts.isEmpty()) { throw AscendKeyError(rawValue: "Key provided was empty.")! }
-        
-        // iterate through the array of json
-        // convert each item into a json object
-        // check to see if there is an audience filter
-        // if not... traverse the genome object and get the value at each key part
-        // return new jsonObj with the element and type
-        
-        for a in jsonArray {
-          allocation = a
-          print("Iterating through the array \(a)")
-
-        }
-        
-      } else {
-        let keyPartsStr = keyParts.map{ String($0) }
-        let eid = allocation["eid"]
-        Log.logger.log(.debug, message: "Unable to find key \(keyPartsStr) in experiement \(String(describing: eid))")
+    
+    // iterate through the array of json
+    for alloc in allocations {
+      for (k, v) in alloc {
+         // convert each item into a swift dict
+        dict[k] = v.stringValue
       }
+    }
+    do {
+      keyParts = key.components(separatedBy: "\\.")
+      if (keyParts.isEmpty()) { throw AscendKeyError(rawValue: "Key provided was empty.")! }
+      
+      // check to see if there is an audience filter
+      // if not... traverse the genome object and get the value at each key part
+      // return new jsonObj with the element and type
+      
+      let keyPartsStr = keyParts.map{ String($0) }
+      let eid = allocation["eid"]
+      Log.logger.log(.debug, message: "Unable to find key \(keyPartsStr) in experiement \(String(describing: eid))")
+      
     } catch let error {
       Log.logger.log(.debug, message: "Key provided was empty.")
       return ["":""]
@@ -72,5 +67,11 @@ public class Allocations {
       element = object[part]
     }
     return element
+  }
+  
+  // TODO: complete this method
+  static func reconcileAllocations(_ previousAllocations: JsonArray,_ fetchedAllocations: JsonArray) -> JsonArray {
+    var allocations = JsonArray()
+    return allocations
   }
 }
