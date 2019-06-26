@@ -29,7 +29,7 @@
 		3664FC1522B18B06009ED0BE /* HTTPURLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1422B18B06009ED0BE /* HTTPURLRequest.swift */; };
 		3664FC1722B18B1A009ED0BE /* HTTPURLResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1622B18B1A009ED0BE /* HTTPURLResponse.swift */; };
 		3664FC1922B18B31009ED0BE /* URLResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1822B18B31009ED0BE /* URLResponse.swift */; };
-		3664FC1B22B19352009ED0BE /* ExecutionDispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */; };
+		3664FC1B22B19352009ED0BE /* ExecutionQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1A22B19352009ED0BE /* ExecutionQueue.swift */; };
 		3664FC1D22B19392009ED0BE /* AscendConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1C22B19392009ED0BE /* AscendConfig.swift */; };
 		3664FC1F22B1C40D009ED0BE /* DefaultAllocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */; };
 		3664FC2522B42EEF009ED0BE /* LruCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC2422B42EEF009ED0BE /* LruCache.swift */; };
@@ -94,7 +94,7 @@
 		3664FC1422B18B06009ED0BE /* HTTPURLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPURLRequest.swift; sourceTree = "<group>"; };
 		3664FC1622B18B1A009ED0BE /* HTTPURLResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPURLResponse.swift; sourceTree = "<group>"; };
 		3664FC1822B18B31009ED0BE /* URLResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLResponse.swift; sourceTree = "<group>"; };
-		3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionDispatch.swift; sourceTree = "<group>"; };
+		3664FC1A22B19352009ED0BE /* ExecutionQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionQueue.swift; sourceTree = "<group>"; };
 		3664FC1C22B19392009ED0BE /* AscendConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AscendConfig.swift; sourceTree = "<group>"; };
 		3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAllocationStore.swift; sourceTree = "<group>"; };
 		3664FC2422B42EEF009ED0BE /* LruCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LruCache.swift; sourceTree = "<group>"; };
@@ -183,7 +183,7 @@
 				3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */,
 				3664FC2622B803CA009ED0BE /* ErrorObserver.swift */,
 				36D06E7E22BB093700B533B3 /* Execution.swift */,
-				3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */,
+				3664FC1A22B19352009ED0BE /* ExecutionQueue.swift */,
 				3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */,
 				36D06E8022BBEF5E00B533B3 /* Generics */,
 				36D06E8722BC323B00B533B3 /* Utility */,
@@ -479,7 +479,7 @@
 				36D06E8422BC0CD200B533B3 /* Dict.swift in Sources */,
 				3664FC3222B95B2E009ED0BE /* AscendClientImpl.swift in Sources */,
 				36D06E8B22BC542000B533B3 /* AscendAction.swift in Sources */,
-				3664FC1B22B19352009ED0BE /* ExecutionDispatch.swift in Sources */,
+				3664FC1B22B19352009ED0BE /* ExecutionQueue.swift in Sources */,
 				36D06E8622BC1F9900B533B3 /* Audience.swift in Sources */,
 				3642C26722BD974F00EF8271 /* LinkedList.swift in Sources */,
 				3661DDE122AF4855008F7017 /* AscendParticipant.swift in Sources */,

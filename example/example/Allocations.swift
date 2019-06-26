@@ -69,9 +69,16 @@ public class Allocations {
     return element
   }
   
-  // TODO: complete this method
   static func reconcileAllocations(_ previousAllocations: JsonArray,_ fetchedAllocations: JsonArray) -> JsonArray {
-    var allocations = JsonArray()
-    return allocations
+    for a in previousAllocations {
+      let eid = String(describing: a["eid"])
+      for f in fetchedAllocations {
+        let fetchedEid = String(describing: f["eid"])
+        if fetchedEid == eid {
+          return previousAllocations
+        }
+      }
+    }
+    return fetchedAllocations
   }
 }

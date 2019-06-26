@@ -24,7 +24,7 @@ public protocol HttpProtocol {
    * @param url a valid url representing a call to the Participant API.
    * @return a response future
    */
-  func get(_ url: URL) -> PromiseKit.Promise<JSON>
+  func get(_ url: URL) -> Promise<JSON>
 
   /**
    * Performs a POST request using the provided url.
@@ -37,7 +37,7 @@ public protocol HttpProtocol {
    * @param url a valid url representing a call to the Participant API.
    * @return a response future
    */
-  func post(_ url: URL) -> PromiseKit.Promise<JSON>
+  func post(_ url: URL) -> Promise<JSON>
 
 }
 
@@ -53,7 +53,6 @@ public class HttpClient: HttpProtocol {
         .responseJSON { response in
           switch response.result {
           case .success(let json):
-            let json = JSON()
             if let data = response.data {
               guard let json = try? JSON(data: data) else {
                 resolver.reject("Error" as! Error)
