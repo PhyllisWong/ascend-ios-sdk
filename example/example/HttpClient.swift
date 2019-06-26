@@ -11,7 +11,7 @@ import PromiseKit
 import SwiftyJSON
 import Alamofire
 
-public protocol HttpService {
+public protocol HttpProtocol {
 
   /**
    * Performs a GET request using the provided url.

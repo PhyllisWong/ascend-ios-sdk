@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import DynamicJSON
+import SwiftyJSON
 
 public class Allocations {
   let allocations: String

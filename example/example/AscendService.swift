@@ -8,10 +8,10 @@
 
 import Foundation
 import PromiseKit
-import DynamicJSON
+import SwiftyJSON
 import Alamofire
 
-class HttpClient: HttpService {
+class HttpClient: HttpProtocol {
   
   static func get(url: URL) -> Promise<JSON> {
     return Promise<JSON> { resolver -> Void in
