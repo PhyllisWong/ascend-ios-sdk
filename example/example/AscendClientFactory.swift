@@ -36,9 +36,9 @@ public class AscendClientFactory {
   }
   
   
-  private static func createClient(config: AscendConfig, participant: AscendParticipant) -> AscendClient {
+  private static func createClient(config: AscendConfig, participant: AscendParticipant) -> AscendClientImpl {
     let store = config.getAscendAllocationStore()
-    let previousAllocations = store.get(participant.getUserId()) as! String
+    let previousAllocations = store.get(participant.getUserId())
     let httpClient = HttpClient()
     let eventEmitter = EventEmitter(httpClient: httpClient, config: config, participant: participant)
     let allocator: Allocator = Allocator(config: config, participant: participant)
@@ -47,7 +47,7 @@ public class AscendClientFactory {
     let futureAllocations = allocator.fetchAllocations()
     let ascendClientImpl = AscendClientImpl(config: config,
                                             allocator: allocator,
-                                            previousAllocations: Allocator.allocationsNotEmpty(allocations: previousAllocations),
+                                            previousAllocations: Allocator.allocationsNotEmpty(allocations: previousAllocations as! Allocator.JsonArray),
                                             participant: participant, eventEmitter: eventEmitter,
                                             futureAllocations: futureAllocations)
     return ascendClientImpl

@@ -11,7 +11,7 @@ import Alamofire
 import SwiftyJSON
 import PromiseKit
 
-public typealias JsonArray = [[String: Any]]?
+public typealias JsonArray = [JSON]?
 
 public class Allocator {
   
@@ -84,7 +84,7 @@ public class Allocator {
     return jsonArray
   }
 
-  static func allocationsNotEmpty(allocations: String?) -> Bool {
+  static func allocationsNotEmpty(allocations: JsonArray?) -> Bool {
     guard let allocationsArray = allocations else {
       return false
     }
