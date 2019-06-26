@@ -185,6 +185,7 @@
 				36D06E7E22BB093700B533B3 /* Execution.swift */,
 				3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */,
 				3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */,
+				36AC565122C3DBAC001ADEA5 /* Http */,
 				36BBE60022C3DB50007A6336 /* Networking */,
 				36D06E8022BBEF5E00B533B3 /* Generics */,
 				36D06E8722BC323B00B533B3 /* Utility */,
@@ -217,6 +218,13 @@
 				3664FC2922B80664009ED0BE /* Log.swift */,
 			);
 			name = "Service Objects";
+			sourceTree = "<group>";
+		};
+		36AC565122C3DBAC001ADEA5 /* Http */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Http;
 			sourceTree = "<group>";
 		};
 		36BBE60022C3DB50007A6336 /* Networking */ = {
