@@ -1,5 +1,5 @@
 //
-//  AscendAllocationStore.swift
+//  EvolvAllocationStore.swift
 //  example
 //
 //  Created by phyllis.wong on 6/12/19.
@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 // This is the inerface for the client
-public protocol AscendAllocationStore {
+public protocol EvolvAllocationProtocol {
   
   /**
    * Retrieves a JsonArray.
@@ -22,8 +22,8 @@ public protocol AscendAllocationStore {
    * @return an allocation if one exists else an empty JsonArray
    */
   
-  func get(uid: String) -> String?
-  // func getEntry(store: URLCache, session: URLSessionDataTask) throws -> CachedURLResponse?
+  func get(uid: String) -> [JSON]? // FIXME: can this ever return an empty array?
+  
   /**
    * Stores a JsonArray.
    * <p>
@@ -32,9 +32,5 @@ public protocol AscendAllocationStore {
    * @param uid the participant's unique id
    * @param allocations the participant's allocations
    */
-  
-  // Do we want to go some kind of confirmation that this was sucessful?
-  // Where are we storing this data?
-  func put(uid: String, allocations: String) -> ()
-  // func putEntry(store: URLCache, request: URLRequest, response: URLResponse, data: Data) throws -> Void
+  func set(uid: String, allocations: [JSON]) -> ()
 }

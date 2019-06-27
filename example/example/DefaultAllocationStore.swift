@@ -9,34 +9,17 @@
 import Foundation
 import SwiftyJSON
 
-public class DefaultAllocationStore : AscendAllocationStore {
-  public func get(uid: String) -> String? {
-    let fakeCache = "[[\"key\": \"value\"]]"
-    //    return cache.getEntry(uid);
-    print("FAKE CACHE VALUE: \(fakeCache)")
-    return fakeCache
-  }
+public class DefaultAllocationStore : EvolvAllocationProtocol {
+  private var cache: LRUCache
   
-  public func put(uid: String, allocations: String) {
-    let fakeCache: String = "[[\"Key\": [\"otherKey\": \"value\"]]]"
-        print("FAKE CACHE JSON: \(fakeCache)")
-  }
-  
-//  public func getEntry(store: URLCache, session: URLSessionDataTask) throws -> CachedURLResponse? {
-//    let fakeCache = "[[\"key\": \"value\"]]" as! CachedURLResponse
-//    //    return cache.getEntry(uid);
-//    print("FAKE CACHE VALUE: \(fakeCache)")
-//    return fakeCache
-//  }
-//
-//  public func putEntry(store: URLCache, request: URLRequest, response: URLResponse, data: Data) throws {
-//    let fakeCache: String = "[[\"Key\": [\"otherKey\": \"value\"]]]"
-//    print("FAKE CACHE JSON: \(fakeCache)")
-//  }
-
-  
-//  private LruCache cache;
   init(size: Int) {
+    self.cache = LRUCache(size)
   }
-
+  public func get(uid: String) -> [JSON]? {
+    return cache.get(uid)
+  }
+  
+  public func set(uid: String, allocations: [JSON]) {
+    cache.set(uid, val: allocations)
+  }
 }

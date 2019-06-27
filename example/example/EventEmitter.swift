@@ -15,14 +15,14 @@ public class EventEmitter {
   public static let CONTAMINATE_KEY: String = "contamination"
   
   let httpClient: HttpClient
-  let config: AscendConfig
-  let participant: AscendParticipant
+  let config: EvolvConfig
+  let participant: EvolvParticipant
   
   let audience = Audience()
   
   init(httpClient: HttpClient = HttpClient(),
-               config: AscendConfig,
-               participant: AscendParticipant) {
+               config: EvolvConfig,
+               participant: EvolvParticipant) {
     self.httpClient = httpClient
     self.config = config
     self.participant = participant

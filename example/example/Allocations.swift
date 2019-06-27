@@ -10,10 +10,10 @@ import Foundation
 import SwiftyJSON
 
 public class Allocations {
-  let allocations: String
+  let allocations: [JSON]
   let audience : Audience = Audience()
   
-  init (allocations: String) {
+  init (allocations: [JSON]) {
     self.allocations = allocations
   }
   
@@ -24,47 +24,47 @@ public class Allocations {
 
   typealias JsonElement = Any
   
-  // func getValueFromAllocations<T>(key: String, type: T, participant: AscendParticipant) throws -> T {
+  // func getValueFromAllocations<T>(key: String, type: T, participant: EvolvParticipant) throws -> T {
 
   
-  func getValueFromAllocations<T>(key: String, type: T, participant: AscendParticipant) throws -> Dictionary<String,Any> {
+  func getValueFromAllocations<T>(key: String, type: T, participant: EvolvParticipant) throws -> [JSON]? {
 
-    let data = allocations.data(using: .utf8)!
+//    let data = allocations.data(using: .utf8)!
     var keyParts = [String]()
-    var allocation = [String: Any]()
-    do {
-      if let jsonArray = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [Dictionary<String,Any>] {
-        keyParts = key.components(separatedBy: "\\.")
-        if (keyParts.isEmpty()) { throw AscendKeyError(rawValue: "Key provided was empty.")! }
-        
-        // iterate through the array of json
-        // convert each item into a json object
-        // check to see if there is an audience filter
-        // if not... traverse the genome object and get the value at each key part
-        // return new jsonObj with the element and type
-        
-        for a in jsonArray {
-          allocation = a
-          print("Iterating through the array \(a)")
-
-        }
-        
-      } else {
-        let keyPartsStr = keyParts.map{ String($0) }
-        let eid = allocation["eid"]
-        Log.logger.log(.debug, message: "Unable to find key \(keyPartsStr) in experiement \(String(describing: eid))")
-      }
-    } catch let error {
-      Log.logger.log(.debug, message: "Key provided was empty.")
-      return ["":""]
-    }
-    return  ["":""]
+    var allocation = [JSON]()
+//    do {
+//      // if let jsonArray = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [Dictionary<String,Any>] {
+//        keyParts = key.components(separatedBy: "\\.")
+//        if (keyParts.isEmpty()) { throw EvolvKeyError(rawValue: "Key provided was empty.")! }
+//
+//        // iterate through the array of json
+//        // convert each item into a json object
+//        // check to see if there is an audience filter
+//        // if not... traverse the genome object and get the value at each key part
+//        // return new jsonObj with the element and type
+//
+//        for a in jsonArray {
+//          allocation = a
+//          print("Iterating through the array \(a)")
+//
+//        }
+//
+//      } else {
+//        let keyPartsStr = keyParts.map{ String($0) }
+//        let eid = allocation["eid"]
+//        Log.logger.log(.debug, message: "Unable to find key \(keyPartsStr) in experiement \(String(describing: eid))")
+//      }
+//    } catch let error {
+//      Log.logger.log(.debug, message: "Key provided was empty.")
+//      return ["":""]
+//    }
+    return  self.allocations
   }
   
   func getElementFromGenome(genome: Any, keyParts: [String]) throws -> Any {
     var element: JsonElement? = genome
     if element == nil { // is this a safe check?
-      throw AscendKeyError(rawValue: "Allocation genome was empty")!
+      throw EvolvKeyError(rawValue: "Allocation genome was empty")!
     }
     for part: String in keyParts {
       // convert element to json object
@@ -75,15 +75,13 @@ public class Allocations {
   }
   
   static public func reconcileAllocations(previousAllocations: [JSON], currentAllocations: [JSON]) -> [JSON] {
-    let current = currentAllocations
-    let previous = previousAllocations
     var allocations = [JSON]()
     
-    for ca in current {
+    for ca in currentAllocations {
       let currentEid = String(describing: ca["eid"])
       var previousFound = false
       
-      for pa in previous {
+      for pa in previousAllocations {
         var previousEid = String(describing: pa["eid"])
         
         if currentEid.elementsEqual(previousEid) {
@@ -91,11 +89,18 @@ public class Allocations {
           previousFound = true
         }
       }
-      
-      if !previousFound {
-        allocations.append(ca)
-      }
+      if !previousFound { allocations.append(ca) }
     }
     return allocations
+  }
+  
+  
+  public func getActiveExperiments() -> Set<String> {
+    var activeExperiments = Set<String>()
+    for a in allocations {
+      let eid = String(describing: a["eid"])
+      activeExperiments.insert(eid)
+    }
+  return activeExperiments
   }
 }

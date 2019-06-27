@@ -3,9 +3,8 @@ import SwiftyJSON
 import PromiseKit
 
 // developer interacts with these methods
-// EVERYTHING that is labed Ascend is what the client interacts with
-// change everything to Evolv from Ascend
-class AscendClientImpl {
+// EVERYTHING that is labed Evolv is what the client interacts with
+class EvolvClientImpl {
   
   private let eventEmitter: EventEmitter
   private let allocator: Allocator
@@ -14,10 +13,10 @@ class AscendClientImpl {
   private let store = LRUCache.share
   
   private let previousAllocations: Bool
-  private let participant: AscendParticipant
+  private let participant: EvolvParticipant
   
-  init(config: AscendConfig, allocator: Allocator,
-       previousAllocations: Bool, participant: AscendParticipant, eventEmitter: EventEmitter, futureAllocations: [JSON]) {
+  init(config: EvolvConfig, allocator: Allocator,
+       previousAllocations: Bool, participant: EvolvParticipant, eventEmitter: EventEmitter, futureAllocations: [JSON]) {
     
     self.allocator = allocator
     self.previousAllocations = previousAllocations
@@ -54,11 +53,11 @@ class AscendClientImpl {
   
   // meant to be async
   public func subscribe<T>(key: String, defaultValue: T, function: @escaping (T) -> T) {
-    let execution = Execution(key: key, defaultValue: defaultValue as! GenericValue<Any>, function: function as! AscendAction, participant: participant)
+    let execution = Execution(key: key, defaultValue: defaultValue as! GenericValue<Any>, function: function as! EvolvAction, participant: participant)
     let previousAlloc = self.store.get(self.participant.getUserId())
     if let prevAlloc = previousAlloc {
       do {
-        try execution.executeWithAllocation(rawAllocations: prevAlloc as! String)
+        try execution.executeWithAllocation(rawAllocations: prevAlloc)
       } catch {
         Log.logger.log(.error, message: "Unable to retrieve the value of \(key) from the allocation.")
         execution.executeWithDefault()
@@ -73,7 +72,7 @@ class AscendClientImpl {
       let alloc = store.get(self.participant.getUserId())
       if let allocations = alloc {
         do {
-          try execution.executeWithAllocation(rawAllocations: allocations as! String)
+          try execution.executeWithAllocation(rawAllocations: allocations)
           return
         } catch let err {
           Log.logger.log(.error, message: "Unable to retieve value from \(key), \(err.localizedDescription)")
