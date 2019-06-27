@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3607F8B222C4383A00A4891D /* ExecutionQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3607F8B122C4383A00A4891D /* ExecutionQueue.swift */; };
+		3607F8B422C4476C00A4891D /* LinkedQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3607F8B322C4476C00A4891D /* LinkedQueue.swift */; };
 		3642C26722BD974F00EF8271 /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3642C26622BD974F00EF8271 /* LinkedList.swift */; };
 		3642C2B022C1673E00EF8271 /* EvolvClientFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3642C2AF22C1673E00EF8271 /* EvolvClientFactory.swift */; };
 		3661DDAE22AF3012008F7017 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3661DDAD22AF3012008F7017 /* AppDelegate.swift */; };
@@ -68,6 +69,7 @@
 		1791950A4D5C785F26EAE579 /* Pods_example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21A91E004D94D3EB6AE918D3 /* Pods-example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.debug.xcconfig"; path = "Target Support Files/Pods-example/Pods-example.debug.xcconfig"; sourceTree = "<group>"; };
 		3607F8B122C4383A00A4891D /* ExecutionQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionQueue.swift; sourceTree = "<group>"; };
+		3607F8B322C4476C00A4891D /* LinkedQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedQueue.swift; sourceTree = "<group>"; };
 		3642C26622BD974F00EF8271 /* LinkedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
 		3642C2AF22C1673E00EF8271 /* EvolvClientFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolvClientFactory.swift; sourceTree = "<group>"; };
 		3661DDAA22AF3012008F7017 /* example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -249,6 +251,7 @@
 			children = (
 				3664FC2422B42EEF009ED0BE /* LruCache.swift */,
 				3642C26622BD974F00EF8271 /* LinkedList.swift */,
+				3607F8B322C4476C00A4891D /* LinkedQueue.swift */,
 				36D06E8822BC325800B533B3 /* Extensions.swift */,
 			);
 			path = Utility;
@@ -487,6 +490,7 @@
 				36D06E8622BC1F9900B533B3 /* Audience.swift in Sources */,
 				3642C26722BD974F00EF8271 /* LinkedList.swift in Sources */,
 				3661DDE122AF4855008F7017 /* EvolvParticipant.swift in Sources */,
+				3607F8B422C4476C00A4891D /* LinkedQueue.swift in Sources */,
 				36D06E8222BBF4A300B533B3 /* GenericClass.swift in Sources */,
 				3664FC2A22B80664009ED0BE /* Log.swift in Sources */,
 				3661DDE322AF6160008F7017 /* EvolvService.swift in Sources */,
