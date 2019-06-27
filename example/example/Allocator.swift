@@ -20,7 +20,7 @@ public class Allocator {
   }
   
   private let executionQueue: ExecutionQueue
-  private let store: EvolvAllocationProtocol
+  private let store: AllocationStoreProtocol
   private let config: EvolvConfig
   private let participant: EvolvParticipant
   private let eventEmitter: EventEmitter
@@ -69,7 +69,7 @@ public class Allocator {
     return Promise { resolve in
       let url = self.createAllocationsUrl()
  
-      let strPromise = HttpClient.get(url: url).done { (stringJSON) in
+      let strPromise = self.httpClient.get(url: url).done { (stringJSON) in
         var allocations = JSON.init(parseJSON: stringJSON).arrayValue
         let previous = self.store.get(uid: self.participant.getUserId())
         

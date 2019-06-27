@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 // This is the inerface for the client
-public protocol EvolvAllocationProtocol {
+public protocol AllocationStoreProtocol {
   
   /**
    * Retrieves a JsonArray.

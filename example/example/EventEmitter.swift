@@ -14,26 +14,26 @@ public class EventEmitter {
   public static let CONFIRM_KEY: String = "confirmation"
   public static let CONTAMINATE_KEY: String = "contamination"
   
-  let httpClient: HttpClient
+  let httpClient: HttpProtocol
   let config: EvolvConfig
   let participant: EvolvParticipant
   
   let audience = Audience()
   
-  init(httpClient: HttpClient = HttpClient(),
-               config: EvolvConfig,
-               participant: EvolvParticipant) {
-    self.httpClient = httpClient
+  init(config: EvolvConfig,
+       participant: EvolvParticipant,
+       httpClient: HttpProtocol = EvolvHttpClient()) {
     self.config = config
     self.participant = participant
+    self.httpClient = httpClient
   }
   
-  func emit(_ key: String) -> Void {
+  public func emit(_ key: String) -> Void {
     let url: URL = createEventUrl(key, 1.0)
     makeEventRequest(url)
   }
   
-  func emit(_ key: String, _ score: Double) -> Void {
+  public func emit(_ key: String, _ score: Double) -> Void {
     let url: URL = createEventUrl(key, score);
     makeEventRequest(url);
   }
@@ -47,17 +47,17 @@ public class EventEmitter {
   }
 
   public func sendAllocationEvents(_ key: String, _ allocations: [JSON]) {
-    if allocations.count > 0 {
+    if !allocations.isEmpty {
       for a in allocations {
+        // TODO: Perform audience check here
         let eid = String(describing: a["eid"])
         let cid = String(describing: a["cid"])
         let url = createEventUrl(type: key, experimentId: eid, candidateId: cid)
-        do {
-          makeEventRequest(url) // confirm this is async, and make this throwing
-        } catch let error {
-          let message: String = "Error sending allocation event: \(error.localizedDescription)"
-          Log.logger.log(.debug, message: message)
-        }
+        makeEventRequest(url)
+        
+        // if the event is filtered: send message
+        let message: String = "\(key) event filtered"
+        Log.logger.log(.debug, message: message)
       }
     }
   }
@@ -106,14 +106,12 @@ public class EventEmitter {
   }
   
   private func makeEventRequest(_ url: URL?) -> Void {
-    let semaphore = DispatchSemaphore(value: 0) // Do we really need this here?
+    // TODO: finish this method, ensure is async
     guard let url = url else {
       let message = "The event url was nil, skipping event request."
       Log.logger.log(.debug, message: message)
       return
     }
-
-//    httpClient.get(withUrl: url, semaphore: semaphore)
-//    semaphore.signal()
+    httpClient.post(url: url)
   }
 }

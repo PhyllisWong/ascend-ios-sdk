@@ -14,7 +14,7 @@ public class ExecutionQueue {
   
   init () {}
   
-  func enqueue(execution: Execution<GenericValue<Any>>) {
+  func enqueue(execution: Execution) {
     self.queue.add(execution)
   }
   

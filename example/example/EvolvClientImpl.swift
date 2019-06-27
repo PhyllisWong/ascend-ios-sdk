@@ -53,7 +53,7 @@ class EvolvClientImpl {
   
   // meant to be async
   public func subscribe<T>(key: String, defaultValue: T, function: @escaping (T) -> T) {
-    let execution = Execution(key: key, defaultValue: defaultValue as! GenericValue<Any>, function: function as! EvolvAction, participant: participant)
+    let execution = Execution(key: key, defaultValue: defaultValue, function: function as! EvolvAction, participant: participant)
     let previousAlloc = self.store.get(self.participant.getUserId())
     if let prevAlloc = previousAlloc {
       do {

@@ -36,20 +36,15 @@ public class EvolvClientFactory {
   }
   
   
-  private static func createClient(config: EvolvConfig, participant: EvolvParticipant) { // -> EvolvClientImpl {
+  private static func createClient(config: EvolvConfig, participant: EvolvParticipant) -> EvolvClient {
     let store = config.getEvolvAllocationStore()
     let previousAllocations = store.get(uid: participant.getUserId())
-    let httpClient = HttpClient()
-    let eventEmitter = EventEmitter(httpClient: httpClient, config: config, participant: participant)
+ 
     let allocator: Allocator = Allocator(config: config, participant: participant)
   
     // fetch and reconcile allocations asynchronously
     let futureAllocations = allocator.fetchAllocations()
-    // let evolvClientImpl = EvolvClientImpl(config: config,
-//                                            allocator: allocator,
-//                                            previousAllocations: Allocator.allocationsNotEmpty(allocations: previousAllocations as! Allocator.JsonArray),
-//                                            participant: participant, eventEmitter: eventEmitter,
-//                                            futureAllocations: futureAllocations)
-//    return evolvClientImpl
+    let emitter = EventEmitter(config: config, participant: participant)
+    
   }
 }
