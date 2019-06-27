@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3607F8B222C4383A00A4891D /* ExecutionQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3607F8B122C4383A00A4891D /* ExecutionQueue.swift */; };
 		3642C26722BD974F00EF8271 /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3642C26622BD974F00EF8271 /* LinkedList.swift */; };
 		3642C2B022C1673E00EF8271 /* EvolvClientFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3642C2AF22C1673E00EF8271 /* EvolvClientFactory.swift */; };
 		3661DDAE22AF3012008F7017 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3661DDAD22AF3012008F7017 /* AppDelegate.swift */; };
@@ -66,6 +67,7 @@
 /* Begin PBXFileReference section */
 		1791950A4D5C785F26EAE579 /* Pods_example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21A91E004D94D3EB6AE918D3 /* Pods-example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.debug.xcconfig"; path = "Target Support Files/Pods-example/Pods-example.debug.xcconfig"; sourceTree = "<group>"; };
+		3607F8B122C4383A00A4891D /* ExecutionQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionQueue.swift; sourceTree = "<group>"; };
 		3642C26622BD974F00EF8271 /* LinkedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
 		3642C2AF22C1673E00EF8271 /* EvolvClientFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolvClientFactory.swift; sourceTree = "<group>"; };
 		3661DDAA22AF3012008F7017 /* example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -183,6 +185,7 @@
 				3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */,
 				3664FC2622B803CA009ED0BE /* ErrorObserver.swift */,
 				36D06E7E22BB093700B533B3 /* Execution.swift */,
+				3607F8B122C4383A00A4891D /* ExecutionQueue.swift */,
 				3664FC1A22B19352009ED0BE /* ExecutionDispatch.swift */,
 				3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */,
 				36BBE60022C3DB50007A6336 /* Networking */,
@@ -477,6 +480,7 @@
 				3664FC1022B187BC009ED0BE /* EventEmitter.swift in Sources */,
 				36D06E7F22BB093700B533B3 /* Execution.swift in Sources */,
 				36D06E8422BC0CD200B533B3 /* Dict.swift in Sources */,
+				3607F8B222C4383A00A4891D /* ExecutionQueue.swift in Sources */,
 				3664FC3222B95B2E009ED0BE /* EvolvClientImpl.swift in Sources */,
 				36D06E8B22BC542000B533B3 /* EvolvAction.swift in Sources */,
 				3664FC1B22B19352009ED0BE /* ExecutionDispatch.swift in Sources */,

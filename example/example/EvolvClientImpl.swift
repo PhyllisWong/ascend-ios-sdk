@@ -57,7 +57,7 @@ class EvolvClientImpl {
     let previousAlloc = self.store.get(self.participant.getUserId())
     if let prevAlloc = previousAlloc {
       do {
-        try execution.executeWithAllocation(rawAllocations: prevAlloc as! String)
+        try execution.executeWithAllocation(rawAllocations: prevAlloc)
       } catch {
         Log.logger.log(.error, message: "Unable to retrieve the value of \(key) from the allocation.")
         execution.executeWithDefault()
@@ -72,7 +72,7 @@ class EvolvClientImpl {
       let alloc = store.get(self.participant.getUserId())
       if let allocations = alloc {
         do {
-          try execution.executeWithAllocation(rawAllocations: allocations as! String)
+          try execution.executeWithAllocation(rawAllocations: allocations)
           return
         } catch let err {
           Log.logger.log(.error, message: "Unable to retieve value from \(key), \(err.localizedDescription)")
