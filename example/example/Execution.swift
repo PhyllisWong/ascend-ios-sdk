@@ -9,31 +9,20 @@
 import Foundation
 import SwiftyJSON
 
-
-protocol EvolvAction {
-  /**
-   * Applies a given value to a set of instructions.
-   * @param value any value that was requested
-   */
-  func apply<T>(value: T) -> Void
-}
-
-struct Set<Element> where Element : Hashable {}
-
-class Execution<T: GenericValue<Any>> {
+class Execution {
   
   private let key: String
-  private let defaultValue: GenericValue<Any> // Generic
+  private let defaultValue: GenericValue<Any>
   private let function: EvolvAction
   private let participant: EvolvParticipant
   
   private var alreadyExecuted: Set<String> = Set()
   
-  init(key: String, defaultValue: GenericValue<Any>,
+  init<T>(key: String, defaultValue: T,
        function: EvolvAction,
        participant: EvolvParticipant) {
     self.key = key
-    self.defaultValue = defaultValue
+    self.defaultValue = defaultValue as! Execution.GenericValue<Any>
     self.function = function
     self.participant = participant
   }
@@ -47,12 +36,33 @@ class Execution<T: GenericValue<Any>> {
   func executeWithAllocation(rawAllocations: [JSON]) throws -> Void {
     let type = getMyType(defaultValue)
     let allocations = Allocations(allocations: rawAllocations)
-    // let type = (cls.element).getMyType()
-    // let value = allocations.getValueFromAllocations(key: key, type: (cls.element as AnyObject).getMyType(), participant: participant)
+    let value = try allocations.getValueFromAllocations(key: key, type: type, participant: participant)
+    
+    guard let _ = value else {
+      throw EvolvKeyError.errorMessage
+    }
+    let activeExperiements = allocations.getActiveExperiments()
+    if alreadyExecuted.isEmpty || alreadyExecuted == activeExperiements {
+      // there was a change to the allocations after reconciliation, apply changes
+      function.apply(value: value)
+    }
+    alreadyExecuted = activeExperiements
   }
   
-  func executeWithDefault() {
+  func executeWithDefault() -> Void {
     self.function.apply(value: self.defaultValue)
+  }
+  
+  class GenericValue<T> {
+    
+    let value: T
+    init(_ value: T) {
+      self.value = value
+    }
+    
+    func getMyType<T>() -> T.Type.Type {
+      return type(of: T.self)
+    }
   }
   
 }

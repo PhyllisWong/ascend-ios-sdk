@@ -19,27 +19,28 @@ public class Allocator {
     case FETCHING, RETRIEVED, FAILED
   }
   
-  private let store: LRUCache
+  private let executionQueue: ExecutionQueue
+  private let store: EvolvAllocationProtocol
   private let config: EvolvConfig
   private let participant: EvolvParticipant
-  private let httpClient: HttpClient
   private let eventEmitter: EventEmitter
-  
+  private let httpClient: HttpProtocol
+ 
   private var confirmationSandbagged: Bool = false
   private var contaminationSandbagged: Bool = false
-  private var logger: Logger
-  private var allocationStatus: AllocationStatus
   
-  init(
-       config: EvolvConfig,
+  private var logger = Log.BasicLogger()
+  private var allocationStatus: AllocationStatus
+
+  
+  init(config: EvolvConfig,
        participant: EvolvParticipant) {
-    self.store = LRUCache.share
+    self.executionQueue = config.getExecutionQueue()
+    self.store = config.getEvolvAllocationStore()
     self.config = config
     self.participant = participant
-    self.httpClient = HttpClient()
+    self.httpClient = config.getHttpClient()
     self.allocationStatus = AllocationStatus.FETCHING
-    self.logger = Log.logger
-    // self.executionDispatch = executionDispatch
     self.eventEmitter = EventEmitter(config: config, participant: participant)
   }
   
@@ -69,27 +70,32 @@ public class Allocator {
       let url = self.createAllocationsUrl()
  
       let strPromise = HttpClient.get(url: url).done { (stringJSON) in
-        var allocationsArray = JSON.init(parseJSON: stringJSON).arrayValue
-        print(allocationsArray[0]["eid"])
-        let previous = self.store.get(self.participant.getUserId())
+        var allocations = JSON.init(parseJSON: stringJSON).arrayValue
+        let previous = self.store.get(uid: self.participant.getUserId())
+        
         if let prevAlloc = previous {
           if Allocator.allocationsNotEmpty(allocations: prevAlloc) {
-            allocationsArray = Allocations.reconcileAllocations(previousAllocations: prevAlloc, currentAllocations: allocationsArray)
+            allocations = Allocations.reconcileAllocations(previousAllocations: prevAlloc, currentAllocations: allocations)
           }
         }
         
-        self.store.set(self.participant.getUserId(), val: allocationsArray)
+        self.store.set(uid: self.participant.getUserId(), allocations: allocations)
         self.allocationStatus = AllocationStatus.RETRIEVED
         
         if (self.confirmationSandbagged) {
-          self.eventEmitter.confirm(allocations: allocationsArray)
+          self.eventEmitter.confirm(allocations: allocations)
         }
         
         if self.contaminationSandbagged {
-          self.eventEmitter.contaminate(allocations: allocationsArray)
+          self.eventEmitter.contaminate(allocations: allocations)
         }
-        resolve.fulfill(allocationsArray)
-        // execute with all values
+        resolve.fulfill(allocations)
+        do {
+          try self.executionQueue.executeAllWithValuesFromAllocations(allocations: allocations)
+        } catch let err {
+          let message = "There was an error executing with allocations. \(err.localizedDescription)"
+          self.logger.log(.error, message: message)
+        }
       }
     }
   }

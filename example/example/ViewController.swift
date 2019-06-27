@@ -37,23 +37,23 @@ private extension ViewController {
   
  
   private func getJsonData() {
-    let participantBuilder = ParticipantBuilder()
-    let participant = participantBuilder.build()
-    let envId = "40ebcd9abf"
-    let config = ConfigBuilder(environmentId: envId).buildConfig()
-    let store = LRUCache.share
-    let alloc = Allocator(config: config, participant: participant)
-    let results = alloc.fetchAllocations()
-    print("YOUR FETCHED ALLOCATION: \(String(describing: results))")
+//    let participantBuilder = ParticipantBuilder()
+//    let participant = participantBuilder.build()
+//    let envId = "40ebcd9abf"
+//    let config = ConfigBuilder(environmentId: envId).buildConfig()
+//    let store = LRUCache.share
+//    let alloc = Allocator(config: config, participant: participant)
+//    let results = alloc.fetchAllocations()
+//    print("YOUR FETCHED ALLOCATION: \(String(describing: results))")
   }
   
-  private func buildClient() -> EvolvClientFactory {
-    let envId = "40ebcd9abf"
-    let config = ConfigBuilder(environmentId: envId).buildConfig()
-    let participantBuilder = ParticipantBuilder()
-    let participant = participantBuilder.build()
-    return EvolvClientFactory(config: config, participant: participant)
-  }
+//  private func buildClient() -> EvolvClientFactory {
+//    let envId = "40ebcd9abf"
+//    let config = ConfigBuilder(environmentId: envId).buildConfig()
+//    let participantBuilder = ParticipantBuilder()
+//    let participant = participantBuilder.build()
+//    return EvolvClientFactory(config: config, participant: participant)
+//  }
   
 //  private func getData() {
 //    let participantBuilder = ParticipantBuilder()

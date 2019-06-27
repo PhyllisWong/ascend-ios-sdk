@@ -9,8 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-class ExecutionQueue {
-  // need an instance of the logger
+public class ExecutionQueue {
   private var queue = LinkedQueue<Execution>()
   
   init () {}
@@ -21,26 +20,22 @@ class ExecutionQueue {
   
   func executeAllWithValuesFromAllocations(allocations: [JSON]) {
     while !queue.isEmpty {
-      let execution: Execution = queue.remove()! // safely unwrap this
+      let execution: Execution = queue.remove()!
       
       do {
         try execution.executeWithAllocation(rawAllocations: allocations)
       } catch {
-        // log here
+        let message = "There was an error retrieving the value of \(execution.getKey()) from the allocation."
+        Log.logger.log(.debug, message: message)
         execution.executeWithDefault()
-      } catch {
-        // log here
-        
       }
     }
   }
   
-  
   func executeAllWithValuesFromDefaults() {
     while !queue.isEmpty {
-      let execution: Execution = queue.remove()! // safely unwrap this nil value
+      let execution: Execution = queue.remove()!
       execution.executeWithDefault()
     }
   }
-  
 }
