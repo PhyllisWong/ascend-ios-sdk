@@ -38,7 +38,7 @@ public class EvolvClientFactory {
   
   private static func createClient(config: EvolvConfig, participant: EvolvParticipant) { // -> EvolvClientImpl {
     let store = config.getEvolvAllocationStore()
-    let previousAllocations = store.get(participant.getUserId())
+    let previousAllocations = store.get(uid: participant.getUserId())
     let httpClient = HttpClient()
     let eventEmitter = EventEmitter(httpClient: httpClient, config: config, participant: participant)
     let allocator: Allocator = Allocator(config: config, participant: participant)

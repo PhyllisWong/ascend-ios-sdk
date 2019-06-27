@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TODO: Do you need this?
 extension Array {
   func isEmpty() -> Bool {
     if self.count > 0 {

@@ -8,10 +8,10 @@
 
 import Foundation
 
-//protocol EvolvAction {
-//  /**
-//   * Applies a given value to a set of instructions.
-//   * @param value any value that was requested
-//   */
-//  func apply<T>(value: T) -> Void
-//}
+protocol EvolvAction {
+  /**
+   * Applies a given value to a set of instructions.
+   * @param value any value that was requested
+   */
+  func apply<T>(value: T) -> Void
+}

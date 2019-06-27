@@ -27,28 +27,28 @@ public class Allocations {
   // func getValueFromAllocations<T>(key: String, type: T, participant: EvolvParticipant) throws -> T {
 
   
-  func getValueFromAllocations<T>(key: String, type: T, participant: EvolvParticipant) throws -> [JSON] {
+  func getValueFromAllocations<T>(key: String, type: T, participant: EvolvParticipant) throws -> [JSON]? {
 
 //    let data = allocations.data(using: .utf8)!
     var keyParts = [String]()
-    var allocation = [String: Any]()
+    var allocation = [JSON]()
 //    do {
 //      // if let jsonArray = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [Dictionary<String,Any>] {
 //        keyParts = key.components(separatedBy: "\\.")
 //        if (keyParts.isEmpty()) { throw EvolvKeyError(rawValue: "Key provided was empty.")! }
-//        
+//
 //        // iterate through the array of json
 //        // convert each item into a json object
 //        // check to see if there is an audience filter
 //        // if not... traverse the genome object and get the value at each key part
 //        // return new jsonObj with the element and type
-//        
+//
 //        for a in jsonArray {
 //          allocation = a
 //          print("Iterating through the array \(a)")
 //
 //        }
-//        
+//
 //      } else {
 //        let keyPartsStr = keyParts.map{ String($0) }
 //        let eid = allocation["eid"]
@@ -89,9 +89,18 @@ public class Allocations {
           previousFound = true
         }
       }
-      
       if !previousFound { allocations.append(ca) }
     }
     return allocations
+  }
+  
+  
+  public func getActiveExperiments() -> Set<String> {
+    var activeExperiments = Set<String>()
+    for a in allocations {
+      let eid = String(describing: a["eid"])
+      activeExperiments.insert(eid)
+    }
+  return activeExperiments
   }
 }
