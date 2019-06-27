@@ -31,11 +31,9 @@ class ViewController: UIViewController {
     super.viewDidLoad()
     let envId = "40ebcd9abf"
     let httpClient = EvolvHttpClient()
-    let configBuilder = EvolvConfig.builder(environmentId: envId, httpClient: httpClient)
-    let config = configBuilder.build()
+    let config = EvolvConfig.builder(environmentId: envId, httpClient: httpClient).build()
     print(config)
-    let participantBuilder = EvolvParticipant.builder()
-    let participant = participantBuilder.build()
+    let participant = EvolvParticipant.builder().build()
     print(participant)
   }
 }

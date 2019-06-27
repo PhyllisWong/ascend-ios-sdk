@@ -29,7 +29,7 @@ public class Allocator {
   private var confirmationSandbagged: Bool = false
   private var contaminationSandbagged: Bool = false
   
-  private var logger = Log.BasicLogger()
+  private var LOGGER = Log.logger
   private var allocationStatus: AllocationStatus
 
   
@@ -94,7 +94,7 @@ public class Allocator {
           try self.executionQueue.executeAllWithValuesFromAllocations(allocations: allocations)
         } catch let err {
           let message = "There was an error executing with allocations. \(err.localizedDescription)"
-          self.logger.log(.error, message: message)
+          self.LOGGER.log(.error, message: message)
         }
       }
     }

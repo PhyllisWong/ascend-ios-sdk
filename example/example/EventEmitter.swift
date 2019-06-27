@@ -11,6 +11,8 @@ import SwiftyJSON
 
 public class EventEmitter {
   
+  private let LOGGER = Log.logger
+  
   public static let CONFIRM_KEY: String = "confirmation"
   public static let CONTAMINATE_KEY: String = "contamination"
   
@@ -57,7 +59,7 @@ public class EventEmitter {
         
         // if the event is filtered: send message
         let message: String = "\(key) event filtered"
-        Log.logger.log(.debug, message: message)
+        LOGGER.log(.debug, message: message)
       }
     }
   }
@@ -77,7 +79,7 @@ public class EventEmitter {
       
       guard let url = components.url else {
         let message: String = "Error creating event url with type and score."
-        Log.logger.log(.debug, message: message)
+        LOGGER.log(.debug, message: message)
         return URL(string: "")!
       }
       return url
@@ -99,7 +101,7 @@ public class EventEmitter {
     
     guard let url = components.url else {
       let message: String = "Error creating event url with Experiment ID and Candidate ID."
-      Log.logger.log(.debug, message: message)
+      LOGGER.log(.debug, message: message)
       return URL(string: "")!
     }
     return url
@@ -109,7 +111,7 @@ public class EventEmitter {
     // TODO: finish this method, ensure is async
     guard let url = url else {
       let message = "The event url was nil, skipping event request."
-      Log.logger.log(.debug, message: message)
+      LOGGER.log(.debug, message: message)
       return
     }
     httpClient.post(url: url)

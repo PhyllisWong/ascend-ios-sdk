@@ -4,7 +4,9 @@ import PromiseKit
 
 // developer interacts with these methods
 // EVERYTHING that is labed Evolv is what the client interacts with
-class EvolvClientImpl {
+class EvolvClientImpl: EvolvClient {
+  
+  private let LOGGER = Log.logger
   
   private let eventEmitter: EventEmitter
   private let allocator: Allocator
@@ -15,8 +17,9 @@ class EvolvClientImpl {
   private let previousAllocations: Bool
   private let participant: EvolvParticipant
   
-  init(config: EvolvConfig, allocator: Allocator,
-       previousAllocations: Bool, participant: EvolvParticipant, eventEmitter: EventEmitter, futureAllocations: [JSON]) {
+  init(_ config: EvolvConfig, _ eventEmitter: EventEmitter,
+       _ futureAllocations: Promise<[JSON]>, _ allocator: Allocator,
+       _ previousAllocations: Bool, _ participant: EvolvParticipant) {
     
     self.allocator = allocator
     self.previousAllocations = previousAllocations
@@ -59,7 +62,7 @@ class EvolvClientImpl {
       do {
         try execution.executeWithAllocation(rawAllocations: prevAlloc)
       } catch {
-        Log.logger.log(.error, message: "Unable to retrieve the value of \(key) from the allocation.")
+        LOGGER.log(.error, message: "Unable to retrieve the value of \(key) from the allocation.")
         execution.executeWithDefault()
       }
     }
@@ -75,7 +78,7 @@ class EvolvClientImpl {
           try execution.executeWithAllocation(rawAllocations: allocations)
           return
         } catch let err {
-          Log.logger.log(.error, message: "Unable to retieve value from \(key), \(err.localizedDescription)")
+          LOGGER.log(.error, message: "Unable to retieve value from \(key), \(err.localizedDescription)")
         }
       }
     }

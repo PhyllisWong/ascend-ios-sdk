@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol EvolvClient {
+public protocol EvolvClient {
   /**
    * Retrieves a value from the participant's allocation, returns a default upon error.
    * <p>
@@ -44,7 +44,7 @@ protocol EvolvClient {
     - function:  a handler that is invoked when the allocation is updated
     - <T>: type of value to be returned
  */
-  func subscribe<T>(key: String, defaultValue: T, EvolvAction: @escaping (Any) -> Void)
+  func subscribe<T>(key: String, defaultValue: T, function: @escaping (T) -> T)
 
 
   /**
