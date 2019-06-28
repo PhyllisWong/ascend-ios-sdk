@@ -8,7 +8,7 @@ class EvolvClientImpl: EvolvClientProtocol {
   private let LOGGER = Log.logger
   
   private let eventEmitter: EventEmitter
-  private let futureAllocations: Promise<[JSON]>?
+  public let futureAllocations: Promise<[JSON]>? // change this back to private after presentation
   private let executionQueue: ExecutionQueue
   private let allocator: Allocator
   private let store: AllocationStoreProtocol

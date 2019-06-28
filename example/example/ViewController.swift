@@ -16,50 +16,48 @@ class ViewController: UIViewController {
  
   @IBOutlet weak var textView: UITextView!
   
-  let store = LRUCache.share
-  let cacheName = "MyCache"
+  let store = DefaultAllocationStore(size: 1000)
   var allocations = [JSON]()
-  enum DataError: Error { // move this somewhere more sensible
-    case taskError
-  }
 
   @IBAction func didPressAlloc(_ sender: Any) {
-   getJsonData()
+    
+    getJsonData()
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    let envId = "40ebcd9abf"
-    let httpClient = EvolvHttpClient()
-    let config = EvolvConfig.builder(environmentId: envId, httpClient: httpClient).build()
-    print(config)
-    let participant = EvolvParticipant.builder().build()
-    print(participant)
+   
   }
 }
 
 
 private extension ViewController {
   
- 
-  private func getJsonData() {
-//    let participantBuilder = ParticipantBuilder()
-//    let participant = participantBuilder.build()
-//    let envId = "40ebcd9abf"
-//    let config = ConfigBuilder(environmentId: envId).buildConfig()
-//    let store = LRUCache.share
-//    let alloc = Allocator(config: config, participant: participant)
-//    let results = alloc.fetchAllocations()
-//    print("YOUR FETCHED ALLOCATION: \(String(describing: results))")
+  private func getJsonData() -> Void {
+    let envId = "40ebcd9abf"
+    let httpClient = EvolvHttpClient()
+    let config = EvolvConfig.builder(environmentId: envId, httpClient: httpClient).build()
+    let participant = EvolvParticipant.builder().build()
+    let client = EvolvClientFactory(config: config, participant: participant).client as! EvolvClientImpl
+    
+    let _ = client.futureAllocations?.done({ (json) in
+      self.allocations = json
+      print("THE FUTURE IS HERE: \(json)")
+      self.store.set(uid: participant.getUserId(), allocations: json)
+      let cachedJson = self.store.get(uid: participant.getUserId())!
+      let reconciled = Allocations.reconcileAllocations(previousAllocations: cachedJson, currentAllocations: json)
+      self.allocations = reconciled
+      self.textView.text = String(describing: reconciled)
+    })
   }
   
-//  private func buildClient() -> EvolvClientFactory {
-//    let envId = "40ebcd9abf"
-//    let config = ConfigBuilder(environmentId: envId).buildConfig()
-//    let participantBuilder = ParticipantBuilder()
-//    let participant = participantBuilder.build()
-//    return EvolvClientFactory(config: config, participant: participant)
-//  }
+  private func buildClient() -> EvolvClientImpl {
+    let envId = "40ebcd9abf"
+    let httpClient = EvolvHttpClient()
+    let config = EvolvConfig.builder(environmentId: envId, httpClient: httpClient).build()
+    let participant = EvolvParticipant.builder().build()
+    return EvolvClientFactory(config: config, participant: participant).client as! EvolvClientImpl
+  }
   
 //  private func getData() {
 //    let participantBuilder = ParticipantBuilder()

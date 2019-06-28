@@ -73,6 +73,7 @@ public class Allocator {
         var allocations = JSON.init(parseJSON: stringJSON).arrayValue
         let previous = self.store.get(uid: self.participant.getUserId())
         
+        print("CACHED JSON: \(String(describing: previous))")
         if let prevAlloc = previous {
           if Allocator.allocationsNotEmpty(allocations: prevAlloc) {
             allocations = Allocations.reconcileAllocations(previousAllocations: prevAlloc, currentAllocations: allocations)
@@ -80,6 +81,8 @@ public class Allocator {
         }
         
         self.store.set(uid: self.participant.getUserId(), allocations: allocations)
+        let cachedAgain = self.store.get(uid: self.participant.getUserId())
+        print("FETCHED JSON CACHED NOW: \(cachedAgain)")
         self.allocationStatus = AllocationStatus.RETRIEVED
         
         if (self.confirmationSandbagged) {
