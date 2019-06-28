@@ -9,6 +9,10 @@
 import Foundation
 import SwiftyJSON
 
+protocol Default {
+  associatedtype T
+}
+
 class Execution<T> {
   
   private let key: String
@@ -17,7 +21,7 @@ class Execution<T> {
   private var defaultValue: T
   private var alreadyExecuted: Set<String> = Set()
   
-  init<T>(_ key: String,
+  init(_ key: String,
           _ defaultValue: T,
           _ function: EvolvAction,
           _ participant: EvolvParticipant) {

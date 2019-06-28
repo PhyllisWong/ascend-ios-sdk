@@ -11,11 +11,11 @@ import SwiftyJSON
 
 public class ExecutionQueue {
   private let LOGGER = Log.logger
-  private var queue = LinkedQueue<Execution>()
+  private var queue = LinkedQueue<Execution<Any>>()
   
   init () {}
   
-  func enqueue(execution: Execution) {
+  func enqueue(execution: Execution<Any>) {
     self.queue.add(execution)
   }
   

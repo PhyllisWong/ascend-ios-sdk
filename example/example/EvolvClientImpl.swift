@@ -3,7 +3,7 @@ import SwiftyJSON
 import PromiseKit
 
 // EVERYTHING that is labeled Ascend in the Android SDK is what the client interacts with
-class EvolvClientImpl: EvolvClient {
+class EvolvClientImpl: EvolvClientProtocol {  
   
   private let LOGGER = Log.logger
   
@@ -35,43 +35,45 @@ class EvolvClientImpl: EvolvClient {
     return type(of: element)
   }
   
-  public func get<T>(key: String, defaultValue: T) -> T {
+  public func get<T>(key: String, defaultValue: T) -> Any {
     
     var allocations = [JSON]()
-    var value: T
-    // is this safe?
+    var value = [JSON]()
+    var allocationsUnpacked = false
+    
     if (futureAllocations == nil) { return defaultValue }
     
-    // There HAS to be a better way to ensure that the promise fulfills before moving on
-    let semaphore = DispatchSemaphore(value: 0)
-    let _ = futureAllocations?.done({ (jsonArray) in
-      allocations = jsonArray
-      semaphore.signal()
-    })
-    let _ = semaphore.wait(timeout: .distantFuture)
-    
-    if Allocator.allocationsNotEmpty(allocations: allocations) {
-      return defaultValue
+    // TODO: Use the FETCHING and RECEIVED properties of Allocator to ensure this happens before moving on
+    if !allocationsUnpacked {
+      let _ = futureAllocations?.done { (jsonArray) in
+        allocations = jsonArray
+        allocationsUnpacked = true
+      }
     }
     
-    let type: T = getMyType(defaultValue) as! T
-    do {
-      value = try Allocations(allocations: allocations).getValueFromAllocations(key, type, participant) as! T
-      if value == nil {
-        throw EvolvKeyError.errorMessage
+    // You have resoved the promise to JSON
+    if allocationsUnpacked {
+      if !Allocator.allocationsNotEmpty(allocations: allocations) {
         return defaultValue
       }
+    }
+
+    let type = getMyType(defaultValue)
+    guard let _ = type else { return defaultValue }
+    do {
+      let alloc = Allocations(allocations: allocations)
+      let v = try alloc.getValueFromAllocations(key, type, participant)
+      if let val = v { value = val }
     } catch {
       LOGGER.log(.error, message: "Unable to retrieve the treatment. Returning the default.")
       return defaultValue
     }
-    
     return value
   }
   
   // meant to be async
-  public func subscribe<T>(key: String, defaultValue: T, function: @escaping (T) -> T) {
-    let execution = Execution(key: key, defaultValue: defaultValue, function: function as! EvolvAction, participant: participant)
+  public func subscribe<T>(key: String, defaultValue: Any, function: @escaping (T) -> T) {
+    let execution = Execution(key, defaultValue, function as! EvolvAction, participant)
     let previousAlloc = self.store.get(uid: self.participant.getUserId())
     if let prevAlloc = previousAlloc {
       do {

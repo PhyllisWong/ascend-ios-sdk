@@ -18,7 +18,7 @@ public class EvolvClientFactory {
    * @return an instance of EvolvClient
    */
   
-  public var client: EvolvClient
+  public var client: EvolvClientProtocol
   
   init(config: EvolvConfig) {
     LOGGER.log(.debug, message: "Initializing Evolv Client.")
@@ -38,7 +38,7 @@ public class EvolvClientFactory {
     self.client = EvolvClientFactory.createClient(config: config, participant: participant)
   }
   
-  private static func createClient(config: EvolvConfig, participant: EvolvParticipant) -> EvolvClient {
+  private static func createClient(config: EvolvConfig, participant: EvolvParticipant) -> EvolvClientProtocol {
     let store = config.getEvolvAllocationStore()
     let previousAllocations = store.get(uid: participant.getUserId())
     let allocator: Allocator = Allocator(config: config, participant: participant)

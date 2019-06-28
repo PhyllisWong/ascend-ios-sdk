@@ -58,7 +58,7 @@ public class Allocations {
 //      Log.logger.log(.debug, message: "Key provided was empty.")
 //      return ["":""]
 //    }
-    return  self.allocations
+    return self.allocations
   }
   
   func getElementFromGenome(genome: Any, keyParts: [String]) throws -> Any {
