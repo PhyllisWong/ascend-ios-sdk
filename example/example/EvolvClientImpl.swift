@@ -14,7 +14,7 @@ class EvolvClientImpl: EvolvClientProtocol {
   private let store: AllocationStoreProtocol
   private let previousAllocations: Bool
   private let participant: EvolvParticipant
-  
+  private let dispatchGroup = DispatchGroup()
   
   init(_ config: EvolvConfig,
        _ eventEmitter: EventEmitter,
@@ -36,28 +36,23 @@ class EvolvClientImpl: EvolvClientProtocol {
   }
   
   public func get<T>(key: String, defaultValue: T) -> Any {
-    
+    let group = DispatchGroup()
     var allocations = [JSON]()
     var value = [JSON]()
-    var allocationsUnpacked = false
     
     if (futureAllocations == nil) { return defaultValue }
-    
-    // TODO: Use the FETCHING and RECEIVED properties of Allocator to ensure this happens before moving on
-    if !allocationsUnpacked {
-      let _ = futureAllocations?.done { (jsonArray) in
-        allocations = jsonArray
-        allocationsUnpacked = true
-      }
-    }
-    
-    // You have resoved the promise to JSON
-    if allocationsUnpacked {
-      if !Allocator.allocationsNotEmpty(allocations: allocations) {
-        return defaultValue
-      }
-    }
 
+   // This needs to be a blocking operation
+    let _ = self.futureAllocations?.done { (jsonArray) in
+      allocations = jsonArray
+      let dict = jsonArray.toDictionary()
+    }
+   
+    // lines 46-48 MUST be complete BEFORE the rest of this code executes
+    if !Allocator.allocationsNotEmpty(allocations: allocations) {
+      return defaultValue
+    }
+  
     let type = getMyType(defaultValue)
     guard let _ = type else { return defaultValue }
     do {
