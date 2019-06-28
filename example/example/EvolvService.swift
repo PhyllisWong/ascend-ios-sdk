@@ -11,9 +11,9 @@ import PromiseKit
 import SwiftyJSON
 import Alamofire
 
-class HttpClient : HttpProtocol {
+class EvolvHttpClient : HttpProtocol {
   
-  static func get(url: URL) -> Promise<String> {
+  func get(url: URL) -> Promise<String> {
     return Promise<String> { resolver -> Void in
       
       Alamofire.request(url)
@@ -34,7 +34,7 @@ class HttpClient : HttpProtocol {
   }
   
   // This is just for the emitter
-  static func post(url: URL) -> Promise<JSON> {
+  func post(url: URL) -> Promise<JSON> {
     return Promise<JSON> { resolver -> Void in
       
       Alamofire.request(url, method: .post, encoding: JSONEncoding.default)

@@ -2,64 +2,84 @@ import Foundation
 import SwiftyJSON
 import PromiseKit
 
-// developer interacts with these methods
-// EVERYTHING that is labed Evolv is what the client interacts with
-class EvolvClientImpl {
+// EVERYTHING that is labeled Ascend in the Android SDK is what the client interacts with
+class EvolvClientImpl: EvolvClientProtocol {  
+  
+  private let LOGGER = Log.logger
   
   private let eventEmitter: EventEmitter
-  private let allocator: Allocator
   private let futureAllocations: Promise<[JSON]>?
-  
-  private let store = LRUCache.share
-  
+  private let executionQueue: ExecutionQueue
+  private let allocator: Allocator
+  private let store: AllocationStoreProtocol
   private let previousAllocations: Bool
   private let participant: EvolvParticipant
   
-  init(config: EvolvConfig, allocator: Allocator,
-       previousAllocations: Bool, participant: EvolvParticipant, eventEmitter: EventEmitter, futureAllocations: [JSON]) {
-    
+  
+  init(_ config: EvolvConfig,
+       _ eventEmitter: EventEmitter,
+       _ futureAllocations: Promise<[JSON]>,
+       _ allocator: Allocator,
+       _ previousAllocations: Bool,
+       _ participant: EvolvParticipant) {
+    self.store = config.getEvolvAllocationStore()
+    self.executionQueue = config.getExecutionQueue()
+    self.eventEmitter = eventEmitter
+    self.futureAllocations = futureAllocations
     self.allocator = allocator
     self.previousAllocations = previousAllocations
     self.participant = participant
-    self.eventEmitter = eventEmitter
-    self.futureAllocations = allocator.fetchAllocations()
   }
   
-  func getMyType<T>(_ element: T) -> Any? {
+  fileprivate func getMyType<T>(_ element: T) -> Any? {
     return type(of: element)
   }
   
-  public func get<T>(key: String, defaultValue: T) -> T {
+  public func get<T>(key: String, defaultValue: T) -> Any {
     
-    if (futureAllocations == nil) { // is this safe?
+    var allocations = [JSON]()
+    var value = [JSON]()
+    var allocationsUnpacked = false
+    
+    if (futureAllocations == nil) { return defaultValue }
+    
+    // TODO: Use the FETCHING and RECEIVED properties of Allocator to ensure this happens before moving on
+    if !allocationsUnpacked {
+      let _ = futureAllocations?.done { (jsonArray) in
+        allocations = jsonArray
+        allocationsUnpacked = true
+      }
+    }
+    
+    // You have resoved the promise to JSON
+    if allocationsUnpacked {
+      if !Allocator.allocationsNotEmpty(allocations: allocations) {
+        return defaultValue
+      }
+    }
+
+    let type = getMyType(defaultValue)
+    guard let _ = type else { return defaultValue }
+    do {
+      let alloc = Allocations(allocations: allocations)
+      let v = try alloc.getValueFromAllocations(key, type, participant)
+      if let val = v { value = val }
+    } catch {
+      LOGGER.log(.error, message: "Unable to retrieve the treatment. Returning the default.")
       return defaultValue
     }
-    // this should be a blocking call DONT DO THIS HERE
-    let futureAllocations = allocator.fetchAllocations()
-    // unpack the promise here
-    let allocations = [JSON]()
-    // print("JSON ALLOCATIONS: \(allocations)")
-    // store.set(key, val: allocations)
-    let storedAlloc = store.get(key)
-    print("STORED ALLOCATIONS: \(String(describing: storedAlloc))")
-    if (!Allocator.allocationsNotEmpty(allocations: allocations)) {
-      return allocations as! T
-    }
-    // let type = getMyType(element)
-    // let value = Allocations(allocations: allocations).getValueFromAllocations(key, type, participant)
-    
-    return defaultValue
+    return value
   }
   
   // meant to be async
-  public func subscribe<T>(key: String, defaultValue: T, function: @escaping (T) -> T) {
-    let execution = Execution(key: key, defaultValue: defaultValue as! GenericValue<Any>, function: function as! EvolvAction, participant: participant)
-    let previousAlloc = self.store.get(self.participant.getUserId())
+  public func subscribe<T>(key: String, defaultValue: Any, function: @escaping (T) -> T) {
+    let execution = Execution(key, defaultValue, function as! EvolvAction, participant)
+    let previousAlloc = self.store.get(uid: self.participant.getUserId())
     if let prevAlloc = previousAlloc {
       do {
         try execution.executeWithAllocation(rawAllocations: prevAlloc)
       } catch {
-        Log.logger.log(.error, message: "Unable to retrieve the value of \(key) from the allocation.")
+        LOGGER.log(.error, message: "Unable to retrieve the value of \(key) from the allocation.")
         execution.executeWithDefault()
       }
     }
@@ -69,13 +89,13 @@ class EvolvClientImpl {
       // 1. enqueue the execution
       return
     } else if allocationStatus == Allocator.AllocationStatus.RETRIEVED {
-      let alloc = store.get(self.participant.getUserId())
+      let alloc = store.get(uid: self.participant.getUserId())
       if let allocations = alloc {
         do {
           try execution.executeWithAllocation(rawAllocations: allocations)
           return
         } catch let err {
-          Log.logger.log(.error, message: "Unable to retieve value from \(key), \(err.localizedDescription)")
+          LOGGER.log(.error, message: "Unable to retieve value from \(key), \(err.localizedDescription)")
         }
       }
     }
@@ -96,10 +116,9 @@ class EvolvClientImpl {
     if (allocationStatus == Allocator.AllocationStatus.FETCHING) {
       allocator.sandbagConfirmation()
     } else if (allocationStatus == Allocator.AllocationStatus.RETRIEVED) {
-      let alloc = store.get(participant.getUserId()) // can this ever be nil?
-      // let request = URLRequest(url: allocator.createAllocationsUrl())
-      if let allocation = alloc {
-        // eventEmitter.confirm(allocations: allocation)
+      let alloc = store.get(uid: participant.getUserId())
+      if let allocations = alloc {
+        eventEmitter.confirm(allocations: allocations)
       }
     }
   }
@@ -109,11 +128,9 @@ class EvolvClientImpl {
     if (allocationStatus == Allocator.AllocationStatus.FETCHING) {
       allocator.sandbagContamination()
     } else if (allocationStatus == Allocator.AllocationStatus.RETRIEVED) {
-      let alloc = store.get(participant.getUserId()) // can this ever be nil?
-      //      let request = URLRequest(url: allocator.createAllocationsUrl())
-      //      let alloc = store.cachedResponse(for: request)
-      if let allocation = alloc {
-        // eventEmitter.contaminate(allocations: allocation)
+      let alloc = store.get(uid: participant.getUserId())
+      if let allocations = alloc {
+        eventEmitter.contaminate(allocations: allocations)
       }
     }
   }

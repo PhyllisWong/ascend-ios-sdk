@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-public class DefaultAllocationStore : EvolvAllocationProtocol {
+public class DefaultAllocationStore : AllocationStoreProtocol {
   private var cache: LRUCache
   
   init(size: Int) {

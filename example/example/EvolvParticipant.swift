@@ -10,7 +10,7 @@ import Foundation
 
 
 public class EvolvParticipant {
-  private let sessionId: String // immuntable
+  private let sessionId: String
   private var userId: String
   private var userAttributes: [String : String]
   
@@ -21,8 +21,7 @@ public class EvolvParticipant {
   }
   
   public static func builder() -> ParticipantBuilder {
-    let builder = ParticipantBuilder()
-    return builder
+    return ParticipantBuilder()
   }
   
   public func getUserId() -> String { return userId }
@@ -30,8 +29,14 @@ public class EvolvParticipant {
   public func getSessionId() -> String { return sessionId }
   
   public func getUserAttributes() -> [String: String] { return userAttributes }
+  
+  func setUserId(userId: String) { self.userId = userId }
 
 }
+
+/**
+ * In Swift the builder pattern must be implemented with adjacent classes instead of nested classes.
+ */
 
 public class ParticipantBuilder {
   private var userId: String

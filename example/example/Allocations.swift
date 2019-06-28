@@ -27,7 +27,7 @@ public class Allocations {
   // func getValueFromAllocations<T>(key: String, type: T, participant: EvolvParticipant) throws -> T {
 
   
-  func getValueFromAllocations<T>(key: String, type: T, participant: EvolvParticipant) throws -> [JSON]? {
+  func getValueFromAllocations<T>(_ key: String, _ type: T, _ participant: EvolvParticipant) throws -> [JSON]? {
 
 //    let data = allocations.data(using: .utf8)!
     var keyParts = [String]()
@@ -58,7 +58,7 @@ public class Allocations {
 //      Log.logger.log(.debug, message: "Key provided was empty.")
 //      return ["":""]
 //    }
-    return  self.allocations
+    return self.allocations
   }
   
   func getElementFromGenome(genome: Any, keyParts: [String]) throws -> Any {
