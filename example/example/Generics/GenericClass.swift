@@ -8,12 +8,14 @@
 
 import Foundation
 
-
-
-//class IntValue: GenericValue<Int> {}
-//class StringValue: GenericValue<String> {}
-
-
-
-
-
+public class GenericValue<T> {
+  
+  let value: T
+  init(_ value: T) {
+    self.value = value
+  }
+  
+  func getMyType<T>() -> T.Type.Type {
+    return type(of: T.self)
+  }
+}
