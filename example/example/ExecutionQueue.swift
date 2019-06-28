@@ -10,11 +10,12 @@ import Foundation
 import SwiftyJSON
 
 public class ExecutionQueue {
-  private var queue = LinkedQueue<Execution>()
+  private let LOGGER = Log.logger
+  private var queue = LinkedQueue<Execution<Any>>()
   
   init () {}
   
-  func enqueue(execution: Execution<GenericValue<Any>>) {
+  func enqueue(execution: Execution<Any>) {
     self.queue.add(execution)
   }
   
@@ -26,7 +27,7 @@ public class ExecutionQueue {
         try execution.executeWithAllocation(rawAllocations: allocations)
       } catch {
         let message = "There was an error retrieving the value of \(execution.getKey()) from the allocation."
-        Log.logger.log(.debug, message: message)
+        LOGGER.log(.debug, message: message)
         execution.executeWithDefault()
       }
     }

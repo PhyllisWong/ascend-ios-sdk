@@ -23,7 +23,7 @@
 		3661DDE122AF4855008F7017 /* EvolvParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3661DDE022AF4855008F7017 /* EvolvParticipant.swift */; };
 		3661DDE322AF6160008F7017 /* EvolvService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3661DDE222AF6160008F7017 /* EvolvService.swift */; };
 		3664FC0822B084F7009ED0BE /* HttpProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC0722B084F7009ED0BE /* HttpProtocol.swift */; };
-		3664FC0A22B15F98009ED0BE /* EvolvAllocationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC0922B15F98009ED0BE /* EvolvAllocationProtocol.swift */; };
+		3664FC0A22B15F98009ED0BE /* AllocationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC0922B15F98009ED0BE /* AllocationProtocol.swift */; };
 		3664FC0C22B16443009ED0BE /* MaxSizeDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */; };
 		3664FC0E22B17F69009ED0BE /* Allocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC0D22B17F69009ED0BE /* Allocations.swift */; };
 		3664FC1022B187BC009ED0BE /* EventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3664FC0F22B187BC009ED0BE /* EventEmitter.swift */; };
@@ -84,7 +84,7 @@
 		3661DDE022AF4855008F7017 /* EvolvParticipant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolvParticipant.swift; sourceTree = "<group>"; };
 		3661DDE222AF6160008F7017 /* EvolvService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EvolvService.swift; path = ../EvolvService.swift; sourceTree = "<group>"; };
 		3664FC0722B084F7009ED0BE /* HttpProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HttpProtocol.swift; path = ../HttpProtocol.swift; sourceTree = "<group>"; };
-		3664FC0922B15F98009ED0BE /* EvolvAllocationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolvAllocationProtocol.swift; sourceTree = "<group>"; };
+		3664FC0922B15F98009ED0BE /* AllocationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllocationProtocol.swift; sourceTree = "<group>"; };
 		3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxSizeDictionary.swift; sourceTree = "<group>"; };
 		3664FC0D22B17F69009ED0BE /* Allocations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Allocations.swift; sourceTree = "<group>"; };
 		3664FC0F22B187BC009ED0BE /* EventEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEmitter.swift; sourceTree = "<group>"; };
@@ -163,7 +163,7 @@
 				3664FC0D22B17F69009ED0BE /* Allocations.swift */,
 				3661DDDB22AF3599008F7017 /* Allocator.swift */,
 				36D06E8A22BC542000B533B3 /* EvolvAction.swift */,
-				3664FC0922B15F98009ED0BE /* EvolvAllocationProtocol.swift */,
+				3664FC0922B15F98009ED0BE /* AllocationProtocol.swift */,
 				3664FC1E22B1C40D009ED0BE /* DefaultAllocationStore.swift */,
 				3661DDDD22AF3890008F7017 /* EvolvClient.swift */,
 				3642C2AF22C1673E00EF8271 /* EvolvClientFactory.swift */,
@@ -175,11 +175,9 @@
 				3607F8B122C4383A00A4891D /* ExecutionQueue.swift */,
 				36D06E8522BC1F9900B533B3 /* Audience.swift */,
 				3664FC2622B803CA009ED0BE /* EvolvErrors.swift */,
-				3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */,
 				36BBE60022C3DB50007A6336 /* Networking */,
 				36D06E8022BBEF5E00B533B3 /* Generics */,
 				36D06E8722BC323B00B533B3 /* Utility */,
-				3664FC2822B80652009ED0BE /* Service Objects */,
 			);
 			path = example;
 			sourceTree = "<group>";
@@ -200,14 +198,6 @@
 				3661DDCF22AF3012008F7017 /* Info.plist */,
 			);
 			path = exampleUITests;
-			sourceTree = "<group>";
-		};
-		3664FC2822B80652009ED0BE /* Service Objects */ = {
-			isa = PBXGroup;
-			children = (
-				3664FC2922B80664009ED0BE /* Log.swift */,
-			);
-			name = "Service Objects";
 			sourceTree = "<group>";
 		};
 		36BBE60022C3DB50007A6336 /* Networking */ = {
@@ -235,6 +225,8 @@
 				3642C26622BD974F00EF8271 /* LinkedList.swift */,
 				3607F8B322C4476C00A4891D /* LinkedQueue.swift */,
 				36D06E8822BC325800B533B3 /* Extensions.swift */,
+				3664FC0B22B16443009ED0BE /* MaxSizeDictionary.swift */,
+				3664FC2922B80664009ED0BE /* Log.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -481,7 +473,7 @@
 				3642C2B022C1673E00EF8271 /* EvolvClientFactory.swift in Sources */,
 				3664FC1F22B1C40D009ED0BE /* DefaultAllocationStore.swift in Sources */,
 				3664FC2722B803CA009ED0BE /* EvolvErrors.swift in Sources */,
-				3664FC0A22B15F98009ED0BE /* EvolvAllocationProtocol.swift in Sources */,
+				3664FC0A22B15F98009ED0BE /* AllocationProtocol.swift in Sources */,
 				3664FC1D22B19392009ED0BE /* EvolvConfig.swift in Sources */,
 				36D06E8922BC325800B533B3 /* Extensions.swift in Sources */,
 			);

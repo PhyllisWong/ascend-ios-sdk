@@ -29,6 +29,12 @@ class ViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    let envId = "40ebcd9abf"
+    let httpClient = EvolvHttpClient()
+    let config = EvolvConfig.builder(environmentId: envId, httpClient: httpClient).build()
+    print(config)
+    let participant = EvolvParticipant.builder().build()
+    print(participant)
   }
 }
 

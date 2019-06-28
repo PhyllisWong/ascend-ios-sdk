@@ -9,7 +9,7 @@
 import Foundation
 
 public class EvolvClientFactory {
-  private static let LOGGER = Log.logger
+  private let LOGGER = Log.logger
   
   /**
    * Creates instances of the EvolvClient.
@@ -17,10 +17,13 @@ public class EvolvClientFactory {
    * @param config general configurations for the SDK
    * @return an instance of EvolvClient
    */
+  
+  public var client: EvolvClientProtocol
+  
   init(config: EvolvConfig) {
-    Log.logger.log(.debug, message: "Initializing Evolv Client.")
+    LOGGER.log(.debug, message: "Initializing Evolv Client.")
     let participant: EvolvParticipant = EvolvParticipant.builder().build()
-    // return EvolvClientFactory.createClient(config, participant);
+    self.client = EvolvClientFactory.createClient(config: config, participant: participant)
   }
   
   /**
@@ -31,25 +34,21 @@ public class EvolvClientFactory {
    * @return an instance of EvolvClient
    */
   init(config: EvolvConfig, participant: EvolvParticipant) {
-    Log.logger.log(.debug, message: "Initializing Evolv Client.")
-    // return EvolvClientFactory.createClient(config, participant);
+    LOGGER.log(.debug, message: "Initializing Evolv Client.")
+    self.client = EvolvClientFactory.createClient(config: config, participant: participant)
   }
   
-  
-  private static func createClient(config: EvolvConfig, participant: EvolvParticipant) { // -> EvolvClientImpl {
+  private static func createClient(config: EvolvConfig, participant: EvolvParticipant) -> EvolvClientProtocol {
     let store = config.getEvolvAllocationStore()
     let previousAllocations = store.get(uid: participant.getUserId())
-    let httpClient = HttpClient()
-    let eventEmitter = EventEmitter(httpClient: httpClient, config: config, participant: participant)
     let allocator: Allocator = Allocator(config: config, participant: participant)
-  
-    // fetch and reconcile allocations asynchronously
     let futureAllocations = allocator.fetchAllocations()
-    // let evolvClientImpl = EvolvClientImpl(config: config,
-//                                            allocator: allocator,
-//                                            previousAllocations: Allocator.allocationsNotEmpty(allocations: previousAllocations as! Allocator.JsonArray),
-//                                            participant: participant, eventEmitter: eventEmitter,
-//                                            futureAllocations: futureAllocations)
-//    return evolvClientImpl
+    
+    return EvolvClientImpl(config,
+                           EventEmitter(config: config,participant: participant),
+                           futureAllocations,
+                           allocator,
+                           Allocator.allocationsNotEmpty(allocations: previousAllocations),
+                           participant)
   }
 }
