@@ -71,8 +71,9 @@ class EvolvClientImpl: EvolvClientProtocol {
     let execution = Execution(key, defaultValue, function as! EvolvAction, participant)
     let previousAlloc = self.store.get(uid: self.participant.getUserId())
     if let prevAlloc = previousAlloc {
+      let prevJSON = [JSON(prevAlloc)]
       do {
-        try execution.executeWithAllocation(rawAllocations: prevAlloc)
+        try execution.executeWithAllocation(rawAllocations: prevJSON)
       } catch {
         LOGGER.log(.error, message: "Unable to retrieve the value of \(key) from the allocation.")
         execution.executeWithDefault()
@@ -84,15 +85,16 @@ class EvolvClientImpl: EvolvClientProtocol {
       // 1. enqueue the execution
       return
     } else if allocationStatus == Allocator.AllocationStatus.RETRIEVED {
-      let alloc = store.get(uid: self.participant.getUserId())
-      if let allocations = alloc {
+      let allocStr = store.get(uid: self.participant.getUserId())
+      let alloc = [JSON(allocStr)]
+     
         do {
-          try execution.executeWithAllocation(rawAllocations: allocations)
+          try execution.executeWithAllocation(rawAllocations: alloc)
           return
         } catch let err {
           LOGGER.log(.error, message: "Unable to retieve value from \(key), \(err.localizedDescription)")
         }
-      }
+    
     }
     execution.executeWithDefault()
   }
@@ -111,7 +113,7 @@ class EvolvClientImpl: EvolvClientProtocol {
     if (allocationStatus == Allocator.AllocationStatus.FETCHING) {
       allocator.sandbagConfirmation()
     } else if (allocationStatus == Allocator.AllocationStatus.RETRIEVED) {
-      let alloc = store.get(uid: participant.getUserId())
+      let alloc = [JSON(store.get(uid: participant.getUserId())!)]
       if let allocations = alloc {
         eventEmitter.confirm(allocations: allocations)
       }
@@ -123,7 +125,7 @@ class EvolvClientImpl: EvolvClientProtocol {
     if (allocationStatus == Allocator.AllocationStatus.FETCHING) {
       allocator.sandbagContamination()
     } else if (allocationStatus == Allocator.AllocationStatus.RETRIEVED) {
-      let alloc = store.get(uid: participant.getUserId())
+      let alloc = [JSON(store.get(uid: participant.getUserId()))]
       if let allocations = alloc {
         eventEmitter.contaminate(allocations: allocations)
       }

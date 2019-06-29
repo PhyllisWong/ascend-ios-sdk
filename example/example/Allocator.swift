@@ -72,11 +72,11 @@ public class Allocator {
       let strPromise = self.httpClient.get(url: url).done { (stringJSON) in
         var allocations = JSON.init(parseJSON: stringJSON).arrayValue
         let previous = self.store.get(uid: self.participant.getUserId())
-        
-        print("CACHED JSON: \(String(describing: previous))")
+        let prevAllocJSON = [JSON(previous)]
+        print("CACHED JSON: \(String(describing: prevAllocJSON))")
         if let prevAlloc = previous {
-          if Allocator.allocationsNotEmpty(allocations: prevAlloc) {
-            allocations = Allocations.reconcileAllocations(previousAllocations: prevAlloc, currentAllocations: allocations)
+          if Allocator.allocationsNotEmpty(allocations: prevAllocJSON) {
+            allocations = Allocations.reconcileAllocations(previousAllocations: prevAllocJSON, currentAllocations: allocations)
           }
         }
         

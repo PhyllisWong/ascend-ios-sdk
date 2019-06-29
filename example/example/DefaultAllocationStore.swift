@@ -15,11 +15,11 @@ public class DefaultAllocationStore : AllocationStoreProtocol {
   init(size: Int) {
     self.cache = LRUCache(size)
   }
-  public func get(uid: String) -> [JSON]? {
+  public func get(uid: String) -> String? {
     return cache.get(uid)
   }
   
-  public func set(uid: String, allocations: [JSON]) {
+  public func set(uid: String, allocations: String) {
     cache.set(uid, val: allocations)
   }
 }
