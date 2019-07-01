@@ -36,33 +36,42 @@ class EvolvClientImpl: EvolvClientProtocol {
   }
   
   public func get<T>(key: String, defaultValue: T) -> Any {
-    let group = DispatchGroup()
-    var allocations = [JSON]()
     var value = [JSON]()
-    
-    if (futureAllocations == nil) { return defaultValue }
+    var promisedAllocations = [JSON]()
+    // let dq = DispatchQueue(label: "futureAllocations")
+    let cachedData = store.get(uid: participant.getUserId())
+    print("Cached data from client.get() \(cachedData)")
+    if (futureAllocations == nil) {
+      print("\(String(describing: futureAllocations))")
+      return defaultValue
+    }
 
-   // This needs to be a blocking operation
-    let _ = self.futureAllocations?.done { (jsonArray) in
-      allocations = jsonArray
-      let dict = jsonArray.toDictionary()
-    }
-   
-    // lines 46-48 MUST be complete BEFORE the rest of this code executes
-    if !Allocator.allocationsNotEmpty(allocations: allocations) {
-      return defaultValue
-    }
-  
-    let type = getMyType(defaultValue)
-    guard let _ = type else { return defaultValue }
     do {
-      let alloc = Allocations(allocations: allocations)
-      let v = try alloc.getValueFromAllocations(key, type, participant)
-      if let val = v { value = val }
+      let a = try futureAllocations?.wait()
+      guard let alloc = a else {
+        return defaultValue
+      }
+      
+      promisedAllocations = alloc
+      if !Allocator.allocationsNotEmpty(allocations: promisedAllocations) {
+        return defaultValue
+      }
+      
+      let type = getMyType(defaultValue)
+      guard let _ = type else { return defaultValue }
+      do {
+        let alloc = Allocations(allocations: promisedAllocations)
+        let v = try alloc.getValueFromAllocations(key, type, participant)
+        value = [v] as! [JSON]
+      } catch {
+        LOGGER.log(.error, message: "Unable to retrieve the treatment. Returning the default.")
+        return defaultValue
+      }
     } catch {
-      LOGGER.log(.error, message: "Unable to retrieve the treatment. Returning the default.")
-      return defaultValue
+      LOGGER.log(.debug, message: "Error retrieving Allocations")
     }
+    
+    // Check that the allocations has a value
     return value
   }
   
@@ -113,7 +122,7 @@ class EvolvClientImpl: EvolvClientProtocol {
     if (allocationStatus == Allocator.AllocationStatus.FETCHING) {
       allocator.sandbagConfirmation()
     } else if (allocationStatus == Allocator.AllocationStatus.RETRIEVED) {
-      let alloc = [JSON(store.get(uid: participant.getUserId())!)]
+      let alloc = store.get(uid: participant.getUserId())
       if let allocations = alloc {
         eventEmitter.confirm(allocations: allocations)
       }
@@ -125,7 +134,7 @@ class EvolvClientImpl: EvolvClientProtocol {
     if (allocationStatus == Allocator.AllocationStatus.FETCHING) {
       allocator.sandbagContamination()
     } else if (allocationStatus == Allocator.AllocationStatus.RETRIEVED) {
-      let alloc = [JSON(store.get(uid: participant.getUserId()))]
+      let alloc = store.get(uid: participant.getUserId())
       if let allocations = alloc {
         eventEmitter.contaminate(allocations: allocations)
       }

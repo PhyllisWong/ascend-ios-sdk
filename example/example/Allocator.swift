@@ -71,16 +71,17 @@ public class Allocator {
  
       let strPromise = self.httpClient.get(url: url).done { (stringJSON) in
         var allocations = JSON.init(parseJSON: stringJSON).arrayValue
+        
+        print("FETCHED FROM API: \(allocations)")
         let previous = self.store.get(uid: self.participant.getUserId())
-        let prevAllocJSON = [JSON(previous)]
-        print("CACHED JSON: \(String(describing: prevAllocJSON))")
+        print("CACHED JSON: \(String(describing: previous))")
         if let prevAlloc = previous {
-          if Allocator.allocationsNotEmpty(allocations: prevAllocJSON) {
-            allocations = Allocations.reconcileAllocations(previousAllocations: prevAllocJSON, currentAllocations: allocations)
+          if Allocator.allocationsNotEmpty(allocations: previous) {
+            allocations = Allocations.reconcileAllocations(previousAllocations: prevAlloc, currentAllocations: allocations)
           }
         }
         
-        self.store.set(uid: self.participant.getUserId(), allocations: stringJSON)
+        self.store.set(uid: self.participant.getUserId(), allocations: allocations)
         let cachedAgain = self.store.get(uid: self.participant.getUserId())
         print("FETCHED JSON CACHED NOW: \(cachedAgain)")
         self.allocationStatus = AllocationStatus.RETRIEVED
