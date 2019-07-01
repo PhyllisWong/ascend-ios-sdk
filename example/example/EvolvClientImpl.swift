@@ -8,13 +8,13 @@ class EvolvClientImpl: EvolvClientProtocol {
   private let LOGGER = Log.logger
   
   private let eventEmitter: EventEmitter
-  private let futureAllocations: Promise<[JSON]>?
+  public let futureAllocations: Promise<[JSON]>? // change this back to private after presentation
   private let executionQueue: ExecutionQueue
   private let allocator: Allocator
   private let store: AllocationStoreProtocol
   private let previousAllocations: Bool
   private let participant: EvolvParticipant
-  
+  private let dispatchGroup = DispatchGroup()
   
   init(_ config: EvolvConfig,
        _ eventEmitter: EventEmitter,
@@ -36,38 +36,42 @@ class EvolvClientImpl: EvolvClientProtocol {
   }
   
   public func get<T>(key: String, defaultValue: T) -> Any {
-    
-    var allocations = [JSON]()
     var value = [JSON]()
-    var allocationsUnpacked = false
-    
-    if (futureAllocations == nil) { return defaultValue }
-    
-    // TODO: Use the FETCHING and RECEIVED properties of Allocator to ensure this happens before moving on
-    if !allocationsUnpacked {
-      let _ = futureAllocations?.done { (jsonArray) in
-        allocations = jsonArray
-        allocationsUnpacked = true
-      }
-    }
-    
-    // You have resoved the promise to JSON
-    if allocationsUnpacked {
-      if !Allocator.allocationsNotEmpty(allocations: allocations) {
-        return defaultValue
-      }
-    }
-
-    let type = getMyType(defaultValue)
-    guard let _ = type else { return defaultValue }
-    do {
-      let alloc = Allocations(allocations: allocations)
-      let v = try alloc.getValueFromAllocations(key, type, participant)
-      if let val = v { value = val }
-    } catch {
-      LOGGER.log(.error, message: "Unable to retrieve the treatment. Returning the default.")
+    var promisedAllocations = [JSON]()
+    // let dq = DispatchQueue(label: "futureAllocations")
+    let cachedData = store.get(uid: participant.getUserId())
+    print("Cached data from client.get() \(cachedData)")
+    if (futureAllocations == nil) {
+      print("\(String(describing: futureAllocations))")
       return defaultValue
     }
+
+    do {
+      let a = try futureAllocations?.wait()
+      guard let alloc = a else {
+        return defaultValue
+      }
+      
+      promisedAllocations = alloc
+      if !Allocator.allocationsNotEmpty(allocations: promisedAllocations) {
+        return defaultValue
+      }
+      
+      let type = getMyType(defaultValue)
+      guard let _ = type else { return defaultValue }
+      do {
+        let alloc = Allocations(allocations: promisedAllocations)
+        let v = try alloc.getValueFromAllocations(key, type, participant)
+        value = [v] as! [JSON]
+      } catch {
+        LOGGER.log(.error, message: "Unable to retrieve the treatment. Returning the default.")
+        return defaultValue
+      }
+    } catch {
+      LOGGER.log(.debug, message: "Error retrieving Allocations")
+    }
+    
+    // Check that the allocations has a value
     return value
   }
   
@@ -76,8 +80,9 @@ class EvolvClientImpl: EvolvClientProtocol {
     let execution = Execution(key, defaultValue, function as! EvolvAction, participant)
     let previousAlloc = self.store.get(uid: self.participant.getUserId())
     if let prevAlloc = previousAlloc {
+      let prevJSON = [JSON(prevAlloc)]
       do {
-        try execution.executeWithAllocation(rawAllocations: prevAlloc)
+        try execution.executeWithAllocation(rawAllocations: prevJSON)
       } catch {
         LOGGER.log(.error, message: "Unable to retrieve the value of \(key) from the allocation.")
         execution.executeWithDefault()
@@ -89,15 +94,16 @@ class EvolvClientImpl: EvolvClientProtocol {
       // 1. enqueue the execution
       return
     } else if allocationStatus == Allocator.AllocationStatus.RETRIEVED {
-      let alloc = store.get(uid: self.participant.getUserId())
-      if let allocations = alloc {
+      let allocStr = store.get(uid: self.participant.getUserId())
+      let alloc = [JSON(allocStr)]
+     
         do {
-          try execution.executeWithAllocation(rawAllocations: allocations)
+          try execution.executeWithAllocation(rawAllocations: alloc)
           return
         } catch let err {
           LOGGER.log(.error, message: "Unable to retieve value from \(key), \(err.localizedDescription)")
         }
-      }
+    
     }
     execution.executeWithDefault()
   }

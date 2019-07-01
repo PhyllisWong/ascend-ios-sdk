@@ -16,64 +16,51 @@ class ViewController: UIViewController {
  
   @IBOutlet weak var textView: UITextView!
   
-  let store = LRUCache.share
-  let cacheName = "MyCache"
+  let store = DefaultAllocationStore(size: 1000)
   var allocations = [JSON]()
-  enum DataError: Error { // move this somewhere more sensible
-    case taskError
-  }
+  var client : EvolvClientProtocol?
 
   @IBAction func didPressAlloc(_ sender: Any) {
-   getJsonData()
+    getJsonData()
+  }
+
+  
+  // This is also necessary when extending the superclass.
+  required init?(coder aDecoder: NSCoder) {
+    let envId = "40ebcd9abf"
+    let httpClient = EvolvHttpClient()
+    let config = EvolvConfig.builder(environmentId: envId, httpClient: httpClient).build()
+    let participant = EvolvParticipant.builder().build()
+    self.client = EvolvClientFactory(config: config, participant: participant).client as! EvolvClientImpl
+    super.init(coder: aDecoder)
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    let envId = "40ebcd9abf"
-    let httpClient = EvolvHttpClient()
-    let config = EvolvConfig.builder(environmentId: envId, httpClient: httpClient).build()
-    print(config)
-    let participant = EvolvParticipant.builder().build()
-    print(participant)
+    
+    
+    // Client makes the call to get the allocations
+   
   }
 }
 
 
 private extension ViewController {
   
- 
-  private func getJsonData() {
-//    let participantBuilder = ParticipantBuilder()
-//    let participant = participantBuilder.build()
-//    let envId = "40ebcd9abf"
-//    let config = ConfigBuilder(environmentId: envId).buildConfig()
-//    let store = LRUCache.share
-//    let alloc = Allocator(config: config, participant: participant)
-//    let results = alloc.fetchAllocations()
-//    print("YOUR FETCHED ALLOCATION: \(String(describing: results))")
+  private func getJsonData() -> Void {
+    guard let client = self.client else {
+      return
+    }
+    let key = "button\\.background\\.height\\.width"
+    let someValue = client.get(key: key, defaultValue: "green")
+    print(someValue)
   }
   
-//  private func buildClient() -> EvolvClientFactory {
+//  private func buildClient() -> EvolvClientImpl {
 //    let envId = "40ebcd9abf"
-//    let config = ConfigBuilder(environmentId: envId).buildConfig()
-//    let participantBuilder = ParticipantBuilder()
-//    let participant = participantBuilder.build()
-//    return EvolvClientFactory(config: config, participant: participant)
-//  }
-  
-//  private func getData() {
-//    let participantBuilder = ParticipantBuilder()
-//
-//    let participant = participantBuilder.build()
-//    let httpClient = HttpClient()
-//    let envId = "40ebcd9abf"
-//    let config = ConfigBuilder(environmentId: envId).buildConfig()
-//    let store = LRUCache(10)
-//    let alloc = Allocator(config: config, participant: participant)
-//    let futureAlloc = alloc.fetchAllocations()
-//    let emitter = EventEmitter(httpClient: httpClient, config: config, participant: participant)
-//    let evolver = EvolvClientImpl(config: config, allocator: alloc, previousAllocations: false, participant: participant, eventEmitter: emitter, futureAllocations: futureAlloc)
-//    let value = evolver.get(key: "button", defaultValue: "green")
-//    print("THIS IS YOUR VALUE: \(value)")
+//    let httpClient = EvolvHttpClient()
+//    let config = EvolvConfig.builder(environmentId: envId, httpClient: httpClient).build()
+//    let participant = EvolvParticipant.builder().build()
+//    return EvolvClientFactory(config: config, participant: participant).client as! EvolvClientImpl
 //  }
 }
