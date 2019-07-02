@@ -114,6 +114,8 @@ public class EventEmitter {
       LOGGER.log(.debug, message: message)
       return
     }
-    httpClient.post(url: url)
+    let _ = httpClient.post(url: url).done { (rsp) in
+      print(rsp)
+    }
   }
 }

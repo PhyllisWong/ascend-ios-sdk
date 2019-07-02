@@ -22,7 +22,7 @@ public protocol AllocationStoreProtocol {
    * @return an allocation if one exists else an empty JsonArray
    */
   
-  func get(uid: String) -> [JSON]? // FIXME: can this ever return an empty array?
+  func get(uid: String) -> [JSON]? // FIXME: can this ever return an empty string?
   
   /**
    * Stores a JsonArray.

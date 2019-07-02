@@ -23,7 +23,7 @@ class EvolvHttpClient : HttpProtocol {
           case .success(let string):
             
             if let string = response.result.value {
-              print("UR PROMISED JSON: \(string)")
+              print("UR FETCHED JSON: \(string)")
               resolver.fulfill(string)
             }          
           case .failure(let error):

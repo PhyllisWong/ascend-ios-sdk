@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol EvolvAction {
+public protocol EvolvAction {
   /**
    * Applies a given value to a set of instructions.
    * @param value any value that was requested
