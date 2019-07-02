@@ -66,6 +66,7 @@
 		3607F8B322C4476C00A4891D /* LinkedQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedQueue.swift; sourceTree = "<group>"; };
 		3642C26622BD974F00EF8271 /* LinkedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
 		3642C2AF22C1673E00EF8271 /* EvolvClientFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolvClientFactory.swift; sourceTree = "<group>"; };
+		3644EC1F22CAE3FD008C4B57 /* Network.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Network.framework; path = System/Library/Frameworks/Network.framework; sourceTree = SDKROOT; };
 		3661DDAA22AF3012008F7017 /* example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3661DDAD22AF3012008F7017 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3661DDAF22AF3012008F7017 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -243,6 +244,7 @@
 		F9590EA500D30C2A7622B487 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3644EC1F22CAE3FD008C4B57 /* Network.framework */,
 				1791950A4D5C785F26EAE579 /* Pods_example.framework */,
 			);
 			name = Frameworks;

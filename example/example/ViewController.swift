@@ -57,7 +57,7 @@ private extension ViewController {
   private func getJsonData() -> String {
     guard let client = self.client else { return "" }
     let key = "button"
-    // let someValue = client.get(key: key, defaultValue: "green")
+    // get this to execute on the main thread and change the UI
     func printStuff(value: Any) { print("DO STUFF with \(value)") }
     // Client makes the call to get the allocations
     let someValue = client.subscribe(key: key, defaultValue: "green", function: printStuff)
