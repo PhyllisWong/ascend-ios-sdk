@@ -13,21 +13,22 @@ protocol Default {
   associatedtype T
 }
 
+
 class Execution<T> {
   
   private let key: String
-  private let function: EvolvAction
+  private let function: (Any) -> Void
   private let participant: EvolvParticipant
   private var defaultValue: T
   private var alreadyExecuted: Set<String> = Set()
   
   init(_ key: String,
           _ defaultValue: T,
-          _ function: EvolvAction,
+          _ function: @escaping (Any) -> Void,
           _ participant: EvolvParticipant) {
     self.key = key
     self.defaultValue = defaultValue
-    self.function = function
+    self.function = function as! (Any) -> Void
     self.participant = participant
   }
   
@@ -48,12 +49,12 @@ class Execution<T> {
     let activeExperiements = allocations.getActiveExperiments()
     if alreadyExecuted.isEmpty || alreadyExecuted == activeExperiements {
       // there was a change to the allocations after reconciliation, apply changes
-      function.apply(value: value)
+      function(value)
     }
     alreadyExecuted = activeExperiements
   }
   
   func executeWithDefault() -> Void {
-    self.function.apply(value: self.defaultValue)
+    function(defaultValue)
   }
 }
