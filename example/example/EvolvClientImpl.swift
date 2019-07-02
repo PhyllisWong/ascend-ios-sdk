@@ -3,8 +3,7 @@ import SwiftyJSON
 import PromiseKit
 
 // EVERYTHING that is labeled Ascend in the Android SDK is what the client interacts with
-class EvolvClientImpl: EvolvClientProtocol {  
-  
+class EvolvClientImpl : EvolvClientProtocol {
   private let LOGGER = Log.logger
   
   private let eventEmitter: EventEmitter
@@ -38,9 +37,7 @@ class EvolvClientImpl: EvolvClientProtocol {
   public func get<T>(key: String, defaultValue: T) -> Any {
     var value = [JSON]()
     var promisedAllocations = [JSON]()
-    // let dq = DispatchQueue(label: "futureAllocations")
-    let cachedData = store.get(uid: participant.getUserId())
-    print("Cached data from client.get() \(cachedData)")
+    
     if (futureAllocations == nil) {
       print("\(String(describing: futureAllocations))")
       return defaultValue
@@ -70,17 +67,15 @@ class EvolvClientImpl: EvolvClientProtocol {
     } catch {
       LOGGER.log(.debug, message: "Error retrieving Allocations")
     }
-    
-    // Check that the allocations has a value
     return value
   }
   
   // meant to be async
-  public func subscribe<T>(key: String, defaultValue: Any, function: @escaping (T) -> T) {
-    let execution = Execution(key, defaultValue, function as! EvolvAction, participant)
+  public func subscribe(key: String, defaultValue: Any, function: @escaping (Any) -> Void) {
+    let execution = Execution(key, defaultValue, function, participant)
     let previousAlloc = self.store.get(uid: self.participant.getUserId())
     if let prevAlloc = previousAlloc {
-      let prevJSON = [JSON(prevAlloc)]
+      let prevJSON = prevAlloc
       do {
         try execution.executeWithAllocation(rawAllocations: prevJSON)
       } catch {
@@ -94,16 +89,15 @@ class EvolvClientImpl: EvolvClientProtocol {
       // 1. enqueue the execution
       return
     } else if allocationStatus == Allocator.AllocationStatus.RETRIEVED {
-      let allocStr = store.get(uid: self.participant.getUserId())
-      let alloc = [JSON(allocStr)]
-     
+      let alloc = store.get(uid: self.participant.getUserId())
+      if let allocations = alloc {
         do {
-          try execution.executeWithAllocation(rawAllocations: alloc)
+          try execution.executeWithAllocation(rawAllocations: allocations)
           return
         } catch let err {
           LOGGER.log(.error, message: "Unable to retieve value from \(key), \(err.localizedDescription)")
         }
-    
+      }
     }
     execution.executeWithDefault()
   }

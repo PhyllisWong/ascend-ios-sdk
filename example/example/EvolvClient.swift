@@ -44,7 +44,7 @@ public protocol EvolvClientProtocol {
     - function:  a handler that is invoked when the allocation is updated
     - <T>: type of value to be returned
  */
-  func subscribe<T>(key: String, defaultValue: Any, function: @escaping (T) -> T)
+  func subscribe(key: String, defaultValue: Any, function: @escaping (Any) -> Void)
 
 
   /**
